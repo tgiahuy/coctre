@@ -28,6 +28,7 @@ import {
   deleteCustomArticle,
   resetArticlesToDefault
 } from "@/lib/articleStore";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 const PRESET_BLOG_IMAGES = [
   { label: "Kỹ thuật đóng cọc", url: "/images/blog/ky-thuat-dong-coc-tre.webp" },
@@ -485,48 +486,15 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
               </div>
             </div>
 
-            {/* Images selection */}
-            <div className="pt-4 border-t border-gray-100 space-y-3">
-              <label className="block text-xs font-semibold text-gray-700 uppercase">
-                Ảnh bìa bài viết
-              </label>
-
-              <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
-                <div className="relative w-28 h-20 rounded-lg overflow-hidden border border-gray-300 shrink-0">
-                  <Image src={formData.coverImage || "/images/blog/ky-thuat-dong-coc-tre.webp"} alt="Cover" fill className="object-cover" />
-                </div>
-                <div className="text-xs text-gray-600 truncate">
-                  <span className="font-semibold block text-gray-900 mb-1">Đường dẫn ảnh bìa:</span>
-                  <code className="text-xs text-[#214E34] bg-white px-2 py-1 rounded border border-gray-200">{formData.coverImage}</code>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-500 mb-2">Ảnh bài viết mẫu có sẵn:</p>
-                <div className="flex flex-wrap gap-2">
-                  {PRESET_BLOG_IMAGES.map((preset) => (
-                    <button
-                      key={preset.url}
-                      type="button"
-                      onClick={() => setFormData((prev) => ({ ...prev, coverImage: preset.url }))}
-                      className="px-2.5 py-1.5 rounded-lg border border-gray-200 hover:border-[#214E34] text-xs font-medium bg-white hover:bg-emerald-50 transition flex items-center gap-1.5"
-                    >
-                      <ImageIcon className="w-3.5 h-3.5 text-gray-400" />
-                      <span>{preset.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={formData.coverImage}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, coverImage: e.target.value }))}
-                  placeholder="Nhập đường dẫn ảnh bìa (/images/blog/... hoặc URL online)"
-                  className="flex-1 px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#214E34] focus:outline-none"
-                />
-              </div>
+            {/* Images selection via ImageUploader */}
+            <div className="pt-4 border-t border-gray-100">
+              <ImageUploader
+                images={formData.coverImage ? [formData.coverImage] : []}
+                onChange={(imgs) => setFormData((prev) => ({ ...prev, coverImage: imgs[0] || "" }))}
+                presetImages={PRESET_BLOG_IMAGES}
+                label="Ảnh bìa bài viết (Tải ảnh từ máy tính/điện thoại hoặc chọn mẫu)"
+                maxFiles={1}
+              />
             </div>
 
             {/* Markdown Editor */}

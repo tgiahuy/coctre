@@ -27,6 +27,7 @@ import {
   deleteProduct,
   resetProductsToDefault
 } from "@/lib/productStore";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 const PRESET_PRODUCT_IMAGES = [
   { label: "Cọc 1.5m", url: "/images/products/coc-tre-15m-1.webp" },
@@ -92,7 +93,6 @@ export default function ProductManager() {
 
   const [appsInput, setAppsInput] = useState("");
   const [advsInput, setAdvsInput] = useState("");
-  const [customImageUrl, setCustomImageUrl] = useState("");
 
   const loadProducts = () => {
     setProductsList(getAllProducts());
@@ -129,7 +129,7 @@ export default function ProductManager() {
       applications: ["Gia cố móng nhà dân dụng, móng kè ao hồ."],
       advantages: ["Tre già thịt dày, không nứt toác."],
       packaging: "Bó 25 cây đai thép chắc chắn.",
-      images: ["/images/products/coc-tre-2m-1.webp"],
+      images: [],
       featured: true,
       rating: 5.0,
       reviewCount: 15,
@@ -171,32 +171,6 @@ export default function ProductManager() {
       name,
       slug: editingId ? prev.slug : slugify(name),
     }));
-  };
-
-  const handleAddPresetImage = (url: string) => {
-    if (!formData.images.includes(url)) {
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, url],
-      }));
-    }
-  };
-
-  const handleRemoveImage = (indexToRemove: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, idx) => idx !== indexToRemove),
-    }));
-  };
-
-  const handleAddCustomImage = () => {
-    if (customImageUrl.trim() && !formData.images.includes(customImageUrl.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, customImageUrl.trim()],
-      }));
-      setCustomImageUrl("");
-    }
   };
 
   const handleSaveForm = (e: React.FormEvent) => {
@@ -597,66 +571,15 @@ export default function ProductManager() {
               </div>
             </div>
 
-            {/* Images selection */}
-            <div className="pt-4 border-t border-gray-100 space-y-3">
-              <label className="block text-xs font-semibold text-gray-700 uppercase">
-                Hình ảnh sản phẩm (Click chọn ảnh mẫu bên dưới hoặc dán link ảnh)
-              </label>
-
-              {/* Current chosen images */}
-              <div className="flex flex-wrap gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
-                {formData.images.map((img, idx) => (
-                  <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-300 group">
-                    <Image src={img} alt="Product img" fill className="object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(idx)}
-                      className="absolute inset-0 bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-xs font-bold"
-                    >
-                      Xóa
-                    </button>
-                  </div>
-                ))}
-                {formData.images.length === 0 && (
-                  <p className="text-xs text-gray-400 py-3">Chưa có ảnh nào được chọn.</p>
-                )}
-              </div>
-
-              {/* Preset picker */}
-              <div>
-                <p className="text-xs text-gray-500 mb-2">Ảnh mẫu có sẵn trong kho:</p>
-                <div className="flex flex-wrap gap-2">
-                  {PRESET_PRODUCT_IMAGES.map((preset) => (
-                    <button
-                      key={preset.url}
-                      type="button"
-                      onClick={() => handleAddPresetImage(preset.url)}
-                      className="px-2.5 py-1.5 rounded-lg border border-gray-200 hover:border-[#214E34] text-xs font-medium bg-white hover:bg-emerald-50 transition flex items-center gap-1.5"
-                    >
-                      <ImageIcon className="w-3.5 h-3.5 text-gray-400" />
-                      <span>{preset.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Custom Image URL input */}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={customImageUrl}
-                  onChange={(e) => setCustomImageUrl(e.target.value)}
-                  placeholder="Hoặc nhập đường dẫn ảnh (URL hoặc /images/...)"
-                  className="flex-1 px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#214E34] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddCustomImage}
-                  className="px-4 py-2 bg-gray-800 hover:bg-black text-white text-xs font-bold rounded-lg transition"
-                >
-                  Thêm ảnh
-                </button>
-              </div>
+            {/* Images selection via ImageUploader */}
+            <div className="pt-4 border-t border-gray-100">
+              <ImageUploader
+                images={formData.images}
+                onChange={(imgs) => setFormData((prev) => ({ ...prev, images: imgs }))}
+                presetImages={PRESET_PRODUCT_IMAGES}
+                label="Hình ảnh sản phẩm (Tải lên từ máy tính/điện thoại hoặc chọn ảnh mẫu)"
+                maxFiles={8}
+              />
             </div>
 
             {/* Featured toggle */}

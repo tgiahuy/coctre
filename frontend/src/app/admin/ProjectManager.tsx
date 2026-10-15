@@ -26,6 +26,7 @@ import {
   deleteProject,
   resetProjectsToDefault
 } from "@/lib/projectStore";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 const PRESET_PROJECT_IMAGES = [
   { label: "Tỉnh Lộ 489C", url: "/images/projects/du-an-tinh-lo-489c-1.webp" },
@@ -525,48 +526,27 @@ export default function ProjectManager() {
               </div>
             </div>
 
-            {/* Images selection */}
-            <div className="pt-4 border-t border-gray-100 space-y-3">
-              <label className="block text-xs font-semibold text-gray-700 uppercase">
-                Ảnh bìa đại diện dự án (Click chọn bên dưới hoặc dán link ảnh)
-              </label>
-
-              <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
-                <div className="relative w-28 h-20 rounded-lg overflow-hidden border border-gray-300 shrink-0">
-                  <Image src={formData.coverImage || "/images/projects/du-an-tinh-lo-489c-1.webp"} alt="Cover" fill className="object-cover" />
-                </div>
-                <div className="text-xs text-gray-600 truncate">
-                  <span className="font-semibold block text-gray-900 mb-1">Đường dẫn ảnh hiện tại:</span>
-                  <code className="text-xs text-[#214E34] bg-white px-2 py-1 rounded border border-gray-200">{formData.coverImage}</code>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-500 mb-2">Ảnh công trình mẫu có sẵn:</p>
-                <div className="flex flex-wrap gap-2">
-                  {PRESET_PROJECT_IMAGES.map((preset) => (
-                    <button
-                      key={preset.url}
-                      type="button"
-                      onClick={() => handleAddPresetImage(preset.url)}
-                      className="px-2.5 py-1.5 rounded-lg border border-gray-200 hover:border-[#214E34] text-xs font-medium bg-white hover:bg-emerald-50 transition flex items-center gap-1.5"
-                    >
-                      <ImageIcon className="w-3.5 h-3.5 text-gray-400" />
-                      <span>{preset.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={formData.coverImage}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, coverImage: e.target.value }))}
-                  placeholder="Nhập đường dẫn ảnh bìa (/images/projects/... hoặc link online)"
-                  className="flex-1 px-3 py-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#214E34] focus:outline-none"
-                />
-              </div>
+            {/* Images selection via ImageUploader */}
+            <div className="pt-4 border-t border-gray-100">
+              <ImageUploader
+                images={
+                  formData.gallery && formData.gallery.length > 0
+                    ? formData.gallery
+                    : formData.coverImage
+                    ? [formData.coverImage]
+                    : []
+                }
+                onChange={(imgs) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    coverImage: imgs[0] || "",
+                    gallery: imgs,
+                  }));
+                }}
+                presetImages={PRESET_PROJECT_IMAGES}
+                label="Hình ảnh & Ảnh bìa dự án (Tải ảnh từ máy tính/điện thoại hoặc chọn mẫu)"
+                maxFiles={6}
+              />
             </div>
 
             <div className="pt-4 border-t border-gray-100 flex items-center gap-3">
