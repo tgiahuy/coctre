@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #214E34;
+  --primary-hover: #183B27;
+  --primary-light: #2D6A47;
+  --primary-subtle: #EBF3EE;
+  
+  --secondary: #CDAA63;
+  --secondary-hover: #B89346;
+  --secondary-light: #F4ECCF;
+
+  --accent-cta: #E57C23;
+  --accent-cta-hover: #CC6914;
+  
+  --bg-page: #F7F5EF;
+  --bg-surface: #FFFFFF;
+  --bg-dark: #18231C;
+  --bg-dark-subtle: #212E26;
+  
+  --text-main: #232323;
+  --text-muted: #686868;
+  --text-light: #9B9B9B;
+  
+  --border-light: #E7E3D8;
+  --border-dark: #2A3930;
+}
+
+@theme {
+  --color-primary: #214E34;
+  --color-primary-hover: #183B27;
+  --color-primary-light: #2D6A47;
+  --color-primary-subtle: #EBF3EE;
+  
+  --color-secondary: #CDAA63;
+  --color-secondary-hover: #B89346;
+  --color-secondary-light: #F4ECCF;
+  
+  --color-accent: #E57C23;
+  --color-accent-hover: #CC6914;
+  
+  --color-bg-page: #F7F5EF;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-dark: #18231C;
+  --color-bg-dark-subtle: #212E26;
+  
+  --color-text-main: #232323;
+  --color-text-muted: #686868;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1ede4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #214e34aa;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #214e34;
+}
+
+/* Glassmorphism helpers */
+.glass-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-dark {
+  background: rgba(24, 35, 28, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Card hover transitions */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(33, 78, 52, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Pulse animation for CTA phone */
+@keyframes ring-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(229, 124, 35, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 14px rgba(229, 124, 35, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(229, 124, 35, 0);
+  }
+}
+
+.ring-pulse-btn {
+  animation: ring-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+/* Ribbon Hexagon Banner Style */
+.clip-ribbon {
+  clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0% 50%);
+}

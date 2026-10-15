@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Website Doanh Nghiệp & Quản Trị Cọc Tre Hòa Bình
 
-## Getting Started
+Hệ thống website giới thiệu sản phẩm cọc tre, dự án công trình nền móng và cẩm nang kỹ thuật thi công chuẩn TCVN 9361:2012 cho **Công ty Cọc Tre Hòa Bình**.
 
-First, run the development server:
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5
+- **Giao diện:** Tailwind CSS v4 + Lucide React Icons
+- **Tối ưu hình ảnh:** `next/image` + Sharp (Toàn bộ ảnh chụp thực tế chất lượng cao nén chuẩn WebP)
+- **Quản trị nội dung:** Trang Admin CMS nội bộ tại `/admin` (Mã PIN: `8888`) hỗ trợ soạn thảo Markdown, trích xuất mục lục tự động, lưu trữ an toàn.
+
+---
+
+## 🏗️ Cấu Trúc Dự Án
+
+```text
+Coctre/
+├── frontend/             # Toàn bộ mã nguồn giao diện (Next.js App Router)
+│   ├── src/
+│   │   ├── app/          # Dynamic routes & các trang chính:
+│   │   │   ├── admin/       # Khu vực quản trị bài viết & dữ liệu
+│   │   │   ├── du-an/       # Danh sách & chi tiết dự án công trình
+│   │   │   ├── san-pham/    # Danh mục & chi tiết cọc tre 1.5m - 4m
+│   │   │   ├── tin-tuc/     # Cẩm nang kỹ thuật & tin tức
+│   │   │   ├── gioi-thieu/  # Giới thiệu doanh nghiệp & bãi cọc
+│   │   │   └── lien-he/     # Bản đồ, hotline, form liên hệ
+│   │   ├── components/   # Header, Footer, Cards, Modal báo giá
+│   │   ├── context/      # QuoteModalContext (Popup báo giá toàn site)
+│   │   ├── data/         # Dữ liệu chuẩn về cọc tre, dự án, bài viết, công ty
+│   │   └── lib/          # Tiện ích & bộ lưu trữ
+│   ├── public/           # Hình ảnh thực tế (WebP)
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── next.config.ts
+├── package.json          # Root scripts điều phối (dev, build, start, lint)
+└── README.md
+```
+
+---
+
+## 🚀 Khởi Chạy Dự Án
+
+Bạn có thể chạy trực tiếp từ thư mục gốc:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Hoặc vào thư mục `frontend`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd frontend
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Mở trình duyệt truy cập:
+- **Trang chủ:** [http://localhost:3000](http://localhost:3000)
+- **Sản phẩm:** [http://localhost:3000/san-pham](http://localhost:3000/san-pham)
+- **Dự án:** [http://localhost:3000/du-an](http://localhost:3000/du-an)
+- **Tin tức & Cẩm nang:** [http://localhost:3000/tin-tuc](http://localhost:3000/tin-tuc)
+- **Trang quản trị (Admin):** [http://localhost:3000/admin](http://localhost:3000/admin) (PIN mặc định: `8888`)
