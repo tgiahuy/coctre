@@ -26,22 +26,36 @@ export default function CompactProductsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [pageCount, setPageCount] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  // Update scroll buttons visibility & active index on scroll
+  // Update scroll buttons visibility, total pages & active page
   const updateScrollState = () => {
     if (!scrollRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
+    const maxScroll = scrollWidth - clientWidth;
 
-    // Estimate current active card
-    const card = scrollRef.current.querySelector(".product-card-item") as HTMLElement | null;
-    if (card) {
-      const cardWidth = card.offsetWidth + 16; // width + gap
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      setActiveIndex(Math.min(Math.max(newIndex, 0), allProducts.length - 1));
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft < maxScroll - 10);
+
+    if (maxScroll <= 10) {
+      setPageCount(1);
+      setCurrentPage(0);
+      return;
     }
+
+    const card = scrollRef.current.querySelector(".product-card-item") as HTMLElement | null;
+    const cardWidth = card ? card.offsetWidth + 16 : 280;
+    const visibleCards = Math.max(1, Math.round(clientWidth / cardWidth));
+
+    // Dynamic page count matching visible screen views
+    const pages = Math.max(2, Math.ceil(allProducts.length / visibleCards));
+    setPageCount(pages);
+
+    // Calculate active page based on scroll progress
+    const progress = Math.max(0, Math.min(1, scrollLeft / maxScroll));
+    const active = Math.min(Math.round(progress * (pages - 1)), pages - 1);
+    setCurrentPage(active);
   };
 
   useEffect(() => {
@@ -54,33 +68,44 @@ export default function CompactProductsSection() {
   const handleScroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
+    const { scrollWidth, clientWidth, scrollLeft } = container;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 0) return;
+
     const card = container.querySelector(".product-card-item") as HTMLElement | null;
     const cardWidth = card ? card.offsetWidth + 16 : 280;
+    const scrollAmount = Math.max(cardWidth, clientWidth * 0.75);
 
     if (direction === "left") {
-      if (container.scrollLeft <= 10) {
-        // Wrap to the end if at start
-        container.scrollTo({ left: container.scrollWidth, behavior: "smooth" });
+      if (scrollLeft <= 10) {
+        container.scrollTo({ left: maxScroll, behavior: "smooth" });
       } else {
-        container.scrollBy({ left: -cardWidth, behavior: "smooth" });
+        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
       }
     } else {
-      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
-        // Wrap to the beginning if at end
+      if (scrollLeft >= maxScroll - 10) {
         container.scrollTo({ left: 0, behavior: "smooth" });
       } else {
-        container.scrollBy({ left: cardWidth, behavior: "smooth" });
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
       }
     }
   };
 
-  // Scroll to a specific card index
-  const scrollToIndex = (index: number) => {
+  // Scroll to a specific page index
+  const scrollToPage = (pageIndex: number) => {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
-    const card = container.querySelector(".product-card-item") as HTMLElement | null;
-    const cardWidth = card ? card.offsetWidth + 16 : 280;
-    container.scrollTo({ left: index * cardWidth, behavior: "smooth" });
+    const { scrollWidth, clientWidth } = container;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 0) return;
+
+    if (pageCount <= 1) {
+      container.scrollTo({ left: 0, behavior: "smooth" });
+      return;
+    }
+
+    const targetScroll = (pageIndex / (pageCount - 1)) * maxScroll;
+    container.scrollTo({ left: targetScroll, behavior: "smooth" });
   };
 
   // Helper to extract a friendly short highlight
@@ -179,7 +204,7 @@ export default function CompactProductsSection() {
             className="flex items-stretch gap-4 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-4 pt-1 px-1 -mx-1"
             style={{ WebkitOverflowScrolling: "touch" }}
           >
-            {allProducts.map((item, idx) => {
+            {allProducts.map((item) => {
               const imageSrc =
                 item.images && item.images.length > 0
                   ? item.images[0]
@@ -262,21 +287,28 @@ export default function CompactProductsSection() {
           </div>
         </div>
 
-        {/* DOTS / PROGRESS INDICATOR */}
-        <div className="flex items-center justify-center gap-2 mt-4 sm:mt-6">
-          {allProducts.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => scrollToIndex(idx)}
-              aria-label={`Chuyển đến sản phẩm số ${idx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                activeIndex === idx
-                  ? "w-8 bg-[#214E34]"
-                  : "w-2 bg-gray-300 hover:bg-gray-400"
-              }`}
-            />
-          ))}
-        </div>
+        {/* DOTS / PROGRESS INDICATOR (Fixed, Responsive, Easy to click) */}
+        {pageCount > 1 && (
+          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-5 sm:mt-7">
+            {Array.from({ length: pageCount }).map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => scrollToPage(idx)}
+                aria-label={`Chuyển đến trang sản phẩm ${idx + 1}`}
+                className="p-2 group cursor-pointer focus:outline-none"
+              >
+                <span
+                  className={`block h-2.5 rounded-full transition-all duration-300 ${
+                    currentPage === idx
+                      ? "w-8 bg-[#214E34] shadow-sm"
+                      : "w-2.5 bg-gray-300 group-hover:bg-[#214E34]/50"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* BOTTOM HELPFUL INFO & CTA BAR */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-gray-600 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/90 shadow-sm">
