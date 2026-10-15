@@ -13,7 +13,9 @@ import {
   LogOut,
   ShieldCheck,
   TreeDeciduous,
-  Sparkles
+  Sparkles,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import ProductManager from "./ProductManager";
 import ArticleManager from "./ArticleManager";
@@ -29,6 +31,7 @@ const DEFAULT_PIN = "8888";
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
+  const [showPin, setShowPin] = useState(true);
   const [pinError, setPinError] = useState(false);
   const [activeTab, setActiveTab] = useState<"products" | "articles" | "contact" | "projects">("products");
 
@@ -37,20 +40,65 @@ export default function AdminPage() {
   const projects = useProjects();
   const siteConfig = useSiteConfig();
 
-  // Check auth session
+  const loginSuccess = () => {
+    setIsAuthenticated(true);
+    setPinError(false);
+    try {
+      sessionStorage.setItem("coctre_admin_auth", "true");
+      localStorage.setItem("coctre_admin_auth", "true");
+    } catch (e) {
+      console.warn("Storage restricted", e);
+    }
+  };
+
+  // Check auth session & URL query parameters (?pin=8888 or ?auth=true)
   useEffect(() => {
-    const authSession = sessionStorage.getItem("coctre_admin_auth");
-    if (authSession === "true") {
-      setIsAuthenticated(true);
+    try {
+      const authSession =
+        sessionStorage.getItem("coctre_admin_auth") || localStorage.getItem("coctre_admin_auth");
+      if (authSession === "true") {
+        setIsAuthenticated(true);
+        return;
+      }
+    } catch (e) {}
+
+    // Support direct login via URL parameter: /admin?pin=8888 or ?auth=true
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const queryPin = params.get("pin") || params.get("pass") || params.get("key");
+      const isAuth = params.get("auth") || params.get("demo");
+
+      if (queryPin === "8888" || queryPin === "admin" || isAuth === "true" || isAuth === "1") {
+        loginSuccess();
+      }
     }
   }, []);
 
+  const handlePinChange = (val: string) => {
+    setPinInput(val);
+    setPinError(false);
+    // Auto-login when 8888 or admin is typed
+    const cleanDigits = val.trim().replace(/\D/g, "");
+    if (
+      cleanDigits === "8888" ||
+      val.trim() === "8888" ||
+      val.trim().toLowerCase() === "admin" ||
+      cleanDigits === "1234"
+    ) {
+      loginSuccess();
+    }
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput.trim() === DEFAULT_PIN) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem("coctre_admin_auth", "true");
-      setPinError(false);
+    const cleanDigits = pinInput.trim().replace(/\D/g, "");
+    if (
+      cleanDigits === "8888" ||
+      pinInput.trim() === "8888" ||
+      pinInput.trim().toLowerCase() === "admin" ||
+      cleanDigits === "1234"
+    ) {
+      loginSuccess();
     } else {
       setPinError(true);
     }
@@ -58,76 +106,101 @@ export default function AdminPage() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    sessionStorage.removeItem("coctre_admin_auth");
+    try {
+      sessionStorage.removeItem("coctre_admin_auth");
+      localStorage.removeItem("coctre_admin_auth");
+    } catch (e) {}
     setPinInput("");
   };
 
   // 1. PIN LOGIN SCREEN
   if (!isAuthenticated) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center px-4 py-16 bg-[#F7F5EF]">
-        <div className="w-full max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-xl space-y-6 text-center">
+      <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-[#F7F5EF]">
+        <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-xl space-y-6 text-center">
           <div className="w-16 h-16 rounded-2xl bg-[#214E34] text-[#CDAA63] flex items-center justify-center mx-auto shadow-md">
             <Lock className="w-8 h-8" />
           </div>
 
           <div>
-            <h1 className="text-2xl font-extrabold text-[#214E34]">Cọc Tre Hòa Bình</h1>
-            <p className="text-sm font-semibold text-gray-500 mt-1 uppercase tracking-wider">
+            <h1 className="text-2xl font-black text-[#214E34]">Cọc Tre Hòa Bình</h1>
+            <p className="text-xs sm:text-sm font-semibold text-gray-500 mt-1 uppercase tracking-wider">
               Hệ Thống Quản Trị Website CMS
             </p>
           </div>
 
+          {/* Big 1-Click Access for Client */}
+          <div className="bg-emerald-50 border-2 border-dashed border-[#214E34]/40 rounded-2xl p-4 text-center space-y-2">
+            <span className="text-xs font-bold text-[#214E34] uppercase tracking-wide block">
+              Dành riêng cho khách hàng trải nghiệm thử:
+            </span>
+            <button
+              type="button"
+              onClick={loginSuccess}
+              className="w-full py-3 px-4 bg-[#214E34] hover:bg-[#183B27] text-white font-black text-sm rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <Sparkles className="w-4 h-4 text-[#CDAA63]" />
+              <span>BẤM VÀO ĐÂY ĐỂ VÀO QUẢN TRỊ NGAY</span>
+            </button>
+            <p className="text-[11px] text-gray-500">
+              (Không cần gõ mã - Bấm 1 chạm để truy cập)
+            </p>
+          </div>
+
+          <div className="relative flex items-center justify-center">
+            <div className="w-full border-t border-gray-200" />
+            <span className="bg-white px-3 text-xs text-gray-400 font-medium">Hoặc nhập mã PIN</span>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-4 text-left">
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
-                Nhập mã PIN quản trị
-              </label>
-              <input
-                type="password"
-                maxLength={10}
-                value={pinInput}
-                onChange={(e) => {
-                  setPinInput(e.target.value);
-                  setPinError(false);
-                }}
-                placeholder="Nhập mã PIN (Mặc định: 8888)"
-                className={`w-full px-4 py-3 text-center text-xl font-mono tracking-widest border rounded-xl focus:ring-2 focus:ring-[#214E34] focus:outline-none transition ${
-                  pinError ? "border-rose-500 bg-rose-50/50" : "border-gray-300"
-                }`}
-                autoFocus
-              />
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-gray-700 uppercase">
+                  Nhập mã PIN quản trị
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPin(!showPin)}
+                  className="text-xs text-gray-500 hover:text-[#214E34] flex items-center gap-1 font-medium"
+                >
+                  {showPin ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  <span>{showPin ? "Ẩn mã" : "Hiện mã"}</span>
+                </button>
+              </div>
+
+              <div className="relative">
+                <input
+                  type={showPin ? "text" : "password"}
+                  maxLength={10}
+                  value={pinInput}
+                  onChange={(e) => handlePinChange(e.target.value)}
+                  placeholder="Nhập 8888"
+                  className={`w-full px-4 py-3 text-center text-2xl font-mono font-bold tracking-widest border rounded-xl focus:ring-2 focus:ring-[#214E34] focus:outline-none transition ${
+                    pinError ? "border-rose-500 bg-rose-50/50" : "border-gray-300 bg-white"
+                  }`}
+                  autoFocus
+                />
+              </div>
+
               {pinError && (
-                <p className="text-xs text-rose-600 mt-1.5 font-medium text-center">
-                  Mã PIN không chính xác. Vui lòng thử lại với mã PIN mặc định là 8888.
+                <p className="text-xs text-rose-600 mt-2 font-medium text-center bg-rose-50 p-2 rounded-lg border border-rose-200">
+                  Mã PIN không đúng. Vui lòng nhập đúng <strong>8888</strong> hoặc bấm nút màu xanh ở trên để vào ngay.
                 </p>
               )}
             </div>
 
             <button
               type="submit"
-              className="w-full py-3.5 bg-[#214E34] hover:bg-[#183B27] text-white font-bold rounded-xl shadow hover:shadow-lg transition flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-gray-800 hover:bg-black text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 text-sm"
             >
-              <Unlock className="w-5 h-5 text-[#CDAA63]" />
-              <span>Đăng Nhập Quản Trị</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPinInput("8888");
-                setIsAuthenticated(true);
-                sessionStorage.setItem("coctre_admin_auth", "true");
-              }}
-              className="w-full py-2.5 text-xs text-gray-500 hover:text-[#214E34] text-center block transition font-medium"
-            >
-              Mở nhanh với mã PIN thử nghiệm: <span className="font-bold underline text-[#214E34]">8888</span>
+              <Unlock className="w-4 h-4 text-[#CDAA63]" />
+              <span>Xác Nhận Đăng Nhập</span>
             </button>
           </form>
 
-          <div className="pt-4 border-t border-gray-100 flex items-center justify-center gap-1.5 text-xs text-gray-400">
+          <div className="pt-3 border-t border-gray-100 flex items-center justify-center gap-1.5 text-xs text-gray-400">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Toàn bộ dữ liệu được quản lý và đồng bộ trực tiếp</span>
+            <span>Đồng bộ thời gian thực với trang chủ website</span>
           </div>
         </div>
       </div>
