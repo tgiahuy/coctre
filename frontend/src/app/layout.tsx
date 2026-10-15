@@ -64,12 +64,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/images/logo.png", type: "image/png" },
+      { url: "/icon.png?v=2", type: "image/png" },
+      { url: "/images/logo.png?v=2", type: "image/png" },
+      { url: "/favicon.ico?v=2" },
     ],
     apple: [
-      { url: "/apple-touch-icon.png" },
+      { url: "/apple-icon.png?v=2" },
+      { url: "/apple-touch-icon.png?v=2" },
     ],
+    shortcut: "/icon.png?v=2",
   },
   robots: {
     index: true,
