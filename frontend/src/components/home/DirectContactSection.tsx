@@ -14,15 +14,24 @@ import {
 } from "lucide-react";
 import { useSiteConfig } from "@/lib/configStore";
 
+const DEFAULT_MAP_EMBED =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.1953284097457!2d105.7820123!3d20.9848149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accf12b7a977%3A0x4a9b407ebaf42f1b!2zMjI4IFRoYW5oIELDrG5oLCBN4buZIExhbywgSMOgIMSQw7RuZywgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s";
+
 function cleanMapUrl(input: string): string {
-  if (!input) {
-    return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.1953284097457!2d105.7820123!3d20.9848149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accf12b7a977%3A0x4a9b407ebaf42f1b!2zMjI4IFRoYW5oIELDrG5oLCBN4buZIExhbywgSMOgIMSQw7RuZywgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s";
+  if (!input || !input.trim()) {
+    return DEFAULT_MAP_EMBED;
   }
+  // If user pasted full iframe tag: <iframe src="..." ...>
   const match = input.match(/src=["'](.*?)["']/);
-  if (match && match[1]) {
-    return match[1];
+  const rawUrl = match && match[1] ? match[1] : input.trim();
+
+  // Only google.com/maps/embed can be rendered inside iframe.
+  // Standard share links (maps.app.goo.gl or google.com/maps/place) cause "Refused to connect"
+  if (rawUrl.includes("google.com/maps/embed")) {
+    return rawUrl;
   }
-  return input.trim();
+
+  return DEFAULT_MAP_EMBED;
 }
 
 export default function DirectContactSection() {

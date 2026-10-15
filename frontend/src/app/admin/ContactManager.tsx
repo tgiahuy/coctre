@@ -286,16 +286,80 @@ export default function ContactManager() {
                 />
               </div>
 
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
-                  Google Maps Embed URL (Thẻ iframe nhúng bản đồ)
-                </label>
-                <input
-                  type="text"
+              <div className="sm:col-span-2 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-gray-700 uppercase">
+                    Mã nhúng bản đồ Google Maps (Embed Iframe)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleChange(
+                        "mapEmbedUrl",
+                        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.1953284097457!2d105.7820123!3d20.9848149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accf12b7a977%3A0x4a9b407ebaf42f1b!2zMjI4IFRoYW5oIELDrG5oLCBN4buZIExhbywgSMOgIMSQw7RuZywgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s"
+                      )
+                    }
+                    className="text-xs text-[#214E34] hover:underline font-semibold"
+                  >
+                    Dùng bản đồ mẫu trụ sở Hà Đông
+                  </button>
+                </div>
+
+                <textarea
+                  rows={2}
                   value={config.mapEmbedUrl}
-                  onChange={(e) => handleChange("mapEmbedUrl", e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#214E34] focus:outline-none"
+                  onChange={(e) => {
+                    const val = e.target.value.trim();
+                    const match = val.match(/src=["'](.*?)["']/);
+                    const clean = match && match[1] ? match[1] : val;
+                    handleChange("mapEmbedUrl", clean);
+                  }}
+                  placeholder='Dán mã nhúng iframe từ Google Maps (Ví dụ: <iframe src="https://www.google.com/maps/embed?pb=..." ...></iframe>)'
+                  className="w-full px-3 py-2 text-xs font-mono border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#214E34] focus:outline-none"
                 />
+
+                {/* Warning if user pasted non-embed link */}
+                {config.mapEmbedUrl &&
+                  (config.mapEmbedUrl.includes("maps.app.goo.gl") ||
+                    config.mapEmbedUrl.includes("google.com/maps/place") ||
+                    !config.mapEmbedUrl.includes("google.com/maps/embed")) && (
+                    <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-amber-900 text-xs space-y-1.5">
+                      <p className="font-bold flex items-center gap-1.5">
+                        ⚠️ Cảnh báo: Bạn đang dán Link chia sẻ thông thường, Google sẽ báo lỗi &quot;Từ chối kết nối&quot;!
+                      </p>
+                      <p className="text-[11px] leading-relaxed">
+                        Google Maps không cho phép nhúng link dạng <code>maps.app.goo.gl</code> hay <code>maps/place</code> vào website.
+                        <br />
+                        <strong>Cách lấy đúng link nhúng:</strong>
+                        <br />
+                        1. Mở Google Maps và tìm vị trí doanh nghiệp của bạn.
+                        <br />
+                        2. Bấm nút <strong>&quot;Chia sẻ&quot; (Share)</strong> ➔ Chọn tab <strong>&quot;Nhúng bản đồ&quot; (Embed a map)</strong>.
+                        <br />
+                        3. Bấm <strong>&quot;Sao chép HTML&quot; (Copy HTML)</strong> và dán thẳng vào ô phía trên!
+                      </p>
+                    </div>
+                  )}
+
+                {/* Live Map Preview inside Admin */}
+                {config.mapEmbedUrl && config.mapEmbedUrl.includes("google.com/maps/embed") && (
+                  <div className="mt-2 border border-gray-200 rounded-xl overflow-hidden">
+                    <div className="bg-gray-100 px-3 py-1.5 text-[11px] font-bold text-gray-700 flex items-center justify-between">
+                      <span>Xem trước bản đồ:</span>
+                      <span className="text-emerald-700">✓ Link nhúng hợp lệ</span>
+                    </div>
+                    <div className="h-44 w-full bg-gray-50">
+                      <iframe
+                        src={config.mapEmbedUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        title="Xem trước bản đồ"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
