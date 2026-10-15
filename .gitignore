@@ -47,3 +47,9 @@ backend/.env*
 *.tsbuildinfo
 next-env.d.ts
 frontend/next-env.d.ts
+
+# java & backend
+backend/target/
+backend/data/
+*.class
+.mvn/wrapper/maven-wrapper.jar

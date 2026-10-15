@@ -7,6 +7,9 @@
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
     "start": "npm --prefix frontend run start",
-    "lint": "npm --prefix frontend run lint"
+    "lint": "npm --prefix frontend run lint",
+    "backend:dev": "cd backend && ./mvnw spring-boot:run",
+    "backend:build": "cd backend && ./mvnw clean package -DskipTests",
+    "backend:postgres": "cd backend && docker compose up -d"
   }
 }
