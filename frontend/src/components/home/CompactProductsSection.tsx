@@ -1,126 +1,310 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Phone, MessageCircle, ArrowRight, CheckCircle2 } from "lucide-react";
+import {
+  ShoppingCart,
+  Phone,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Layers,
+  Ruler,
+} from "lucide-react";
 import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
+import { useProducts } from "@/lib/productStore";
+import { Product } from "@/data/products";
 
 export default function CompactProductsSection() {
   const siteConfig = useSiteConfig();
   const { openQuoteModal } = useQuoteModal();
+  const allProducts = useProducts();
 
-  const products = [
-    {
-      id: "coc-tre-3m",
-      slug: "coc-tre-3m",
-      title: "CỌC TRE 3M",
-      spec: "Ø 80 - 100 mm",
-      image: "/images/products/coc-tre-3m-1.webp",
-      highlight: "Kè sông, móng sâu",
-    },
-    {
-      id: "coc-tre-25m",
-      slug: "coc-tre-25m",
-      title: "CỌC TRE 2.5M",
-      spec: "Ø 70 - 90 mm",
-      image: "/images/products/coc-tre-25m-1.webp",
-      highlight: "Móng nhà phố 3-4 tầng",
-    },
-    {
-      id: "coc-tre-2m",
-      slug: "coc-tre-2m",
-      title: "CỌC TRE 2M",
-      spec: "Ø 60 - 80 mm",
-      image: "/images/products/coc-tre-2m-1.webp",
-      highlight: "Phổ biến móng nhà dân",
-    },
-    {
-      id: "coc-tre-15m",
-      slug: "coc-tre-15m",
-      title: "CỌC TRE 1.5M",
-      spec: "Ø 50 - 70 mm",
-      image: "/images/products/coc-tre-15m-1.webp",
-      highlight: "Gia cố mương rãnh",
-    },
-  ];
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Update scroll buttons visibility & active index on scroll
+  const updateScrollState = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
+
+    // Estimate current active card
+    const card = scrollRef.current.querySelector(".product-card-item") as HTMLElement | null;
+    if (card) {
+      const cardWidth = card.offsetWidth + 16; // width + gap
+      const newIndex = Math.round(scrollLeft / cardWidth);
+      setActiveIndex(Math.min(Math.max(newIndex, 0), allProducts.length - 1));
+    }
+  };
+
+  useEffect(() => {
+    updateScrollState();
+    window.addEventListener("resize", updateScrollState);
+    return () => window.removeEventListener("resize", updateScrollState);
+  }, [allProducts]);
+
+  // Handle smooth scroll Left or Right
+  const handleScroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const card = container.querySelector(".product-card-item") as HTMLElement | null;
+    const cardWidth = card ? card.offsetWidth + 16 : 280;
+
+    if (direction === "left") {
+      if (container.scrollLeft <= 10) {
+        // Wrap to the end if at start
+        container.scrollTo({ left: container.scrollWidth, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: -cardWidth, behavior: "smooth" });
+      }
+    } else {
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
+        // Wrap to the beginning if at end
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: cardWidth, behavior: "smooth" });
+      }
+    }
+  };
+
+  // Scroll to a specific card index
+  const scrollToIndex = (index: number) => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    const card = container.querySelector(".product-card-item") as HTMLElement | null;
+    const cardWidth = card ? card.offsetWidth + 16 : 280;
+    container.scrollTo({ left: index * cardWidth, behavior: "smooth" });
+  };
+
+  // Helper to extract a friendly short highlight
+  const getProductHighlight = (p: Product) => {
+    if (p.applications && p.applications.length > 0) {
+      return p.applications[0];
+    }
+    return p.shortDescription || "Cọc tre tự nhiên già tuyển chọn";
+  };
 
   return (
-    <section className="py-10 sm:py-14 bg-[#FAF9F5] border-t border-b border-gray-200" id="san-pham-noi-bat">
+    <section
+      className="py-10 sm:py-16 bg-[#FAF9F5] border-t border-b border-gray-200 relative overflow-hidden"
+      id="san-pham-noi-bat"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* GREEN RIBBON HEADER (Exact style as user's photo) */}
-        <div className="relative flex items-center justify-center mb-8 sm:mb-10">
-          <div className="absolute inset-0 flex items-center" aria-hidden="true">
-            <div className="w-full border-t-2 border-[#214E34]/30" />
+        {/* GREEN RIBBON HEADER & NAVIGATION CONTROLS */}
+        <div className="relative flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 gap-4">
+          
+          {/* Background horizontal line */}
+          <div
+            className="absolute inset-0 flex items-center hidden sm:flex"
+            aria-hidden="true"
+          >
+            <div className="w-full border-t-2 border-[#214E34]/25" />
           </div>
-          <div className="relative">
-            {/* Hexagon/Ribbon shaped badge */}
-            <div className="relative bg-[#214E34] text-white px-8 sm:px-12 py-2 sm:py-2.5 font-black text-sm sm:text-base tracking-wider uppercase shadow-md flex items-center gap-2 clip-ribbon">
+
+          {/* Left spacer for balance on desktop */}
+          <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500 bg-[#FAF9F5] px-3 z-10 font-medium">
+            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+            <span>Sẵn hàng tại bãi: <strong>500.000+ cọc</strong></span>
+          </div>
+
+          {/* Center Hexagon/Ribbon Badge */}
+          <div className="relative z-10">
+            <div className="bg-[#214E34] text-white px-8 sm:px-12 py-2.5 sm:py-3 font-black text-sm sm:text-base tracking-wider uppercase shadow-lg flex items-center gap-2.5 clip-ribbon">
+              <Sparkles className="w-4 h-4 text-[#CDAA63]" />
               <span>SẢN PHẨM NỔI BẬT</span>
             </div>
           </div>
+
+          {/* Right Header Controls: Prev / Next Buttons */}
+          <div className="relative z-10 flex items-center gap-2 bg-[#FAF9F5] sm:pl-3">
+            <span className="text-xs text-gray-500 font-semibold hidden md:inline-block mr-1">
+              Xem thêm các quy cách:
+            </span>
+            <button
+              onClick={() => handleScroll("left")}
+              aria-label="Xem sản phẩm trước"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
+              title="Xem sản phẩm trước (Sang trái)"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => handleScroll("right")}
+              aria-label="Xem sản phẩm kế tiếp"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
+              title="Xem sản phẩm tiếp theo (Sang phải)"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
-        {/* 4 HORIZONTAL COMPACT PRODUCT CARDS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl p-3 sm:p-4 border border-gray-200 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between text-center group"
-            >
-              {/* Product Image */}
-              <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3 border border-gray-100">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded">
-                  {item.spec}
-                </div>
-              </div>
+        {/* SLIDER CAROUSEL TRACK WRAPPER */}
+        <div className="relative group/carousel">
+          
+          {/* FLOATING LEFT ARROW BUTTON (Desktop & Tablet) */}
+          <button
+            onClick={() => handleScroll("left")}
+            aria-label="Cuộn sang trái"
+            className={`absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-sm border-2 border-[#214E34]/40 text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-90 hover:scale-110 hidden sm:flex ${
+              !canScrollLeft ? "opacity-75 hover:opacity-100" : "opacity-95"
+            }`}
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
 
-              {/* Title & Info */}
-              <div className="space-y-1 mb-3">
-                <h3 className="text-sm sm:text-base font-black text-[#18231C] uppercase tracking-wide">
-                  {item.title}
-                </h3>
-                <p className="text-[11px] sm:text-xs text-gray-500 font-medium">
-                  {item.highlight}
-                </p>
-              </div>
+          {/* FLOATING RIGHT ARROW BUTTON (Desktop & Tablet) */}
+          <button
+            onClick={() => handleScroll("right")}
+            aria-label="Cuộn sang phải"
+            className={`absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-sm border-2 border-[#214E34]/40 text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-90 hover:scale-110 hidden sm:flex ${
+              !canScrollRight ? "opacity-75 hover:opacity-100" : "opacity-95"
+            }`}
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
 
-              {/* Order Pill Button (Like in photo) */}
-              <div className="space-y-2 pt-1">
-                <button
-                  onClick={() => openQuoteModal()}
-                  className="w-full py-2 sm:py-2.5 px-3 rounded-full border-2 border-[#214E34] text-[#214E34] hover:bg-[#214E34] hover:text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer group-hover:bg-[#214E34] group-hover:text-white shadow-sm"
+          {/* HORIZONTAL SCROLL CONTAINER */}
+          <div
+            ref={scrollRef}
+            onScroll={updateScrollState}
+            className="flex items-stretch gap-4 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-4 pt-1 px-1 -mx-1"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            {allProducts.map((item, idx) => {
+              const imageSrc =
+                item.images && item.images.length > 0
+                  ? item.images[0]
+                  : "/images/products/coc-tre-3m-1.webp";
+
+              return (
+                <div
+                  key={item.id || item.slug}
+                  className="product-card-item shrink-0 snap-start w-[78vw] xs:w-[280px] sm:w-[270px] md:w-[280px] lg:w-[calc(25%-15px)] bg-white rounded-2xl p-3.5 sm:p-4 border border-gray-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-center group/card hover:-translate-y-1"
                 >
-                  <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span>BÁO GIÁ NGAY</span>
-                </button>
-              </div>
-            </div>
+                  {/* Top Image Section */}
+                  <Link
+                    href={`/san-pham/${item.slug}`}
+                    className="relative block aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3 border border-gray-100 group/img"
+                  >
+                    <Image
+                      src={imageSrc}
+                      alt={item.name}
+                      fill
+                      sizes="(max-width: 640px) 78vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover group-hover/card:scale-108 transition-transform duration-500"
+                    />
+
+                    {/* Diameter Spec Badge */}
+                    <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1 shadow-sm">
+                      <Ruler className="w-3 h-3 text-[#CDAA63]" />
+                      <span>{item.diameter || "Tiêu chuẩn"}</span>
+                    </div>
+
+                    {/* Length Tag */}
+                    <div className="absolute top-2.5 right-2.5 bg-[#214E34]/90 backdrop-blur-sm text-[#EED59B] text-[10px] sm:text-xs font-extrabold px-2.5 py-1 rounded-md border border-[#CDAA63]/30 shadow-sm">
+                      {item.length ? `Dài ${item.length}` : "Quy cách chuẩn"}
+                    </div>
+
+                    {/* Stock Pill */}
+                    <div className="absolute bottom-2 left-2.5 bg-emerald-600/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded">
+                      ● Sẵn hàng bãi
+                    </div>
+                  </Link>
+
+                  {/* Title & Specs */}
+                  <div className="space-y-1.5 mb-3 px-1 text-left">
+                    <Link
+                      href={`/san-pham/${item.slug}`}
+                      className="block group-hover/card:text-[#214E34] transition-colors"
+                    >
+                      <h3 className="text-sm sm:text-base font-black text-[#18231C] uppercase tracking-wide line-clamp-1 group-hover/card:text-[#214E34]">
+                        {item.name}
+                      </h3>
+                    </Link>
+
+                    <p className="text-[11px] sm:text-xs text-gray-500 font-medium line-clamp-2 min-h-[32px] leading-relaxed">
+                      {getProductHighlight(item)}
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-2 pt-2 border-t border-gray-100 mt-auto">
+                    {/* Báo giá ngay */}
+                    <button
+                      onClick={() => openQuoteModal(item.name)}
+                      className="w-full py-2.5 px-3 rounded-full border-2 border-[#214E34] text-[#214E34] hover:bg-[#214E34] hover:text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer group-hover/card:bg-[#214E34] group-hover/card:text-white shadow-sm active:scale-95"
+                    >
+                      <ShoppingCart className="w-4 h-4 shrink-0" />
+                      <span>BÁO GIÁ NGAY</span>
+                    </button>
+
+                    {/* Chi tiết link */}
+                    <Link
+                      href={`/san-pham/${item.slug}`}
+                      className="inline-flex items-center justify-center gap-1 text-[11px] font-bold text-gray-500 hover:text-[#214E34] transition-colors py-0.5"
+                    >
+                      <span>Xem thông số kỹ thuật</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* DOTS / PROGRESS INDICATOR */}
+        <div className="flex items-center justify-center gap-2 mt-4 sm:mt-6">
+          {allProducts.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => scrollToIndex(idx)}
+              aria-label={`Chuyển đến sản phẩm số ${idx + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                activeIndex === idx
+                  ? "w-8 bg-[#214E34]"
+                  : "w-2 bg-gray-300 hover:bg-gray-400"
+              }`}
+            />
           ))}
         </div>
 
-        {/* Small Bottom Info Bar */}
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-gray-600 bg-white p-3.5 rounded-xl border border-gray-200 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-            <span>Có sẵn cọc 4m, 5m hoặc nhận chặt vát theo yêu cầu kỹ thuật từng công trình.</span>
+        {/* BOTTOM HELPFUL INFO & CTA BAR */}
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-gray-600 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/90 shadow-sm">
+          <div className="flex items-center gap-2.5 text-center md:text-left">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+            <span>
+              Chúng tôi nhận chặt vát đầu cọc, cắt theo kích thước yêu cầu (1.5m - 5m) và giao tận chân công trình.
+            </span>
           </div>
-          <a
-            href={`tel:${siteConfig.hotline}`}
-            className="font-bold text-[#E57C23] hover:underline flex items-center gap-1 shrink-0"
-          >
-            <Phone className="w-3.5 h-3.5" />
-            <span>Hotline bãi cọc: {siteConfig.hotlineFormatted}</span>
-          </a>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/san-pham"
+              className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-[#214E34] hover:text-white text-gray-800 font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-sm"
+            >
+              <Layers className="w-4 h-4 text-[#CDAA63]" />
+              <span>Xem tất cả ({allProducts.length}) quy cách</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+
+            <a
+              href={`tel:${siteConfig.hotline}`}
+              className="px-4 py-2 rounded-xl bg-[#E57C23] hover:bg-[#CC6914] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+            >
+              <Phone className="w-4 h-4" />
+              <span>{siteConfig.hotlineFormatted}</span>
+            </a>
+          </div>
         </div>
 
       </div>

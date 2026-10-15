@@ -59,6 +59,15 @@ body {
   overflow-x: hidden;
 }
 
+/* Utility to hide scrollbars while allowing touch/smooth scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
