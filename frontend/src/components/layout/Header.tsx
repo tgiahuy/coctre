@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Phone,
@@ -116,8 +117,15 @@ export default function Header() {
           <div className="flex justify-between items-center">
             {/* LOGO */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[#214E34] to-[#183B27] flex items-center justify-center text-[#CDAA63] shadow-md group-hover:scale-105 transition-transform">
-                <TreeDeciduous className="w-7 h-7 stroke-[2.2]" />
+              <div className="relative w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full shadow-md group-hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#CDAA63]/30 bg-white p-0.5">
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo Cọc Tre Hòa Bình"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-contain rounded-full"
+                  priority
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl sm:text-2xl font-black tracking-tight text-[#214E34] leading-tight flex items-center gap-1">

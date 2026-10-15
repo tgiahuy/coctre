@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Lock,
   Unlock,
@@ -118,8 +119,14 @@ export default function AdminPage() {
     return (
       <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-[#F7F5EF]">
         <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-xl space-y-6 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[#214E34] text-[#CDAA63] flex items-center justify-center mx-auto shadow-md">
-            <Lock className="w-8 h-8" />
+          <div className="relative w-20 h-20 mx-auto rounded-full shadow-lg ring-4 ring-[#CDAA63]/40 bg-white p-1">
+            <Image
+              src="/images/logo.png"
+              alt="Logo Cọc Tre Hòa Bình"
+              width={80}
+              height={80}
+              className="w-full h-full object-contain rounded-full"
+            />
           </div>
 
           <div>
@@ -214,8 +221,14 @@ export default function AdminPage() {
       <header className="bg-[#18231C] text-white sticky top-0 z-40 border-b border-[#2B3E32] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#214E34] text-[#CDAA63] flex items-center justify-center shrink-0">
-              <TreeDeciduous className="w-5 h-5" />
+            <div className="relative w-9 h-9 rounded-full bg-white p-0.5 ring-2 ring-[#CDAA63]/60 shrink-0 shadow-sm overflow-hidden">
+              <Image
+                src="/images/logo.png"
+                alt="Logo Cọc Tre Hòa Bình"
+                width={36}
+                height={36}
+                className="w-full h-full object-contain rounded-full"
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">

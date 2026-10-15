@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   MapPin,
   Phone,
@@ -68,9 +69,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* COL 1: ABOUT COMPANY */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#214E34] flex items-center justify-center text-[#CDAA63] shadow-inner">
-                <TreeDeciduous className="w-6 h-6" />
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-12 h-12 shrink-0 rounded-full shadow-lg overflow-hidden ring-2 ring-[#CDAA63] bg-white p-0.5 group-hover:scale-105 transition-transform">
+                <Image
+                  src="/images/logo.png"
+                  alt="Logo Cọc Tre Hòa Bình"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-contain rounded-full"
+                />
               </div>
               <div>
                 <span className="text-xl font-extrabold text-white tracking-tight">

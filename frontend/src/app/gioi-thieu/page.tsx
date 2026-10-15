@@ -71,16 +71,28 @@ export default function AboutPage() {
       <section className="bg-[#18231C] text-white py-14 sm:py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-[#182B1F]/80 to-transparent z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[#CDAA63]/20 text-[#CDAA63] border border-[#CDAA63]/40">
-              HỒ SƠ NĂNG LỰC DOANH NGHIỆP
+          <div className="max-w-4xl flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-8">
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-full shadow-2xl ring-4 ring-[#CDAA63] bg-white p-1">
+              <Image
+                src="/images/logo.png"
+                alt="Logo Cọc Tre Hòa Bình"
+                width={112}
+                height={112}
+                className="w-full h-full object-contain rounded-full"
+                priority
+              />
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight text-white">
-              CÔNG TY TNHH KHAI THÁC & CHẾ BIẾN LÂM SẢN HÒA BÌNH
-            </h1>
-            <p className="text-base sm:text-lg text-gray-300 leading-relaxed font-normal">
-              Đơn vị tiên phong và uy tín hàng đầu trong lĩnh vực khai thác, sơ chế và cung ứng cọc tre công trình tại miền Bắc và miền Trung.
-            </p>
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[#CDAA63]/20 text-[#CDAA63] border border-[#CDAA63]/40">
+                HỒ SƠ NĂNG LỰC DOANH NGHIỆP
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white">
+                CÔNG TY TNHH KHAI THÁC & CHẾ BIẾN LÂM SẢN HÒA BÌNH
+              </h1>
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal">
+                Đơn vị tiên phong và uy tín hàng đầu trong lĩnh vực khai thác, sơ chế và cung ứng cọc tre công trình tại miền Bắc và miền Trung.
+              </p>
+            </div>
           </div>
         </div>
       </section>

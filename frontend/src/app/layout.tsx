@@ -62,6 +62,15 @@ export const metadata: Metadata = {
     description: "Cung cấp cọc tre số lượng lớn giao tận công trình 24/7.",
     images: ["/images/products/coc-tre-2m-1.webp"],
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/images/logo.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
@@ -78,7 +87,8 @@ export default function RootLayout({
     "@type": "LocalBusiness",
     name: siteConfig.companyName,
     legalName: siteConfig.legalName,
-    image: "https://coctrehoabinh.com/images/products/coc-tre-2m-1.webp",
+    image: "https://coctrehoabinh.com/images/logo.png",
+    logo: "https://coctrehoabinh.com/images/logo.png",
     telephone: siteConfig.hotline,
     email: siteConfig.email,
     address: {
