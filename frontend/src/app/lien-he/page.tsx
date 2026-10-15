@@ -15,9 +15,10 @@ import {
   MessageSquare
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
-import { siteConfig } from "@/data/config";
+import { useSiteConfig } from "@/lib/configStore";
 
 export default function ContactPage() {
+  const siteConfig = useSiteConfig();
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",

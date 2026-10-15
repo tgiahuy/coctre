@@ -17,11 +17,13 @@ import {
   TreeDeciduous,
   ArrowRight
 } from "lucide-react";
-import { siteConfig } from "@/data/config";
-import { products } from "@/data/products";
+import { useSiteConfig } from "@/lib/configStore";
+import { useProducts } from "@/lib/productStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function Header() {
+  const siteConfig = useSiteConfig();
+  const products = useProducts();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [productDropdownOpen, setProductDropdownOpen] = useState(false);

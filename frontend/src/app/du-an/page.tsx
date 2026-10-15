@@ -5,9 +5,10 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import ProjectCard from "@/components/common/ProjectCard";
 import SectionHeading from "@/components/common/SectionHeading";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { projects } from "@/data/projects";
+import { useProjects } from "@/lib/projectStore";
 
 export default function ProjectsPage() {
+  const projects = useProjects();
   const [filterType, setFilterType] = useState<string>("all");
 
   const categories = [

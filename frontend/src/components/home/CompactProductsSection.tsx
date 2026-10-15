@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart, Phone, MessageCircle, ArrowRight, CheckCircle2 } from "lucide-react";
-import { siteConfig } from "@/data/config";
+import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function CompactProductsSection() {
+  const siteConfig = useSiteConfig();
   const { openQuoteModal } = useQuoteModal();
 
   const products = [

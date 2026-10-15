@@ -2,9 +2,10 @@
 
 import React from "react";
 import { Phone, MessageCircle, MapPin, Clock, ShieldCheck, Warehouse } from "lucide-react";
-import { siteConfig } from "@/data/config";
+import { useSiteConfig } from "@/lib/configStore";
 
 export default function DirectContactSection() {
+  const siteConfig = useSiteConfig();
   return (
     <section className="py-14 sm:py-20 bg-[#14261B] text-white" id="lien-he-truc-tiep">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

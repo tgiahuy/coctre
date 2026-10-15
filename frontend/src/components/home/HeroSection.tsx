@@ -15,10 +15,11 @@ import {
   TreeDeciduous,
   Layers
 } from "lucide-react";
-import { siteConfig } from "@/data/config";
+import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function HeroSection() {
+  const siteConfig = useSiteConfig();
   const { openQuoteModal } = useQuoteModal();
 
   return (

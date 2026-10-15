@@ -1,12 +1,16 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, Building2 } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import ProjectCard from "@/components/common/ProjectCard";
-import { projects } from "@/data/projects";
+import { useProjects } from "@/lib/projectStore";
 
 export default function FeaturedProjectsSection() {
-  const featuredProjects = projects.slice(0, 3);
+  const projects = useProjects();
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 3);
+  const displayProjects = featuredProjects.length > 0 ? featuredProjects : projects.slice(0, 3);
 
   return (
     <section className="py-16 sm:py-24 bg-[#F7F5EF] border-t border-gray-200">
@@ -20,7 +24,7 @@ export default function FeaturedProjectsSection() {
 
         {/* 3 Cards / Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {featuredProjects.map((project) => (
+          {displayProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>

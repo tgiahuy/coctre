@@ -14,11 +14,13 @@ import {
   Calculator
 } from "lucide-react";
 import { useQuoteModal } from "@/context/QuoteModalContext";
-import { products } from "@/data/products";
-import { siteConfig } from "@/data/config";
+import { useProducts } from "@/lib/productStore";
+import { useSiteConfig } from "@/lib/configStore";
 
 export default function QuoteModal() {
   const { isOpen, selectedProduct, closeQuoteModal } = useQuoteModal();
+  const products = useProducts();
+  const siteConfig = useSiteConfig();
 
   const [formData, setFormData] = useState({
     fullName: "",

@@ -23,9 +23,9 @@ import {
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { getProductBySlug, getRelatedProducts, products } from "@/data/products";
+import { getProductBySlug, getAllProducts } from "@/lib/productStore";
 import { initialReviews, ProductReview } from "@/data/reviews";
-import { siteConfig } from "@/data/config";
+import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function ProductDetailPage({
@@ -34,11 +34,14 @@ export default function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = use(params);
+  const siteConfig = useSiteConfig();
   const product = getProductBySlug(resolvedParams.slug);
 
   if (!product) {
     notFound();
   }
+
+  const relatedProducts = getAllProducts().filter((p) => p.slug !== product.slug && p.id !== product.id).slice(0, 4);
 
   const { openQuoteModal } = useQuoteModal();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -81,8 +84,6 @@ export default function ProductDetailPage({
     setReviewSuccess(true);
     setTimeout(() => setReviewSuccess(false), 5000);
   };
-
-  const relatedProducts = getRelatedProducts(product.slug, 3);
 
   const tabs = [
     { key: "desc", label: "MÔ TẢ CHI TIẾT" },

@@ -6,9 +6,10 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import SectionHeading from "@/components/common/SectionHeading";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { products } from "@/data/products";
+import { useProducts } from "@/lib/productStore";
 
 export default function ProductsPage() {
+  const products = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLength, setSelectedLength] = useState<string>("all");
 

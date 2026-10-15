@@ -19,8 +19,8 @@ import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import ProjectCard from "@/components/common/ProjectCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { getProjectBySlug, getRelatedProjects, projects } from "@/data/projects";
-import { products } from "@/data/products";
+import { getProjectBySlug, getAllProjects } from "@/lib/projectStore";
+import { getAllProducts } from "@/lib/productStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function ProjectDetailPage({
@@ -36,8 +36,9 @@ export default function ProjectDetailPage({
   }
 
   const { openQuoteModal } = useQuoteModal();
-  const relatedProjects = getRelatedProjects(project.slug, 3);
-  const matchedProducts = products.filter((p) =>
+  const allProjects = getAllProjects();
+  const relatedProjects = allProjects.filter((p) => p.slug !== project.slug && p.id !== project.id).slice(0, 3);
+  const matchedProducts = getAllProducts().filter((p) =>
     project.productsUsed.includes(p.id) || project.productsUsed.includes(p.slug)
   );
 

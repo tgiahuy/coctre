@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Phone, MessageCircle, ArrowUp, FileText } from "lucide-react";
-import { siteConfig } from "@/data/config";
+import { Phone, MessageCircle, ArrowUp } from "lucide-react";
+import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function FloatingContact() {
+  const siteConfig = useSiteConfig();
   const [showBackToTop, setShowBackToTop] = useState(false);
   const { openQuoteModal } = useQuoteModal();
 

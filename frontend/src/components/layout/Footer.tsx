@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import {
@@ -12,10 +14,12 @@ import {
   Truck,
   ExternalLink
 } from "lucide-react";
-import { siteConfig } from "@/data/config";
-import { products } from "@/data/products";
+import { useSiteConfig } from "@/lib/configStore";
+import { useProducts } from "@/lib/productStore";
 
 export default function Footer() {
+  const siteConfig = useSiteConfig();
+  const products = useProducts();
   const currentYear = new Date().getFullYear();
 
   return (
