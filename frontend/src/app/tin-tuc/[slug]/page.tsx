@@ -1,9 +1,8 @@
 "use client";
 
-import React, { use, useState, useEffect } from "react";
+import React, { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   Calendar,
   Clock,
@@ -19,8 +18,7 @@ import {
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ArticleCard from "@/components/common/ArticleCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { getAllArticles, findArticleBySlug } from "@/lib/articleStore";
-import { Article } from "@/data/articles";
+import { useArticles } from "@/lib/articleStore";
 import { siteConfig } from "@/data/config";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
@@ -30,21 +28,13 @@ export default function ArticleDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = use(params);
-  const [article, setArticle] = useState<Article | null | undefined>(undefined);
-  const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
-
-  useEffect(() => {
-    const found = findArticleBySlug(resolvedParams.slug);
-    setArticle(found || null);
-
-    const all = getAllArticles();
-    const related = all.filter((a) => a.slug !== resolvedParams.slug).slice(0, 3);
-    setRelatedArticles(related);
-  }, [resolvedParams.slug]);
+  const allArticles = useArticles();
+  const article = allArticles.find((item) => item.slug === resolvedParams.slug || item.id === resolvedParams.slug);
+  const relatedArticles = allArticles.filter((item) => item.slug !== resolvedParams.slug).slice(0, 3);
 
   const { openQuoteModal } = useQuoteModal();
 
-  if (article === null) {
+  if (!article) {
     return (
       <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
         <div className="text-center space-y-4 max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
@@ -59,10 +49,6 @@ export default function ArticleDetailPage({
         </div>
       </div>
     );
-  }
-
-  if (!article) {
-    return <div className="min-h-screen bg-[#F7F5EF] py-24 text-center text-gray-500">Đang tải bài viết...</div>;
   }
 
   return (

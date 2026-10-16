@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Filter, Layers, CheckCircle2, ShieldCheck, Ruler, HelpCircle } from "lucide-react";
+import { Search, Filter, ShieldCheck, HelpCircle } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
-import SectionHeading from "@/components/common/SectionHeading";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
 import { useProducts } from "@/lib/productStore";
 
@@ -50,7 +49,7 @@ export default function ProductsPage() {
 
       return true;
     });
-  }, [searchQuery, selectedLength]);
+  }, [products, searchQuery, selectedLength]);
 
   return (
     <div className="bg-[#F7F5EF] min-h-screen">

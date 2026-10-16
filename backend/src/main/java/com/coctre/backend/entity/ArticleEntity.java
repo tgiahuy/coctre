@@ -37,6 +37,11 @@ public class ArticleEntity {
     private String content;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "article_table_of_contents", joinColumns = @JoinColumn(name = "article_id"))
+    @Builder.Default
+    private List<TableOfContentsEntry> tableOfContents = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "article_tags", joinColumns = @JoinColumn(name = "article_id"))
     @Column(name = "tag")
     @Builder.Default
@@ -44,4 +49,15 @@ public class ArticleEntity {
 
     @Builder.Default
     private Boolean featured = false;
+
+    @Embeddable
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TableOfContentsEntry {
+        @Column(name = "heading_id")
+        private String id;
+        private String text;
+    }
 }

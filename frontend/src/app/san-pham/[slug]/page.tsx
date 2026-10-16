@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { useState, use, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   CheckCircle2,
   Phone,
@@ -12,10 +11,6 @@ import {
   Truck,
   ShieldCheck,
   Star,
-  Layers,
-  Ruler,
-  Clock,
-  Sparkles,
   ArrowRight,
   Send,
   AlertCircle
@@ -23,7 +18,7 @@ import {
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { getProductBySlug, getAllProducts } from "@/lib/productStore";
+import { useProducts } from "@/lib/productStore";
 import { initialReviews, ProductReview } from "@/data/reviews";
 import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
@@ -35,28 +30,31 @@ export default function ProductDetailPage({
 }) {
   const resolvedParams = use(params);
   const siteConfig = useSiteConfig();
-  const product = getProductBySlug(resolvedParams.slug);
-
-  if (!product) {
-    notFound();
-  }
-
-  const relatedProducts = getAllProducts().filter((p) => p.slug !== product.slug && p.id !== product.id).slice(0, 4);
-
+  const products = useProducts();
+  const product = products.find((item) => item.slug === resolvedParams.slug || item.id === resolvedParams.slug);
   const { openQuoteModal } = useQuoteModal();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"desc" | "specs" | "apps" | "shipping" | "reviews">("desc");
 
   // Reviews state
-  const [reviewsList, setReviewsList] = useState<ProductReview[]>(() =>
-    initialReviews.filter((r) => r.productId === product.id || r.productId === product.slug)
-  );
+  const [submittedReviews, setSubmittedReviews] = useState<ProductReview[]>([]);
+  const reviewIdCounter = useRef(0);
   const [reviewAuthor, setReviewAuthor] = useState("");
   const [reviewCompany, setReviewCompany] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
   const [reviewSuccess, setReviewSuccess] = useState(false);
   const [reviewError, setReviewError] = useState("");
+
+  if (!product) {
+    return <div className="min-h-screen py-24 text-center text-gray-500">Không tìm thấy sản phẩm.</div>;
+  }
+
+  const relatedProducts = products.filter((p) => p.slug !== product.slug && p.id !== product.id).slice(0, 4);
+  const reviewsList = [
+    ...submittedReviews,
+    ...initialReviews.filter((review) => review.productId === product.id || review.productId === product.slug),
+  ];
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +64,7 @@ export default function ProductDetailPage({
     }
 
     const newRev: ProductReview = {
-      id: "r-" + Date.now(),
+      id: `${product.id}-local-${++reviewIdCounter.current}`,
       productId: product.id,
       author: reviewAuthor.trim(),
       company: reviewCompany.trim() || "Nhà thầu xây dựng",
@@ -76,7 +74,7 @@ export default function ProductDetailPage({
       verified: true,
     };
 
-    setReviewsList([newRev, ...reviewsList]);
+    setSubmittedReviews([newRev, ...submittedReviews]);
     setReviewAuthor("");
     setReviewCompany("");
     setReviewComment("");
@@ -85,7 +83,7 @@ export default function ProductDetailPage({
     setTimeout(() => setReviewSuccess(false), 5000);
   };
 
-  const tabs = [
+  const tabs: { key: "desc" | "specs" | "apps" | "shipping" | "reviews"; label: string }[] = [
     { key: "desc", label: "MÔ TẢ CHI TIẾT" },
     { key: "specs", label: "THÔNG SỐ KỸ THUẬT" },
     { key: "apps", label: "ỨNG DỤNG THI CÔNG" },
@@ -275,7 +273,7 @@ export default function ProductDetailPage({
             {tabs.map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key as any)}
+                onClick={() => setActiveTab(tab.key)}
                 className={`py-3 px-5 text-xs sm:text-sm font-extrabold whitespace-nowrap transition-all border-b-2 cursor-pointer ${
                   activeTab === tab.key
                     ? "border-[#214E34] text-[#214E34] bg-[#EBF3EE]/50 rounded-t-lg"

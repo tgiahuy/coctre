@@ -1,6 +1,6 @@
 import { Article } from "@/data/articles";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api/content";
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -19,46 +19,24 @@ export interface QuoteFormData {
 }
 
 /**
- * 1. Báo giá: Lưu vào LocalStorage và gửi API (nếu có cấu hình Backend)
+ * 1. Báo giá: chỉ báo thành công sau khi backend đã lưu dữ liệu.
  */
-export async function sendQuoteRequest(data: QuoteFormData): Promise<ApiResponse<any>> {
-  // Luôn lưu bản sao vào localStorage để không bao giờ bị mất khách
-  if (typeof window !== "undefined") {
-    try {
-      if (!localStorage.getItem("coctre_purged_mock_quotes_v1")) {
-        localStorage.removeItem("coctre_quote_requests");
-        localStorage.setItem("coctre_purged_mock_quotes_v1", "true");
-      }
-      const existing = JSON.parse(localStorage.getItem("coctre_quote_requests") || "[]");
-      existing.unshift({
-        ...data,
-        id: "quote-" + Date.now(),
-        createdAt: new Date().toISOString(),
-      });
-      localStorage.setItem("coctre_quote_requests", JSON.stringify(existing));
-    } catch (e) {
-      // Ignore
-    }
-  }
-
-  // Nếu có API backend được cấu hình, gửi tiếp lên server
-  if (API_BASE_URL) {
-    try {
-      const res = await fetch(`${API_BASE_URL}/quotes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      return await res.json();
-    } catch (error) {
-      // Ignore error and return success from local save
-    }
-  }
-
-  return {
-    success: true,
-    message: "Đã lưu yêu cầu báo giá thành công! Đội ngũ tư vấn sẽ liên hệ sớm nhất.",
-  };
+export async function sendQuoteRequest(data: QuoteFormData): Promise<ApiResponse<unknown>> {
+  const res = await fetch("/api/quotes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      customerName: data.customerName,
+      phone: data.phone,
+      email: data.email,
+      location: data.deliveryAddress,
+      productType: data.bambooSpecs,
+      notes: data.notes,
+    }),
+  });
+  const result = await res.json().catch(() => ({ success: false, message: "Phản hồi máy chủ không hợp lệ" }));
+  if (!res.ok || !result.success) throw new Error(result.message || "Không thể gửi yêu cầu");
+  return result;
 }
 
 /**
@@ -84,7 +62,7 @@ export async function fetchArticlesFromApi(category?: string, search?: string): 
 /**
  * 3. Đăng bài viết: Gửi API nếu có backend
  */
-export async function createArticleOnApi(article: Article, pin = "8888"): Promise<boolean> {
+export async function createArticleOnApi(article: Article): Promise<boolean> {
   if (!API_BASE_URL) return true;
 
   try {
@@ -92,7 +70,6 @@ export async function createArticleOnApi(article: Article, pin = "8888"): Promis
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-admin-pin": pin,
       },
       body: JSON.stringify(article),
     });
@@ -106,13 +83,12 @@ export async function createArticleOnApi(article: Article, pin = "8888"): Promis
 /**
  * 4. Xóa bài viết trên API nếu có backend
  */
-export async function deleteArticleOnApi(slugOrId: string, pin = "8888"): Promise<boolean> {
+export async function deleteArticleOnApi(slugOrId: string): Promise<boolean> {
   if (!API_BASE_URL) return true;
 
   try {
     const res = await fetch(`${API_BASE_URL}/articles/${slugOrId}`, {
       method: "DELETE",
-      headers: { "x-admin-pin": pin },
     });
     const json = await res.json();
     return Boolean(json.success);

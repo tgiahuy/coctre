@@ -23,10 +23,9 @@ import {
 } from "lucide-react";
 import { Article } from "@/data/articles";
 import {
-  getAllArticles,
+  requestArticles,
   saveCustomArticle,
-  deleteCustomArticle,
-  resetArticlesToDefault
+  deleteCustomArticle
 } from "@/lib/articleStore";
 import ImageUploader from "@/components/admin/ImageUploader";
 
@@ -88,12 +87,12 @@ export default function ArticleManager() {
 
   const [tagInput, setTagInput] = useState("Cọc tre, Nền móng");
 
-  const loadArticles = () => {
-    setArticlesList(getAllArticles());
+  const loadArticles = async () => {
+    setArticlesList(await requestArticles());
   };
 
   useEffect(() => {
-    loadArticles();
+    void loadArticles();
   }, []);
 
   const showToast = (msg: string) => {
@@ -138,20 +137,17 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
     setViewMode("form");
   };
 
-  const handleDelete = (slugOrId: string, title: string) => {
+  const handleDelete = async (slugOrId: string, title: string) => {
     if (confirm(`Bạn có chắc chắn muốn xóa bài viết "${title}"?`)) {
-      deleteCustomArticle(slugOrId);
-      loadArticles();
+      if (!await deleteCustomArticle(slugOrId)) return alert("Không thể xóa bài viết. Phiên đăng nhập có thể đã hết hạn.");
+      await loadArticles();
       showToast(`Đã xóa bài viết "${title}" thành công!`);
     }
   };
 
   const handleReset = () => {
-    if (confirm("Khôi phục danh sách bài viết về mặc định của hệ thống?")) {
-      resetArticlesToDefault();
-      loadArticles();
-      showToast("Đã khôi phục tin tức về danh sách mẫu!");
-    }
+    void loadArticles();
+    showToast("Đã tải lại bài viết từ máy chủ.");
   };
 
   const handleTitleChange = (title: string) => {
@@ -162,7 +158,7 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
     }));
   };
 
-  const handleSaveForm = (e: React.FormEvent) => {
+  const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.title.trim()) {
@@ -184,8 +180,8 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
       tableOfContents: autoToc.length > 0 ? autoToc : formData.tableOfContents,
     };
 
-    saveCustomArticle(articleToSave);
-    loadArticles();
+    if (!await saveCustomArticle(articleToSave)) return alert("Không thể lưu bài viết. Phiên đăng nhập có thể đã hết hạn.");
+    await loadArticles();
     setViewMode("list");
     showToast(`Đã lưu bài viết "${articleToSave.title}" thành công!`);
   };
@@ -231,7 +227,7 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <RotateCcw className="w-4 h-4 text-gray-500" />
-                Khôi phục gốc
+                Tải lại
               </button>
 
               <button

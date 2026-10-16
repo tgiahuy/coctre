@@ -13,15 +13,23 @@ import com.coctre.backend.repository.SiteConfigRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class DataSeeder implements CommandLineRunner {
+
+    @Value("${app.admin.initial-email:}")
+    private String initialAdminEmail;
+
+    @Value("${app.admin.initial-password:}")
+    private String initialAdminPassword;
 
     private final ProductRepository productRepository;
     private final ProjectRepository projectRepository;
@@ -37,22 +45,27 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedAdminUsers() {
-        Optional<AdminUserEntity> userOpt = adminUserRepository.findByEmailIgnoreCase("admincoctre@gmail.com");
-        if (userOpt.isPresent()) {
-            AdminUserEntity user = userOpt.get();
-            user.setPasswordHash(PasswordUtil.hashPassword("admin123"));
-            adminUserRepository.save(user);
-        } else {
+        if (initialAdminEmail.isBlank() || initialAdminPassword.isBlank()) {
+            if (adminUserRepository.count() == 0) {
+                log.warn("Chưa có tài khoản quản trị. Hãy đặt APP_ADMIN_INITIAL_EMAIL và APP_ADMIN_INITIAL_PASSWORD cho lần khởi động đầu tiên.");
+            }
+            return;
+        }
+        Optional<AdminUserEntity> userOpt = adminUserRepository.findByEmailIgnoreCase(initialAdminEmail.trim());
+        if (userOpt.isEmpty()) {
+            if (initialAdminPassword.length() < 12) {
+                throw new IllegalStateException("APP_ADMIN_INITIAL_PASSWORD phải có ít nhất 12 ký tự");
+            }
             AdminUserEntity superAdmin = AdminUserEntity.builder()
-                    .id("admin-super-coctre")
-                    .email("admincoctre@gmail.com")
-                    .passwordHash(PasswordUtil.hashPassword("admin123"))
+                    .id("admin-" + java.util.UUID.randomUUID())
+                    .email(initialAdminEmail.trim().toLowerCase())
+                    .passwordHash(PasswordUtil.hashPassword(initialAdminPassword))
                     .fullName("Ban Quản Trị Cọc Tre")
                     .role("SUPER_ADMIN")
                     .isActive(true)
                     .build();
             adminUserRepository.save(superAdmin);
-            log.info("✓ Đã khởi tạo tài khoản quản trị mặc định (admincoctre@gmail.com)");
+            log.info("✓ Đã khởi tạo tài khoản quản trị ban đầu");
         }
     }
 

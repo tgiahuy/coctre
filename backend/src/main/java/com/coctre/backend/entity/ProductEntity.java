@@ -38,6 +38,11 @@ public class ProductEntity {
     private String description;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_specs", joinColumns = @JoinColumn(name = "product_id"))
+    @Builder.Default
+    private List<ProductSpec> specs = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "product_applications", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "application", columnDefinition = "TEXT")
     @Builder.Default
@@ -50,6 +55,7 @@ public class ProductEntity {
     private List<String> advantages = new ArrayList<>();
 
     private String packaging;
+    private String videoUrl;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "product_images", joinColumns = @JoinColumn(name = "product_id"))
@@ -65,4 +71,15 @@ public class ProductEntity {
 
     @Builder.Default
     private Integer reviewCount = 0;
+
+    @Embeddable
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductSpec {
+        private String label;
+        @Column(name = "spec_value")
+        private String value;
+    }
 }

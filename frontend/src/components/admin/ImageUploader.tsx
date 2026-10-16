@@ -42,7 +42,7 @@ export default function ImageUploader({
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Upload single file via /api/upload with fallback to base64
+  // Upload only through the authenticated server endpoint.
   const uploadSingleFile = async (file: File): Promise<string> => {
     try {
       const formData = new FormData();
@@ -59,16 +59,10 @@ export default function ImageUploader({
           return data.url;
         }
       }
-      throw new Error("Không thể lưu ảnh lên máy chủ");
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.message || "Không thể lưu ảnh lên máy chủ");
     } catch (err) {
-      console.warn("Server upload failed, converting to Data URL fallback:", err);
-      // Fallback: Read as Base64 Data URL so the user is never blocked
-      return new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file);
-      });
+      throw err;
     }
   };
 
@@ -82,7 +76,7 @@ export default function ImageUploader({
       const validFiles: File[] = [];
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (file.type.startsWith("image/")) {
+        if (["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) && file.size <= 5 * 1024 * 1024) {
           validFiles.push(file);
         }
       }
@@ -207,7 +201,7 @@ export default function ImageUploader({
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/gif"
           multiple
           onChange={handleFileChange}
           className="hidden"

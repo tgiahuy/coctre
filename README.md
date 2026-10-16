@@ -9,7 +9,7 @@ Hệ thống website giới thiệu sản phẩm cọc tre, dự án công trìn
 - **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5
 - **Giao diện:** Tailwind CSS v4 + Lucide React Icons
 - **Tối ưu hình ảnh:** `next/image` + Sharp (Toàn bộ ảnh chụp thực tế chất lượng cao nén chuẩn WebP)
-- **Quản trị nội dung:** Trang Admin CMS nội bộ tại `/admin` (Mã PIN: `8888`) hỗ trợ soạn thảo Markdown, trích xuất mục lục tự động, lưu trữ an toàn.
+- **Quản trị nội dung:** Trang Admin CMS nội bộ tại `/admin`, xác thực bằng tài khoản quản trị lưu trong backend.
 
 ---
 
@@ -60,6 +60,6 @@ Mở trình duyệt truy cập:
 - **Sản phẩm:** [http://localhost:3000/san-pham](http://localhost:3000/san-pham)
 - **Dự án:** [http://localhost:3000/du-an](http://localhost:3000/du-an)
 - **Tin tức & Cẩm nang:** [http://localhost:3000/tin-tuc](http://localhost:3000/tin-tuc)
-- **Trang quản trị (Admin):** [http://localhost:3000/admin](http://localhost:3000/admin) (PIN mặc định: `8888`)
+- **Trang quản trị (Admin):** [http://localhost:3000/admin](http://localhost:3000/admin). Ở lần khởi động đầu tiên, đặt `APP_ADMIN_INITIAL_EMAIL` và `APP_ADMIN_INITIAL_PASSWORD`; các lần khởi động sau không đặt lại mật khẩu.
 
 # coctre

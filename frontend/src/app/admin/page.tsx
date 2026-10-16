@@ -22,7 +22,6 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle2,
-  KeyRound
 } from "lucide-react";
 import ProductManager from "./ProductManager";
 import ArticleManager from "./ArticleManager";
@@ -33,21 +32,20 @@ import { useArticles } from "@/lib/articleStore";
 import { useProjects } from "@/lib/projectStore";
 import { useSiteConfig } from "@/lib/configStore";
 import {
-  getStoredUser,
   saveUserAuth,
   clearUserAuth,
-  isUserAuthenticated,
   AdminUser,
 } from "@/lib/authStore";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<AdminUser | null>(null);
-  const [emailInput, setEmailInput] = useState("admincoctre@gmail.com");
+  const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"products" | "articles" | "contact" | "projects">("products");
 
@@ -56,32 +54,21 @@ export default function AdminPage() {
   const projects = useProjects();
   const siteConfig = useSiteConfig();
 
-  // Check auth session on mount & support legacy query params
+  // The backend session is the only source of truth for authentication.
   useEffect(() => {
-    if (isUserAuthenticated()) {
-      setIsAuthenticated(true);
-      setCurrentUser(getStoredUser());
-      return;
-    }
-
-    // Support direct access via URL parameter if configured (?auth=true)
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const isAuth = params.get("auth") || params.get("demo");
-      const pin = params.get("pin") || params.get("pass");
-
-      if (isAuth === "true" || pin === "8888" || pin === "admin" || pin === "admin123") {
-        const demoUser: AdminUser = {
-          email: "admincoctre@gmail.com",
-          fullName: "Ban Quản Trị Cọc Tre",
-          role: "SUPER_ADMIN",
-          token: "coctre-demo-token",
-        };
-        saveUserAuth(demoUser, true);
-        setIsAuthenticated(true);
-        setCurrentUser(demoUser);
-      }
-    }
+    fetch("/api/auth/session", { cache: "no-store" })
+      .then(async (res) => ({ ok: res.ok, body: await res.json().catch(() => null) }))
+      .then(({ ok, body }) => {
+        if (ok && body?.success && body?.data) {
+          setIsAuthenticated(true);
+          setCurrentUser(body.data);
+          saveUserAuth(body.data, true);
+        } else {
+          clearUserAuth();
+        }
+      })
+      .catch(() => clearUserAuth())
+      .finally(() => setIsCheckingSession(false));
   }, []);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
@@ -116,18 +103,21 @@ export default function AdminPage() {
     }
   };
 
-  const handleQuickFill = (email: string, pass: string) => {
-    setEmailInput(email);
-    setPasswordInput(pass);
-    setErrorMessage(null);
-  };
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => undefined);
     clearUserAuth();
     setIsAuthenticated(false);
     setCurrentUser(null);
     setPasswordInput("");
   };
+
+  if (isCheckingSession) {
+    return (
+      <div className="min-h-[85vh] flex items-center justify-center bg-[#F7F5EF]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#214E34]" aria-label="Đang kiểm tra phiên đăng nhập" />
+      </div>
+    );
+  }
 
   // 1. EMAIL & PASSWORD LOGIN SCREEN
   if (!isAuthenticated) {
@@ -152,26 +142,6 @@ export default function AdminPage() {
               <p className="text-xs sm:text-sm font-semibold text-gray-500 mt-1 uppercase tracking-wider">
                 Hệ Thống Quản Trị Website CMS
               </p>
-            </div>
-          </div>
-
-          {/* Quick Demo Access Bar */}
-          <div className="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5 space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[#214E34] flex items-center gap-1.5">
-                <KeyRound className="w-3.5 h-3.5 text-[#CDAA63]" />
-                Tài khoản mặc định:
-              </span>
-              <span className="text-[11px] text-gray-500 font-mono">admin123</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickFill("admincoctre@gmail.com", "admin123")}
-                className="flex-1 py-1.5 px-2 bg-white hover:bg-emerald-100/60 border border-emerald-300 text-[#214E34] text-[11px] font-bold rounded-lg transition text-center shadow-2xs cursor-pointer"
-              >
-                Điền nhanh: admincoctre@gmail.com
-              </button>
             </div>
           </div>
 
@@ -201,7 +171,7 @@ export default function AdminPage() {
                     setEmailInput(e.target.value);
                     setErrorMessage(null);
                   }}
-                  placeholder="admincoctre@gmail.com"
+                  placeholder="admin@example.com"
                   className="w-full pl-10 pr-4 py-3 text-sm font-medium border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#214E34] focus:border-[#214E34] focus:outline-none transition bg-white"
                   autoFocus
                 />

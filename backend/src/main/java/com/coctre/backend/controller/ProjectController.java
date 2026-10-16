@@ -1,6 +1,7 @@
 package com.coctre.backend.controller;
 
 import com.coctre.backend.dto.ApiResponse;
+import com.coctre.backend.config.AdminOnly;
 import com.coctre.backend.entity.ProjectEntity;
 import com.coctre.backend.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class ProjectController {
     }
 
     @PostMapping
+    @AdminOnly
     public ResponseEntity<ApiResponse<ProjectEntity>> saveProject(@RequestBody ProjectEntity project) {
         if (project.getId() == null || project.getId().trim().isEmpty()) {
             project.setId("project-" + System.currentTimeMillis());
@@ -43,6 +45,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{slugOrId}")
+    @AdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteProject(@PathVariable String slugOrId) {
         Optional<ProjectEntity> found = projectRepository.findBySlug(slugOrId);
         if (found.isPresent()) {

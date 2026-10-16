@@ -1,6 +1,7 @@
 package com.coctre.backend.controller;
 
 import com.coctre.backend.dto.ApiResponse;
+import com.coctre.backend.config.AdminOnly;
 import com.coctre.backend.entity.QuoteRequestEntity;
 import com.coctre.backend.repository.QuoteRequestRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class QuoteController {
     private final QuoteRequestRepository quoteRequestRepository;
 
     @GetMapping
+    @AdminOnly
     public ResponseEntity<ApiResponse<List<QuoteRequestEntity>>> getAllQuotes() {
         List<QuoteRequestEntity> list = quoteRequestRepository.findAllByOrderByCreatedAtDesc();
         return ResponseEntity.ok(ApiResponse.ok("Lấy danh sách yêu cầu báo giá thành công", list));
@@ -38,6 +40,7 @@ public class QuoteController {
     }
 
     @PatchMapping("/{id}/status")
+    @AdminOnly
     public ResponseEntity<ApiResponse<QuoteRequestEntity>> updateStatus(
             @PathVariable String id,
             @RequestParam String status
@@ -53,6 +56,7 @@ public class QuoteController {
     }
 
     @DeleteMapping("/{id}")
+    @AdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteQuote(@PathVariable String id) {
         quoteRequestRepository.deleteById(id);
         return ResponseEntity.ok(ApiResponse.ok("Đã xóa yêu cầu báo giá", null));

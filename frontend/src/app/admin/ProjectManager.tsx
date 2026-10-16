@@ -21,10 +21,9 @@ import {
 } from "lucide-react";
 import { Project } from "@/data/projects";
 import {
-  getAllProjects,
+  requestProjects,
   saveProject,
-  deleteProject,
-  resetProjectsToDefault
+  deleteProject
 } from "@/lib/projectStore";
 import ImageUploader from "@/components/admin/ImageUploader";
 
@@ -78,12 +77,12 @@ export default function ProjectManager() {
 
   const [customImageUrl, setCustomImageUrl] = useState("");
 
-  const loadProjects = () => {
-    setProjectsList(getAllProjects());
+  const loadProjects = async () => {
+    setProjectsList(await requestProjects());
   };
 
   useEffect(() => {
-    loadProjects();
+    void loadProjects();
   }, []);
 
   const showToast = (msg: string) => {
@@ -123,20 +122,17 @@ export default function ProjectManager() {
     setViewMode("form");
   };
 
-  const handleDelete = (idOrSlug: string, title: string) => {
+  const handleDelete = async (idOrSlug: string, title: string) => {
     if (confirm(`Bạn có chắc chắn muốn xóa dự án "${title}"?`)) {
-      deleteProject(idOrSlug);
-      loadProjects();
+      if (!await deleteProject(idOrSlug)) return alert("Không thể xóa dự án. Phiên đăng nhập có thể đã hết hạn.");
+      await loadProjects();
       showToast(`Đã xóa dự án "${title}" thành công!`);
     }
   };
 
   const handleReset = () => {
-    if (confirm("Khôi phục danh sách dự án về mẫu gốc ban đầu của hệ thống?")) {
-      resetProjectsToDefault();
-      loadProjects();
-      showToast("Đã khôi phục danh mục dự án về mặc định!");
-    }
+    void loadProjects();
+    showToast("Đã tải lại dự án từ máy chủ.");
   };
 
   const handleTitleChange = (title: string) => {
@@ -155,7 +151,7 @@ export default function ProjectManager() {
     }));
   };
 
-  const handleSaveForm = (e: React.FormEvent) => {
+  const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.title.trim()) {
@@ -172,8 +168,8 @@ export default function ProjectManager() {
       gallery: formData.gallery.length > 0 ? formData.gallery : [formData.coverImage || "/images/projects/du-an-tinh-lo-489c-1.webp"],
     };
 
-    saveProject(projectToSave);
-    loadProjects();
+    if (!await saveProject(projectToSave)) return alert("Không thể lưu dự án. Phiên đăng nhập có thể đã hết hạn.");
+    await loadProjects();
     setViewMode("list");
     showToast(`Đã lưu dự án "${projectToSave.title}" thành công!`);
   };
@@ -219,7 +215,7 @@ export default function ProjectManager() {
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <RotateCcw className="w-4 h-4 text-gray-500" />
-                Khôi phục gốc
+                Tải lại
               </button>
 
               <button

@@ -1,6 +1,7 @@
 package com.coctre.backend.controller;
 
 import com.coctre.backend.dto.ApiResponse;
+import com.coctre.backend.config.AdminOnly;
 import com.coctre.backend.entity.ProductEntity;
 import com.coctre.backend.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @AdminOnly
     public ResponseEntity<ApiResponse<ProductEntity>> saveProduct(@RequestBody ProductEntity product) {
         if (product.getId() == null || product.getId().trim().isEmpty()) {
             product.setId("product-" + System.currentTimeMillis());
@@ -43,6 +45,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{slugOrId}")
+    @AdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable String slugOrId) {
         Optional<ProductEntity> found = productRepository.findBySlug(slugOrId);
         if (found.isPresent()) {

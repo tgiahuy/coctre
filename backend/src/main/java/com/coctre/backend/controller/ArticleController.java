@@ -1,6 +1,7 @@
 package com.coctre.backend.controller;
 
 import com.coctre.backend.dto.ApiResponse;
+import com.coctre.backend.config.AdminOnly;
 import com.coctre.backend.entity.ArticleEntity;
 import com.coctre.backend.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class ArticleController {
     }
 
     @PostMapping
+    @AdminOnly
     public ResponseEntity<ApiResponse<ArticleEntity>> saveArticle(@RequestBody ArticleEntity article) {
         if (article.getId() == null || article.getId().trim().isEmpty()) {
             article.setId("post-" + System.currentTimeMillis());
@@ -50,6 +52,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{slugOrId}")
+    @AdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteArticle(@PathVariable String slugOrId) {
         Optional<ArticleEntity> found = articleRepository.findBySlug(slugOrId);
         if (found.isPresent()) {

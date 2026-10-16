@@ -1,24 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import SectionHeading from "@/components/common/SectionHeading";
 import ArticleCard from "@/components/common/ArticleCard";
-import { getAllArticles } from "@/lib/articleStore";
-import { Article } from "@/data/articles";
+import { useArticles } from "@/lib/articleStore";
 
 export default function LatestNewsSection() {
-  const [articlesList, setArticlesList] = useState<Article[]>([]);
-
-  useEffect(() => {
-    setArticlesList(getAllArticles().slice(0, 3));
-    const handleStorage = () => {
-      setArticlesList(getAllArticles().slice(0, 3));
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+  const articlesList = useArticles().slice(0, 3);
 
   return (
     <section className="py-16 sm:py-24 bg-[#F7F5EF] border-t border-gray-200">

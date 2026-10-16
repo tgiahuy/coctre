@@ -6,7 +6,6 @@ import {
   Phone,
   Mail,
   Clock,
-  Warehouse,
   Send,
   CheckCircle2,
   AlertCircle,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { useSiteConfig } from "@/lib/configStore";
+import { sendQuoteRequest } from "@/lib/api";
 
 export default function ContactPage() {
   const siteConfig = useSiteConfig();
@@ -30,6 +30,7 @@ export default function ContactPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = () => {
     const errs: { [key: string]: string } = {};
@@ -49,11 +50,18 @@ export default function ContactPage() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      await sendQuoteRequest({
+        customerName: formData.fullName,
+        phone: formData.phone,
+        email: formData.email,
+        deliveryAddress: formData.company,
+        notes: formData.message,
+      });
       setIsSuccess(true);
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      setSubmitError(err instanceof Error ? err.message : "Không thể gửi liên hệ. Vui lòng thử lại hoặc gọi hotline.");
     } finally {
       setIsSubmitting(false);
     }
@@ -212,6 +220,13 @@ export default function ContactPage() {
                       Chúng tôi cam kết bảo mật thông tin và phản hồi nhanh chóng
                     </p>
                   </div>
+
+                  {submitError && (
+                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Full Name */}

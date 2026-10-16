@@ -26,9 +26,9 @@ import {
   KeyRound,
   ShieldCheck
 } from "lucide-react";
-import { SiteConfig } from "@/data/config";
-import { getSiteConfig, saveSiteConfig, resetSiteConfigToDefault } from "@/lib/configStore";
-import { getStoredUser } from "@/lib/authStore";
+import { SiteConfig, siteConfig as defaultSiteConfig } from "@/data/config";
+import { getSiteConfig, requestConfig, saveSiteConfig } from "@/lib/configStore";
+import { clearUserAuth, getStoredUser } from "@/lib/authStore";
 
 export default function ContactManager() {
   const [config, setConfig] = useState<SiteConfig>(getSiteConfig());
@@ -53,7 +53,7 @@ export default function ContactManager() {
   const [changePassMsg, setChangePassMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
-    setConfig(getSiteConfig());
+    void requestConfig().then(setConfig).catch(() => undefined);
   }, []);
 
   const handleChange = (field: keyof SiteConfig, value: string | number) => {
@@ -66,8 +66,8 @@ export default function ContactManager() {
 
   const handleLogoUpload = async (file: File) => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setUploadError("Vui lòng chọn file hình ảnh (PNG, WEBP, JPG, SVG, GIF)");
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setUploadError("Chỉ chấp nhận JPG, PNG, WEBP hoặc GIF tối đa 5 MB");
       return;
     }
     setUploadError(null);
@@ -91,19 +91,9 @@ export default function ContactManager() {
         }
       }
       throw new Error("Không thể lưu ảnh lên máy chủ");
-    } catch (err) {
-      console.warn("Upload fallback to Base64:", err);
-      // Fallback: Read as Base64 Data URL so user is never blocked
-      const reader = new FileReader();
-      reader.onload = () => {
-        handleChange("logoUrl", reader.result as string);
-        setIsUploading(false);
-      };
-      reader.onerror = () => {
-        setUploadError("Không thể đọc file ảnh. Vui lòng thử lại!");
-        setIsUploading(false);
-      };
-      reader.readAsDataURL(file);
+    } catch (err: any) {
+      setUploadError(err?.message || "Không thể tải ảnh. Vui lòng thử lại!");
+      setIsUploading(false);
     }
   };
 
@@ -117,6 +107,10 @@ export default function ContactManager() {
 
   const handleFaviconUpload = async (file: File) => {
     if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setFaviconUploadError("Chỉ chấp nhận JPG, PNG, WEBP hoặc GIF tối đa 5 MB");
+      return;
+    }
     setFaviconUploadError(null);
     setIsUploadingFavicon(true);
 
@@ -138,18 +132,9 @@ export default function ContactManager() {
         }
       }
       throw new Error("Không thể lưu favicon lên máy chủ");
-    } catch (err) {
-      console.warn("Favicon upload fallback to Base64:", err);
-      const reader = new FileReader();
-      reader.onload = () => {
-        handleChange("faviconUrl", reader.result as string);
-        setIsUploadingFavicon(false);
-      };
-      reader.onerror = () => {
-        setFaviconUploadError("Không thể đọc file favicon. Vui lòng thử lại!");
-        setIsUploadingFavicon(false);
-      };
-      reader.readAsDataURL(file);
+    } catch (err: any) {
+      setFaviconUploadError(err?.message || "Không thể tải favicon. Vui lòng thử lại!");
+      setIsUploadingFavicon(false);
     }
   };
 
@@ -158,8 +143,8 @@ export default function ContactManager() {
       setChangePassMsg({ type: "error", text: "Vui lòng nhập đầy đủ mật khẩu hiện tại và mật khẩu mới" });
       return;
     }
-    if (newPass.length < 6) {
-      setChangePassMsg({ type: "error", text: "Mật khẩu mới phải có tối thiểu 6 ký tự" });
+    if (newPass.length < 12) {
+      setChangePassMsg({ type: "error", text: "Mật khẩu mới phải có tối thiểu 12 ký tự" });
       return;
     }
     if (newPass !== confirmPass) {
@@ -171,14 +156,10 @@ export default function ContactManager() {
     setChangePassMsg(null);
 
     try {
-      const user = getStoredUser();
-      const email = user?.email || "admin@coctrehoabinh.com";
-
       const res = await fetch("/api/auth/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
           currentPassword: currentPass,
           newPassword: newPass,
         }),
@@ -186,11 +167,12 @@ export default function ContactManager() {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setChangePassMsg({ type: "success", text: "Đổi mật khẩu thành công! Mật khẩu mới đã được cập nhật an toàn." });
+        setChangePassMsg({ type: "success", text: "Đổi mật khẩu thành công. Bạn cần đăng nhập lại." });
         setCurrentPass("");
         setNewPass("");
         setConfirmPass("");
-        setTimeout(() => setChangePassMsg(null), 5000);
+        clearUserAuth();
+        setTimeout(() => window.location.assign("/admin"), 1500);
       } else {
         setChangePassMsg({ type: "error", text: data.message || "Mật khẩu hiện tại không chính xác" });
       }
@@ -201,17 +183,23 @@ export default function ContactManager() {
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    saveSiteConfig(config);
+    if (!await saveSiteConfig(config)) {
+      alert("Không thể lưu cấu hình. Phiên đăng nhập có thể đã hết hạn.");
+      return;
+    }
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 4000);
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (confirm("Bạn có chắc chắn muốn khôi phục toàn bộ logo và thông tin website về mặc định ban đầu?")) {
-      resetSiteConfigToDefault();
-      setConfig(getSiteConfig());
+      if (!await saveSiteConfig(defaultSiteConfig)) {
+        alert("Không thể khôi phục cấu hình. Phiên đăng nhập có thể đã hết hạn.");
+        return;
+      }
+      setConfig(defaultSiteConfig);
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
     }

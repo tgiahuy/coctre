@@ -3,24 +3,20 @@
 import React, { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   MapPin,
   Calendar,
   Layers,
   CheckCircle2,
-  FileText,
   Building2,
-  ArrowRight,
-  ShieldCheck,
-  Truck
+  ArrowRight
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import ProjectCard from "@/components/common/ProjectCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { getProjectBySlug, getAllProjects } from "@/lib/projectStore";
-import { getAllProducts } from "@/lib/productStore";
+import { useProjects } from "@/lib/projectStore";
+import { useProducts } from "@/lib/productStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
 export default function ProjectDetailPage({
@@ -29,16 +25,17 @@ export default function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = use(params);
-  const project = getProjectBySlug(resolvedParams.slug);
+  const allProjects = useProjects();
+  const allProducts = useProducts();
+  const project = allProjects.find((item) => item.slug === resolvedParams.slug || item.id === resolvedParams.slug);
+  const { openQuoteModal } = useQuoteModal();
 
   if (!project) {
-    notFound();
+    return <div className="min-h-screen py-24 text-center text-gray-500">Không tìm thấy dự án.</div>;
   }
 
-  const { openQuoteModal } = useQuoteModal();
-  const allProjects = getAllProjects();
   const relatedProjects = allProjects.filter((p) => p.slug !== project.slug && p.id !== project.id).slice(0, 3);
-  const matchedProducts = getAllProducts().filter((p) =>
+  const matchedProducts = allProducts.filter((p) =>
     project.productsUsed.includes(p.id) || project.productsUsed.includes(p.slug)
   );
 

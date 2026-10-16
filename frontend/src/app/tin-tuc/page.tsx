@@ -1,27 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search, BookOpen, Calendar, Clock, ArrowRight, ShieldAlert } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ArticleCard from "@/components/common/ArticleCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { getAllArticles } from "@/lib/articleStore";
-import { Article } from "@/data/articles";
+import { useArticles } from "@/lib/articleStore";
 
 export default function NewsPage() {
-  const [articlesList, setArticlesList] = useState<Article[]>([]);
+  const articlesList = useArticles();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    setArticlesList(getAllArticles());
-    const handleStorage = () => {
-      setArticlesList(getAllArticles());
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
 
   const categories = [
     { label: "Tất cả bài viết", value: "all" },

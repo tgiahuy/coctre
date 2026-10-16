@@ -22,10 +22,9 @@ import {
 } from "lucide-react";
 import { Product } from "@/data/products";
 import {
-  getAllProducts,
+  requestProducts,
   saveProduct,
-  deleteProduct,
-  resetProductsToDefault
+  deleteProduct
 } from "@/lib/productStore";
 import ImageUploader from "@/components/admin/ImageUploader";
 
@@ -94,12 +93,12 @@ export default function ProductManager() {
   const [appsInput, setAppsInput] = useState("");
   const [advsInput, setAdvsInput] = useState("");
 
-  const loadProducts = () => {
-    setProductsList(getAllProducts());
+  const loadProducts = async () => {
+    setProductsList(await requestProducts());
   };
 
   useEffect(() => {
-    loadProducts();
+    void loadProducts();
   }, []);
 
   const showToast = (msg: string) => {
@@ -149,20 +148,17 @@ export default function ProductManager() {
     setViewMode("form");
   };
 
-  const handleDelete = (idOrSlug: string, name: string) => {
+  const handleDelete = async (idOrSlug: string, name: string) => {
     if (confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${name}"?`)) {
-      deleteProduct(idOrSlug);
-      loadProducts();
+      if (!await deleteProduct(idOrSlug)) return alert("Không thể xóa sản phẩm. Phiên đăng nhập có thể đã hết hạn.");
+      await loadProducts();
       showToast(`Đã xóa sản phẩm "${name}" thành công!`);
     }
   };
 
   const handleReset = () => {
-    if (confirm("Khôi phục danh sách sản phẩm về mẫu gốc của hệ thống?")) {
-      resetProductsToDefault();
-      loadProducts();
-      showToast("Đã khôi phục danh mục sản phẩm về mặc định!");
-    }
+    void loadProducts();
+    showToast("Đã tải lại sản phẩm từ máy chủ.");
   };
 
   const handleNameChange = (name: string) => {
@@ -173,7 +169,7 @@ export default function ProductManager() {
     }));
   };
 
-  const handleSaveForm = (e: React.FormEvent) => {
+  const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
@@ -199,8 +195,8 @@ export default function ProductManager() {
       images: formData.images.length > 0 ? formData.images : ["/images/products/coc-tre-2m-1.webp"],
     };
 
-    saveProduct(productToSave);
-    loadProducts();
+    if (!await saveProduct(productToSave)) return alert("Không thể lưu sản phẩm. Phiên đăng nhập có thể đã hết hạn.");
+    await loadProducts();
     setViewMode("list");
     showToast(`Đã lưu sản phẩm "${productToSave.name}" thành công!`);
   };
@@ -245,10 +241,10 @@ export default function ProductManager() {
                 type="button"
                 onClick={handleReset}
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-                title="Khôi phục dữ liệu ban đầu"
+                title="Tải lại dữ liệu từ máy chủ"
               >
                 <RotateCcw className="w-4 h-4 text-gray-500" />
-                Khôi phục gốc
+                Tải lại
               </button>
 
               <button

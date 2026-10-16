@@ -1,61 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ADMIN_SESSION_COOKIE, fetchBackendAsAdmin } from "@/lib/serverAuth";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, currentPassword, newPassword } = body || {};
+    const { currentPassword, newPassword } = body || {};
 
-    if (!newPassword || newPassword.trim().length < 6) {
+    if (typeof newPassword !== "string" || newPassword.length < 12) {
       return NextResponse.json(
-        { success: false, message: "Mật khẩu mới phải có ít nhất 6 ký tự" },
+        { success: false, message: "Mật khẩu mới phải có ít nhất 12 ký tự" },
         { status: 400 }
       );
     }
 
-    // 1. Try backend Spring Boot if available
-    const backendUrl = process.env.BACKEND_API_URL || "http://localhost:8080";
     try {
-      const backendRes = await fetch(`${backendUrl}/api/v1/auth/change-password`, {
+      const backendRes = await fetchBackendAsAdmin(request, "/auth/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, currentPassword, newPassword }),
-        signal: AbortSignal.timeout(2500),
+        body: JSON.stringify({ currentPassword, newPassword }),
+        signal: AbortSignal.timeout(5000),
       });
 
+      const backendData = await backendRes.json().catch(() => ({ success: false, message: "Phản hồi không hợp lệ" }));
+      const response = NextResponse.json(backendData, { status: backendRes.status });
       if (backendRes.ok) {
-        const backendData = await backendRes.json();
-        return NextResponse.json(backendData);
-      } else if (backendRes.status === 400 || backendRes.status === 401) {
-        const errData = await backendRes.json().catch(() => null);
-        return NextResponse.json(
-          {
-            success: false,
-            message: errData?.message || "Mật khẩu hiện tại không chính xác",
-          },
-          { status: 400 }
-        );
+        response.cookies.delete(ADMIN_SESSION_COOKIE);
       }
+      return response;
     } catch {
-      // Backend not running, accept if current password matches known passwords
+      return NextResponse.json(
+        { success: false, message: "Dịch vụ xác thực tạm thời không khả dụng" },
+        { status: 503 }
+      );
     }
-
-    // Standalone fallback
-    const validCurrentPasswords = ["admin123", "Admin@123456", "admin123456", "123456", "8888", "admin"];
-    if (validCurrentPasswords.includes((currentPassword || "").trim())) {
-      return NextResponse.json({
-        success: true,
-        message: "Đổi mật khẩu thành công!",
-      });
-    }
-
+  } catch {
     return NextResponse.json(
-      { success: false, message: "Mật khẩu hiện tại không chính xác" },
+      { success: false, message: "Yêu cầu đổi mật khẩu không hợp lệ" },
       { status: 400 }
-    );
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: "Lỗi đổi mật khẩu: " + (error?.message || "Không xác định") },
-      { status: 500 }
     );
   }
 }

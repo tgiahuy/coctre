@@ -1,6 +1,7 @@
 package com.coctre.backend.controller;
 
 import com.coctre.backend.dto.ApiResponse;
+import com.coctre.backend.config.AdminOnly;
 import com.coctre.backend.entity.SiteConfigEntity;
 import com.coctre.backend.repository.SiteConfigRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ConfigController {
     }
 
     @PutMapping
+    @AdminOnly
     public ResponseEntity<ApiResponse<SiteConfigEntity>> updateConfig(@RequestBody SiteConfigEntity updates) {
         updates.setId("main-config");
         SiteConfigEntity saved = siteConfigRepository.save(updates);
