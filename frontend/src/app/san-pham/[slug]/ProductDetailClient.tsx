@@ -36,8 +36,10 @@ export default function ProductDetailClient({
 }: ProductDetailClientProps) {
   const siteConfig = useSiteConfig();
   const { data: products, isLoading, error } = useProductsState();
-  const product =
-    products.find((item) => item.slug === slug || item.id === slug) || initialProduct;
+  const liveProduct = products.find((item) => item.slug === slug || item.id === slug);
+  const product = initialProduct
+    ? (isLoading ? initialProduct : (liveProduct || initialProduct))
+    : liveProduct;
   const { openQuoteModal } = useQuoteModal();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"desc" | "specs" | "apps" | "shipping" | "reviews">("desc");

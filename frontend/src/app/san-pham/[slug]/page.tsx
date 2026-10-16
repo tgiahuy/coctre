@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { siteConfig } from "@/data/config";
 import { getServerProductBySlug } from "@/lib/serverData";
 import ProductDetailClient from "./ProductDetailClient";
@@ -64,45 +65,60 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params;
   const product = await getServerProductBySlug(slug);
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
 
-  const coverImage = product?.images?.[0] || "/images/products/coc-tre-2m-1.webp";
+  if (!product) {
+    notFound();
+  }
+
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const coverImage = product.images?.[0] || "/images/products/coc-tre-2m-1.webp";
+
+  const rawPrice = (product as unknown as Record<string, unknown>).price;
+  const numericPrice = typeof rawPrice === "number" ? rawPrice : Number(rawPrice);
+  const hasRealPrice = !isNaN(numericPrice) && numericPrice > 0;
+
+  const hasRealRating =
+    typeof product.reviewCount === "number" &&
+    product.reviewCount > 0 &&
+    typeof product.rating === "number" &&
+    product.rating > 0;
 
   // Schema.org Product structured data for rich snippets in Google Search
-  const productSchema = product
-    ? {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        name: product.name,
-        image: product.images && product.images.length > 0
-          ? product.images.map((img) => (img.startsWith("http") ? img : `${baseUrl}${img}`))
-          : [`${baseUrl}${coverImage}`],
-        description: product.description,
-        sku: product.id,
-        brand: {
-          "@type": "Brand",
-          name: siteConfig.companyName,
-        },
-        offers: {
-          "@type": "Offer",
-          url: `${baseUrl}/san-pham/${product.slug}`,
-          priceCurrency: "VND",
-          price: "0",
-          priceValidUntil: "2027-12-31",
-          availability: "https://schema.org/InStock",
-          itemCondition: "https://schema.org/NewCondition",
-          seller: {
-            "@type": "Organization",
-            name: siteConfig.companyName,
+  const productSchema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image:
+      product.images && product.images.length > 0
+        ? product.images.map((img) => (img.startsWith("http") ? img : `${baseUrl}${img}`))
+        : [`${baseUrl}${coverImage}`],
+    description: product.description,
+    sku: product.id,
+    brand: {
+      "@type": "Brand",
+      name: siteConfig.companyName,
+    },
+    offers: {
+      "@type": "Offer",
+      url: `${baseUrl}/san-pham/${product.slug}`,
+      ...(hasRealPrice ? { priceCurrency: "VND", price: String(numericPrice), priceValidUntil: "2027-12-31" } : {}),
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: {
+        "@type": "Organization",
+        name: siteConfig.companyName,
+      },
+    },
+    ...(hasRealRating
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: String(product.rating),
+            reviewCount: String(product.reviewCount),
           },
-        },
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: product.rating ? String(product.rating) : "5.0",
-          reviewCount: product.reviewCount ? String(product.reviewCount) : "28",
-        },
-      }
-    : null;
+        }
+      : {}),
+  };
 
   // Breadcrumb Schema for search engine navigation
   const breadcrumbSchema = {
@@ -124,20 +140,18 @@ export default async function ProductDetailPage({
       {
         "@type": "ListItem",
         position: 3,
-        name: product?.name || slug,
-        item: `${baseUrl}/san-pham/${slug}`,
+        name: product.name,
+        item: `${baseUrl}/san-pham/${product.slug}`,
       },
     ],
   };
 
   return (
     <>
-      {productSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

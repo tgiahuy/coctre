@@ -26,7 +26,7 @@ async function fetchFromBackend<T>(endpoint: string): Promise<T[] | null> {
 
 export async function getServerProducts(): Promise<Product[]> {
   const backendData = await fetchFromBackend<Product>("/products");
-  if (backendData && backendData.length > 0) return backendData;
+  if (backendData !== null) return backendData;
   return staticProducts;
 }
 
@@ -37,7 +37,7 @@ export async function getServerProductBySlug(slug: string): Promise<Product | un
 
 export async function getServerArticles(): Promise<Article[]> {
   const backendData = await fetchFromBackend<Article>("/articles");
-  if (backendData && backendData.length > 0) return backendData;
+  if (backendData !== null) return backendData;
   return staticArticles;
 }
 
@@ -48,7 +48,7 @@ export async function getServerArticleBySlug(slug: string): Promise<Article | un
 
 export async function getServerProjects(): Promise<Project[]> {
   const backendData = await fetchFromBackend<Project>("/projects");
-  if (backendData && backendData.length > 0) return backendData;
+  if (backendData !== null) return backendData;
   return staticProjects;
 }
 

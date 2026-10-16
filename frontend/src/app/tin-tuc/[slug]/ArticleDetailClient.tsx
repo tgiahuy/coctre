@@ -31,8 +31,10 @@ export default function ArticleDetailClient({
   initialArticle,
 }: ArticleDetailClientProps) {
   const { data: allArticles, isLoading, error } = useArticlesState();
-  const article =
-    allArticles.find((item) => item.slug === slug || item.id === slug) || initialArticle;
+  const liveArticle = allArticles.find((item) => item.slug === slug || item.id === slug);
+  const article = initialArticle
+    ? (isLoading ? initialArticle : (liveArticle || initialArticle))
+    : liveArticle;
   const relatedArticles = allArticles.filter((item) => item.slug !== slug).slice(0, 3);
   const { openQuoteModal } = useQuoteModal();
 

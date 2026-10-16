@@ -32,8 +32,10 @@ export default function ProjectDetailClient({
 }: ProjectDetailClientProps) {
   const { data: allProjects, isLoading, error } = useProjectsState();
   const allProducts = useProducts();
-  const project =
-    allProjects.find((item) => item.slug === slug || item.id === slug) || initialProject;
+  const liveProject = allProjects.find((item) => item.slug === slug || item.id === slug);
+  const project = initialProject
+    ? (isLoading ? initialProject : (liveProject || initialProject))
+    : liveProject;
   const { openQuoteModal } = useQuoteModal();
 
   if (isLoading && !project) {

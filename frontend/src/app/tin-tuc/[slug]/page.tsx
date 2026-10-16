@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { siteConfig } from "@/data/config";
 import { getServerArticleBySlug } from "@/lib/serverData";
 import ArticleDetailClient from "./ArticleDetailClient";
@@ -65,38 +66,40 @@ export default async function ArticleDetailPage({
 }) {
   const { slug } = await params;
   const article = await getServerArticleBySlug(slug);
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
 
-  const coverImage = article?.coverImage || "/images/products/coc-tre-2m-1.webp";
+  if (!article) {
+    notFound();
+  }
+
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const coverImage = article.coverImage || "/images/products/coc-tre-2m-1.webp";
 
   // Schema.org NewsArticle / BlogPosting Schema
-  const articleSchema = article
-    ? {
-        "@context": "https://schema.org",
-        "@type": "NewsArticle",
-        headline: article.title,
-        image: [coverImage.startsWith("http") ? coverImage : `${baseUrl}${coverImage}`],
-        datePublished: article.publishDate,
-        dateModified: article.publishDate,
-        description: article.excerpt,
-        author: {
-          "@type": "Person",
-          name: article.author || "Kỹ sư nền móng Huyền Dương",
-        },
-        publisher: {
-          "@type": "Organization",
-          name: siteConfig.companyName,
-          logo: {
-            "@type": "ImageObject",
-            url: `${baseUrl}/icon.png`,
-          },
-        },
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": `${baseUrl}/tin-tuc/${article.slug}`,
-        },
-      }
-    : null;
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    image: [coverImage.startsWith("http") ? coverImage : `${baseUrl}${coverImage}`],
+    datePublished: article.publishDate,
+    dateModified: article.publishDate,
+    description: article.excerpt,
+    author: {
+      "@type": "Person",
+      name: article.author || "Kỹ sư nền móng Huyền Dương",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.companyName,
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/icon.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/tin-tuc/${article.slug}`,
+    },
+  };
 
   // Breadcrumb Schema
   const breadcrumbSchema = {
@@ -118,20 +121,18 @@ export default async function ArticleDetailPage({
       {
         "@type": "ListItem",
         position: 3,
-        name: article?.title || slug,
-        item: `${baseUrl}/tin-tuc/${slug}`,
+        name: article.title,
+        item: `${baseUrl}/tin-tuc/${article.slug}`,
       },
     ],
   };
 
   return (
     <>
-      {articleSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

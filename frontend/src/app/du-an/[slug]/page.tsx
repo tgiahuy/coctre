@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { siteConfig } from "@/data/config";
 import { getServerProjectBySlug } from "@/lib/serverData";
 import ProjectDetailClient from "./ProjectDetailClient";
@@ -64,36 +65,38 @@ export default async function ProjectDetailPage({
 }) {
   const { slug } = await params;
   const project = await getServerProjectBySlug(slug);
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
 
-  const coverImage = project?.coverImage || "/images/products/coc-tre-2m-1.webp";
+  if (!project) {
+    notFound();
+  }
+
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const coverImage = project.coverImage || "/images/products/coc-tre-2m-1.webp";
 
   // Schema.org Article / Project Schema
-  const projectSchema = project
-    ? {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        headline: project.title,
-        image: [coverImage.startsWith("http") ? coverImage : `${baseUrl}${coverImage}`],
-        description: project.overview || project.shortDescription,
-        author: {
-          "@type": "Organization",
-          name: siteConfig.companyName,
-        },
-        publisher: {
-          "@type": "Organization",
-          name: siteConfig.companyName,
-          logo: {
-            "@type": "ImageObject",
-            url: `${baseUrl}/icon.png`,
-          },
-        },
-        about: {
-          "@type": "Place",
-          name: project.location,
-        },
-      }
-    : null;
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: project.title,
+    image: [coverImage.startsWith("http") ? coverImage : `${baseUrl}${coverImage}`],
+    description: project.overview || project.shortDescription,
+    author: {
+      "@type": "Organization",
+      name: siteConfig.companyName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.companyName,
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/icon.png`,
+      },
+    },
+    about: {
+      "@type": "Place",
+      name: project.location,
+    },
+  };
 
   // Breadcrumb Schema
   const breadcrumbSchema = {
@@ -115,20 +118,18 @@ export default async function ProjectDetailPage({
       {
         "@type": "ListItem",
         position: 3,
-        name: project?.title || slug,
-        item: `${baseUrl}/du-an/${slug}`,
+        name: project.title,
+        item: `${baseUrl}/du-an/${project.slug}`,
       },
     ],
   };
 
   return (
     <>
-      {projectSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

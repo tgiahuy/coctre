@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isIP } from "node:net";
 import { backendApiUrl } from "@/lib/serverAuth";
 
-function isValidIp(ip: string): boolean {
+function isValidIp(ip: string | null | undefined): boolean {
   if (!ip) return false;
-  // IPv4 simple check
-  if (/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) return true;
-  // IPv6 simple check
-  if (ip.includes(":") && ip.length >= 2) return true;
-  return false;
+  const clean = ip.trim();
+  // isIP returns 4 for valid IPv4 (0-255 per octet), 6 for valid IPv6, 0 for invalid
+  return isIP(clean) !== 0;
 }
 
 function resolveClientIp(request: NextRequest): string {
@@ -15,22 +14,24 @@ function resolveClientIp(request: NextRequest): string {
   const cfIp = request.headers.get("cf-connecting-ip")?.trim();
   if (cfIp && isValidIp(cfIp)) return cfIp;
 
-  // 2. Reverse proxy / Nginx real-ip
+  // 2. Reverse proxy / Nginx real-ip (set by Nginx proxy_set_header X-Real-IP $remote_addr)
   const realIp = request.headers.get("x-real-ip")?.trim();
   if (realIp && isValidIp(realIp)) return realIp;
 
-  // 3. Next.js / Vercel runtime client IP
+  // 3. Next.js / Vercel runtime client socket IP
   // @ts-expect-error ip property is populated in production NextRequest
   const nextIp = typeof request.ip === "string" ? request.ip.trim() : "";
   if (nextIp && isValidIp(nextIp)) return nextIp;
 
-  // 4. Fallback to right-most or first valid IP from X-Forwarded-For
+  // 4. Fallback to right-most valid IP from X-Forwarded-For (the one appended by the nearest reverse proxy)
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
     const list = forwardedFor.split(",").map((s) => s.trim()).filter(Boolean);
-    // Prefer the first entry
-    if (list.length > 0 && isValidIp(list[0])) {
-      return list[0];
+    // When proxies chain, nearest proxy appends to the end
+    for (let i = list.length - 1; i >= 0; i--) {
+      if (isValidIp(list[i])) {
+        return list[i];
+      }
     }
   }
 
