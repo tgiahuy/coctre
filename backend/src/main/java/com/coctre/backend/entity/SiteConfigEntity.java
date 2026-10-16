@@ -20,6 +20,8 @@ public class SiteConfigEntity {
     private String shortName;
     private String legalName;
     private String slogan;
+    private String logoUrl;
+    private String faviconUrl;
     private String hotline;
     private String hotlineFormatted;
     private String hotlineSecondary;

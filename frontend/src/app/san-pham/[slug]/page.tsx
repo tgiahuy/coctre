@@ -170,19 +170,30 @@ export default function ProductDetailPage({
               </h1>
 
               {/* Rating summary */}
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex text-[#E57C23]">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
+              {reviewsList.length > 0 ? (
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex text-[#E57C23]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-xs font-bold text-gray-700">
+                    {(reviewsList.reduce((acc, r) => acc + r.rating, 0) / reviewsList.length).toFixed(1)} / 5.0
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    ({reviewsList.length} đánh giá thực tế từ nhà thầu)
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-gray-700">
-                  {product.rating} / 5.0
-                </span>
-                <span className="text-xs text-gray-400">
-                  ({reviewsList.length} đánh giá thực tế từ nhà thầu)
-                </span>
-              </div>
+              ) : (
+                <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                  <div className="flex text-gray-300">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                    ))}
+                  </div>
+                  <span>Chưa có đánh giá nào từ khách hàng</span>
+                </div>
+              )}
             </div>
 
             {/* Key Specs Matrix */}
@@ -372,48 +383,58 @@ export default function ProductDetailPage({
                       Đánh giá từ khách hàng & nhà thầu
                     </h3>
                     <p className="text-xs text-gray-500">
-                      Điểm trung bình {product.rating} / 5 ({reviewsList.length} lượt đánh giá)
+                      {reviewsList.length > 0
+                        ? `Điểm trung bình ${(reviewsList.reduce((acc, r) => acc + r.rating, 0) / reviewsList.length).toFixed(1)} / 5 (${reviewsList.length} lượt đánh giá)`
+                        : "Chưa có lượt đánh giá nào"}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1 text-[#E57C23]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
+                  {reviewsList.length > 0 && (
+                    <div className="flex items-center gap-1 text-[#E57C23]">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-5 h-5 fill-current" />
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Reviews List */}
                 <div className="space-y-4">
-                  {reviewsList.map((rev) => (
-                    <div
-                      key={rev.id}
-                      className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm space-y-2"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <strong className="text-sm text-gray-900">{rev.author}</strong>
-                          <span className="text-xs text-gray-500">({rev.company})</span>
-                          {rev.verified && (
-                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                              Đã mua hàng
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-xs text-gray-400">{rev.date}</span>
-                      </div>
-
-                      <div className="flex text-[#E57C23]">
-                        {[...Array(rev.rating)].map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                        ))}
-                      </div>
-
-                      <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                        {rev.comment}
-                      </p>
+                  {reviewsList.length === 0 ? (
+                    <div className="p-8 rounded-2xl bg-white border border-gray-200 text-center text-gray-500 text-xs sm:text-sm">
+                      Chưa có đánh giá nào cho sản phẩm này. Hãy là người đầu tiên để lại đánh giá thực tế bên dưới!
                     </div>
-                  ))}
+                  ) : (
+                    reviewsList.map((rev) => (
+                      <div
+                        key={rev.id}
+                        className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm space-y-2"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <strong className="text-sm text-gray-900">{rev.author}</strong>
+                            <span className="text-xs text-gray-500">({rev.company})</span>
+                            {rev.verified && (
+                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                                Đã mua hàng
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-xs text-gray-400">{rev.date}</span>
+                        </div>
+
+                        <div className="flex text-[#E57C23]">
+                          {[...Array(rev.rating)].map((_, i) => (
+                            <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                          ))}
+                        </div>
+
+                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                          {rev.comment}
+                        </p>
+                      </div>
+                    ))
+                  )}
                 </div>
 
                 {/* Submit New Review Form */}

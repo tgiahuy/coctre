@@ -92,6 +92,10 @@ export default function FeaturedProjectsSection() {
     container.scrollTo({ left: targetScroll, behavior: "smooth" });
   };
 
+  if (!projects || projects.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-16 sm:py-24 bg-[#F7F5EF] border-t border-gray-200 relative overflow-hidden" id="du-an-tieu-bieu">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,7 +113,7 @@ export default function FeaturedProjectsSection() {
             </h2>
 
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-              Những dự án giao thông, kè đê điều, cầu đường và khu công nghiệp trọng điểm tin tưởng lựa chọn cọc tre Hòa Bình.
+              Những dự án giao thông, kè đê điều, cầu đường và công trình xây dựng trọng điểm tin tưởng lựa chọn cọc tre Huyền Dương.
             </p>
           </div>
 

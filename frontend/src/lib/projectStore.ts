@@ -5,9 +5,24 @@ import { projects as initialProjects, Project } from "@/data/projects";
 
 const STORAGE_CUSTOM_KEY = "coctre_custom_projects";
 const STORAGE_DELETED_KEY = "coctre_deleted_project_ids";
+const PURGE_MOCK_FLAG = "coctre_purged_mock_projects_v2";
+
+function purgeOldMocksIfNeeded() {
+  if (typeof window === "undefined") return;
+  try {
+    if (!localStorage.getItem(PURGE_MOCK_FLAG)) {
+      localStorage.removeItem(STORAGE_CUSTOM_KEY);
+      localStorage.removeItem(STORAGE_DELETED_KEY);
+      localStorage.setItem(PURGE_MOCK_FLAG, "true");
+    }
+  } catch (e) {
+    // Ignore storage errors
+  }
+}
 
 export function getDeletedProjectIds(): string[] {
   if (typeof window === "undefined") return [];
+  purgeOldMocksIfNeeded();
   try {
     const raw = localStorage.getItem(STORAGE_DELETED_KEY);
     return raw ? JSON.parse(raw) : [];
@@ -18,6 +33,7 @@ export function getDeletedProjectIds(): string[] {
 
 export function getCustomProjects(): Project[] {
   if (typeof window === "undefined") return [];
+  purgeOldMocksIfNeeded();
   try {
     const raw = localStorage.getItem(STORAGE_CUSTOM_KEY);
     return raw ? JSON.parse(raw) : [];

@@ -1,9 +1,11 @@
 package com.coctre.backend.config;
 
+import com.coctre.backend.entity.AdminUserEntity;
 import com.coctre.backend.entity.ArticleEntity;
 import com.coctre.backend.entity.ProductEntity;
 import com.coctre.backend.entity.ProjectEntity;
 import com.coctre.backend.entity.SiteConfigEntity;
+import com.coctre.backend.repository.AdminUserRepository;
 import com.coctre.backend.repository.ArticleRepository;
 import com.coctre.backend.repository.ProductRepository;
 import com.coctre.backend.repository.ProjectRepository;
@@ -25,41 +27,63 @@ public class DataSeeder implements CommandLineRunner {
     private final ProjectRepository projectRepository;
     private final ArticleRepository articleRepository;
     private final SiteConfigRepository siteConfigRepository;
+    private final AdminUserRepository adminUserRepository;
 
     @Override
     public void run(String... args) {
         seedSiteConfig();
+        seedAdminUsers();
         seedProducts();
-        seedProjects();
-        seedArticles();
+    }
+
+    private void seedAdminUsers() {
+        Optional<AdminUserEntity> userOpt = adminUserRepository.findByEmailIgnoreCase("admincoctre@gmail.com");
+        if (userOpt.isPresent()) {
+            AdminUserEntity user = userOpt.get();
+            user.setPasswordHash(PasswordUtil.hashPassword("admin123"));
+            adminUserRepository.save(user);
+        } else {
+            AdminUserEntity superAdmin = AdminUserEntity.builder()
+                    .id("admin-super-coctre")
+                    .email("admincoctre@gmail.com")
+                    .passwordHash(PasswordUtil.hashPassword("admin123"))
+                    .fullName("Ban Quản Trị Cọc Tre")
+                    .role("SUPER_ADMIN")
+                    .isActive(true)
+                    .build();
+            adminUserRepository.save(superAdmin);
+            log.info("✓ Đã khởi tạo tài khoản quản trị mặc định (admincoctre@gmail.com)");
+        }
     }
 
     private void seedSiteConfig() {
         if (siteConfigRepository.count() == 0) {
             SiteConfigEntity cfg = SiteConfigEntity.builder()
                     .id("main-config")
-                    .companyName("Cọc Tre Hòa Bình")
+                    .companyName("Cọc Tre Huyền Dương")
                     .shortName("Cọc Tre Công Trình")
-                    .legalName("Công ty TNHH Khai Thác & Chế Biến Lâm Sản Hòa Bình")
-                    .slogan("Cọc tre công trình chất lượng cao – Đúng tiến độ – Giá tại bãi")
-                    .hotline("0325401407")
-                    .hotlineFormatted("0325.401.407")
-                    .hotlineSecondary("0988.666.888")
-                    .zalo("0325401407")
-                    .zaloUrl("https://zalo.me/0325401407")
-                    .email("hoabinh271159@gmail.com")
-                    .headquarters("Số 16, ngõ 228 Thanh Bình, Mộ Lao, Hà Đông, Hà Nội")
-                    .warehouse1("Bãi tập kết cọc tre km12 Quốc Lộ 6, Lương Sơn, Hòa Bình")
-                    .warehouse2("Kho trung chuyển Chân cầu Thanh Trì, Lĩnh Nam, Hoàng Mai, Hà Nội")
+                    .legalName("Công ty TNHH Xây Dựng & TM Huyền Dương")
+                    .slogan("Giao hàng tận chân công trình trong ngày – Hỗ trợ bốc xếp – Chiết khấu cao cho đơn hàng lớn")
+                    .logoUrl("/images/logo.png")
+                    .faviconUrl("/favicon.ico")
+                    .hotline("0988718013")
+                    .hotlineFormatted("0988.718.013")
+                    .hotlineSecondary("0369.928.040")
+                    .zalo("0988718013")
+                    .zaloUrl("https://zalo.me/0988718013")
+                    .email("huyenduong70@gmail.com")
+                    .headquarters("331 Phố Vác, Dân Hòa, Hà Nội")
+                    .warehouse1("Tổng kho & Xưởng chế biến cọc tre 331 Phố Vác, Dân Hòa, Hà Nội")
+                    .warehouse2("Đội xe chuyên dụng giao hàng tận chân công trình trong ngày toàn miền Bắc")
                     .workHours("Thứ 2 - Chủ Nhật: 06:00 - 22:00 (Hỗ trợ khẩn cấp 24/7)")
-                    .website("https://coctrehoabinh.com")
-                    .facebook("https://facebook.com/coctrehoabinh")
-                    .mapEmbedUrl("https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.1953284097457!2d105.7820123!3d20.9848149!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accf12b7a977%3A0x4a9b407ebaf42f1b!2zMjI4IFRoYW5oIELDrG5oLCBN4buZIExhbywgSMOgIMSQw7RuZywgSMOgIE7hu5lp!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s")
-                    .experienceYears(12)
-                    .warehouseArea("5.000m²+")
-                    .completedProjects("1.200+")
-                    .supplyCapacity("500.000 cọc/tháng")
-                    .deliveryCoverage("Giao hàng toàn miền Bắc & Miền Trung")
+                    .website("https://coctrehuyenduong.com")
+                    .facebook("https://facebook.com/coctrehuyenduong")
+                    .mapEmbedUrl("https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3729.6590783231222!2d105.7768899!3d20.8050759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31344b16832a57e1%3A0x50d7c89128659d32!2zQ-G7rWEgSMOgbmcgQ-G7jWMgVHJlIETGsMahbmcgSHV54buBbg!5e0!3m2!1svi!2s!4v1792139837819!5m2!1svi!2s")
+                    .experienceYears(34)
+                    .warehouseArea("10.000m²+")
+                    .completedProjects("1.500+")
+                    .supplyCapacity("Hàng sẵn kho – Giao trong ngày")
+                    .deliveryCoverage("Giao tận chân công trình toàn miền Bắc")
                     .build();
             siteConfigRepository.save(cfg);
             log.info("✓ Đã khởi tạo dữ liệu mẫu SiteConfig thành công");
@@ -76,7 +100,7 @@ public class DataSeeder implements CommandLineRunner {
                     .lengthMeters(2.0)
                     .diameter("Ø 65 – 90 mm")
                     .bambooType("Tre luồng / Tre gai già đanh")
-                    .origin("Hòa Bình – Thanh Hóa")
+                    .origin("Vùng tre già chọn lọc miền Bắc")
                     .stockStatus("Sẵn hàng số lượng lớn")
                     .shortDescription("Quy cách phổ biến nhất cho công trình nhà dân dụng, móng băng, móng bè trên nền đất ruộng, ao hồ san lấp.")
                     .description("Cọc tre 2m là quy cách được sử dụng nhiều nhất trên 70% các công trình xây dựng dân dụng tại khu vực miền Bắc.")
@@ -85,8 +109,8 @@ public class DataSeeder implements CommandLineRunner {
                     .packaging("Bó 25 cây đai thép chắc chắn")
                     .images(Arrays.asList("/images/products/coc-tre-2m-1.webp", "/images/products/coc-tre-2m-2.webp"))
                     .featured(true)
-                    .rating(5.0)
-                    .reviewCount(42)
+                    .rating(0.0)
+                    .reviewCount(0)
                     .build();
 
             ProductEntity p25m = ProductEntity.builder()
@@ -96,8 +120,8 @@ public class DataSeeder implements CommandLineRunner {
                     .length("2.5m")
                     .lengthMeters(2.5)
                     .diameter("Ø 70 – 100 mm")
-                    .bambooType("Tre đực già Hòa Bình")
-                    .origin("Hòa Bình")
+                    .bambooType("Tre đực già đặc ruột")
+                    .origin("Vùng nguyên liệu tre già đạt chuẩn")
                     .stockStatus("Sẵn hàng số lượng lớn")
                     .shortDescription("Chuyên dùng cho gia cố móng nhà 3-4 tầng, móng kè đê bao kênh rạch.")
                     .description("Cọc tre 2.5m chịu lực nén cọc cao, độ thẳng đều.")
@@ -106,8 +130,8 @@ public class DataSeeder implements CommandLineRunner {
                     .packaging("Bó 25 cây")
                     .images(Arrays.asList("/images/products/coc-tre-25m-1.webp"))
                     .featured(true)
-                    .rating(4.9)
-                    .reviewCount(35)
+                    .rating(0.0)
+                    .reviewCount(0)
                     .build();
 
             ProductEntity p3m = ProductEntity.builder()
@@ -118,7 +142,7 @@ public class DataSeeder implements CommandLineRunner {
                     .lengthMeters(3.0)
                     .diameter("Ø 80 – 100 mm")
                     .bambooType("Tre luồng già loại 1")
-                    .origin("Hòa Bình – Thanh Hóa")
+                    .origin("Vùng nguyên liệu tre già chọn lọc")
                     .stockStatus("Sẵn hàng số lượng lớn")
                     .shortDescription("Quy cách cọc dài chuyên dụng xử lý tầng bùn sâu, kè bờ sông hồ.")
                     .description("Cọc tre 3m đạt độ già từ 4-6 năm, thân cọc thẳng và dẻo dai.")
@@ -127,8 +151,8 @@ public class DataSeeder implements CommandLineRunner {
                     .packaging("Bó 20 cây")
                     .images(Arrays.asList("/images/products/coc-tre-3m-1.webp"))
                     .featured(true)
-                    .rating(5.0)
-                    .reviewCount(28)
+                    .rating(0.0)
+                    .reviewCount(0)
                     .build();
 
             productRepository.saveAll(Arrays.asList(p2m, p25m, p3m));

@@ -28,7 +28,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/banner/hero-bg.jpg"
-          alt="Rừng tre tự nhiên Hòa Bình"
+          alt="Rừng tre già nguyên liệu cọc tre Huyền Dương"
           fill
           priority
           sizes="100vw"
@@ -48,44 +48,44 @@ export default function HeroSection() {
             {/* Tagline / Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3D794E]/40 border border-[#7BB661]/40 text-[#A3E635] text-xs font-black tracking-wider uppercase backdrop-blur-md shadow-sm">
               <TreeDeciduous className="w-4 h-4 text-[#84CC16]" />
-              <span>TỔNG KHO CỌC TRE CÔNG TRÌNH MIỀN BẮC</span>
+              <span>HƠN 30 NĂM KINH NGHIỆM TỪ NĂM 1990 • DÂN HÒA, HÀ NỘI</span>
             </div>
 
             {/* Artistic Main Heading */}
             <div className="space-y-2">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] drop-shadow-md">
                 <span className="block font-serif italic text-[#CBEA7B] font-bold text-3xl sm:text-5xl mb-1">
-                  Cọc Tre Việt
+                  Cọc Tre Huyền Dương
                 </span>
                 <span className="text-white drop-shadow-sm">
-                  Nền Móng Tương Lai
+                  Gia Cố Nền Móng Vững Chắc
                 </span>
               </h1>
 
-              {/* Green Pill Badge like in Image 1 */}
-              <div className="inline-block mt-3 px-5 py-2 rounded-full bg-[#3B7A33]/90 text-white font-extrabold text-sm sm:text-base border border-[#68B854]/60 shadow-lg backdrop-blur-sm">
-                Giá Rẻ &bull; Chuẩn TCVN &bull; Cho Mọi Công Trình
+              {/* Green Pill Badge with Customer Main Message */}
+              <div className="inline-block mt-3 px-5 py-2.5 rounded-full bg-[#3B7A33]/90 text-white font-extrabold text-xs sm:text-sm md:text-base border border-[#68B854]/60 shadow-lg backdrop-blur-sm">
+                Giao Hàng Tận Chân Công Trình &bull; Hỗ Trợ Bốc Xếp &bull; Chiết Khấu Cao
               </div>
             </div>
 
             {/* Subheadline / Intro */}
             <p className="text-sm sm:text-base text-gray-200 max-w-xl leading-relaxed font-medium">
-              Chuyên khai thác, sơ chế và phân phối cọc tre luồng già, tre gai chọn lọc cho các công trình móng nhà dân dụng, cầu đường, kè sông và thủy lợi tại Hà Nội & các tỉnh phía Bắc.
+              Công Ty TNHH Xây Dựng & TM Huyền Dương chuyên cung cấp cọc tre công trình từ 1.5m – 4m & theo yêu cầu. Sở hữu kho bãi quy mô lớn cùng hệ thống xe vận chuyển tận chân công trình trong ngày, giá tận xưởng, đủ quy cách.
             </p>
 
             {/* 3 Value Highlights */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
               <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-gray-100 bg-white/10 px-3 py-2 rounded-xl backdrop-blur-sm border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-[#A3E635] shrink-0" />
-                <span>Tre già đực 3-6 năm</span>
+                <span>Giao hàng trong ngày</span>
               </div>
               <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-gray-100 bg-white/10 px-3 py-2 rounded-xl backdrop-blur-sm border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-[#A3E635] shrink-0" />
-                <span>Bãi sẵn 50.000+ cây</span>
+                <span>Hỗ trợ bốc xếp tận nơi</span>
               </div>
               <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-gray-100 bg-white/10 px-3 py-2 rounded-xl backdrop-blur-sm border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-[#A3E635] shrink-0" />
-                <span>Giao tận hố móng</span>
+                <span>Chiết khấu cao đơn lớn</span>
               </div>
             </div>
 
@@ -96,27 +96,35 @@ export default function HeroSection() {
                 className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#E57C23] hover:bg-[#CC6914] text-white font-black text-sm sm:text-base rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FileText className="w-5 h-5" />
-                <span>NHẬN BÁO GIÁ TẠI BÃI</span>
+                <span>NHẬN BÁO GIÁ TẬN XƯỞNG</span>
               </button>
 
               <Link
                 href="/gioi-thieu"
                 className="px-5 sm:px-6 py-3.5 sm:py-4 bg-[#234E34]/80 hover:bg-[#183B27] text-white font-bold text-sm sm:text-base rounded-xl border border-[#528C63] transition-all flex items-center justify-center gap-2 backdrop-blur-sm"
               >
-                <span>GIỚI THIỆU DOANH NGHIỆP</span>
+                <span>VỀ CHÚNG TÔI</span>
                 <ArrowRight className="w-4 h-4 text-[#A3E635]" />
               </Link>
             </div>
 
             {/* Hotline Quick Callout */}
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-300 pt-1">
-              <span>Hotline tư vấn kỹ thuật & giao nhận:</span>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 pt-1">
+              <span>Hotline / Zalo tư vấn 24/7:</span>
               <a
                 href={`tel:${siteConfig.hotline}`}
                 className="font-extrabold text-[#CDAA63] hover:text-white transition-colors flex items-center gap-1"
               >
                 <Phone className="w-3.5 h-3.5 text-[#E57C23]" />
                 {siteConfig.hotlineFormatted}
+              </a>
+              <span className="text-gray-400">•</span>
+              <a
+                href={`tel:${siteConfig.hotline2 || "0369928040"}`}
+                className="font-extrabold text-[#CDAA63] hover:text-white transition-colors flex items-center gap-1"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#E57C23]" />
+                {siteConfig.hotline2Formatted || "0369.928.040"}
               </a>
             </div>
           </div>
@@ -131,7 +139,7 @@ export default function HeroSection() {
               >
                 <Image
                   src="/images/banner/bamboo-vertical.jpg"
-                  alt="Rừng tre cọc già Hòa Bình"
+                  alt="Rừng tre cọc già tuyển chọn"
                   fill
                   sizes="200px"
                   className="object-cover transform skew-x-12 group-hover:skew-x-0 scale-125 transition-all duration-500"

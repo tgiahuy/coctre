@@ -75,7 +75,7 @@ export default function ProductTableSection() {
             CÁC LOẠI CỌC TRE CÓ SẴN TẠI TỔNG KHO
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-medium">
-            100% tre già đực Hòa Bình, thân thẳng, cắt vát nhọn 3 cạnh chuẩn TCVN 9361:2012. Quý khách có thể xem bảng dưới đây và bấm nút gọi để nhận giá tại bãi tốt nhất.
+            100% tre già đực chọn lọc, thân thẳng, không mối mọt cong vênh, vát nhọn 3 cạnh chuẩn kỹ thuật. Bấm gọi hotline để nhận giá tận xưởng tốt nhất trong ngày.
           </p>
         </div>
 

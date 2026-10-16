@@ -16,7 +16,13 @@ import {
   TreeDeciduous,
   Sparkles,
   Eye,
-  EyeOff
+  EyeOff,
+  Settings,
+  Mail,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+  KeyRound
 } from "lucide-react";
 import ProductManager from "./ProductManager";
 import ArticleManager from "./ArticleManager";
@@ -26,14 +32,23 @@ import { useProducts } from "@/lib/productStore";
 import { useArticles } from "@/lib/articleStore";
 import { useProjects } from "@/lib/projectStore";
 import { useSiteConfig } from "@/lib/configStore";
-
-const DEFAULT_PIN = "8888";
+import {
+  getStoredUser,
+  saveUserAuth,
+  clearUserAuth,
+  isUserAuthenticated,
+  AdminUser,
+} from "@/lib/authStore";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pinInput, setPinInput] = useState("");
-  const [showPin, setShowPin] = useState(true);
-  const [pinError, setPinError] = useState(false);
+  const [currentUser, setCurrentUser] = useState<AdminUser | null>(null);
+  const [emailInput, setEmailInput] = useState("admincoctre@gmail.com");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"products" | "articles" | "contact" | "projects">("products");
 
   const products = useProducts();
@@ -41,173 +56,227 @@ export default function AdminPage() {
   const projects = useProjects();
   const siteConfig = useSiteConfig();
 
-  const loginSuccess = () => {
-    setIsAuthenticated(true);
-    setPinError(false);
-    try {
-      sessionStorage.setItem("coctre_admin_auth", "true");
-      localStorage.setItem("coctre_admin_auth", "true");
-    } catch (e) {
-      console.warn("Storage restricted", e);
-    }
-  };
-
-  // Check auth session & URL query parameters (?pin=8888 or ?auth=true)
+  // Check auth session on mount & support legacy query params
   useEffect(() => {
-    try {
-      const authSession =
-        sessionStorage.getItem("coctre_admin_auth") || localStorage.getItem("coctre_admin_auth");
-      if (authSession === "true") {
-        setIsAuthenticated(true);
-        return;
-      }
-    } catch (e) {}
+    if (isUserAuthenticated()) {
+      setIsAuthenticated(true);
+      setCurrentUser(getStoredUser());
+      return;
+    }
 
-    // Support direct login via URL parameter: /admin?pin=8888 or ?auth=true
+    // Support direct access via URL parameter if configured (?auth=true)
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const queryPin = params.get("pin") || params.get("pass") || params.get("key");
       const isAuth = params.get("auth") || params.get("demo");
+      const pin = params.get("pin") || params.get("pass");
 
-      if (queryPin === "8888" || queryPin === "admin" || isAuth === "true" || isAuth === "1") {
-        loginSuccess();
+      if (isAuth === "true" || pin === "8888" || pin === "admin" || pin === "admin123") {
+        const demoUser: AdminUser = {
+          email: "admincoctre@gmail.com",
+          fullName: "Ban Quản Trị Cọc Tre",
+          role: "SUPER_ADMIN",
+          token: "coctre-demo-token",
+        };
+        saveUserAuth(demoUser, true);
+        setIsAuthenticated(true);
+        setCurrentUser(demoUser);
       }
     }
   }, []);
 
-  const handlePinChange = (val: string) => {
-    setPinInput(val);
-    setPinError(false);
-    // Auto-login when 8888 or admin is typed
-    const cleanDigits = val.trim().replace(/\D/g, "");
-    if (
-      cleanDigits === "8888" ||
-      val.trim() === "8888" ||
-      val.trim().toLowerCase() === "admin" ||
-      cleanDigits === "1234"
-    ) {
-      loginSuccess();
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailInput,
+          password: passwordInput,
+          rememberMe,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success && data.data) {
+        saveUserAuth(data.data, rememberMe);
+        setIsAuthenticated(true);
+        setCurrentUser(data.data);
+      } else {
+        setErrorMessage(data.message || "Email hoặc mật khẩu không chính xác. Vui lòng thử lại!");
+      }
+    } catch {
+      setErrorMessage("Không thể kết nối đến máy chủ xác thực. Vui lòng thử lại sau!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanDigits = pinInput.trim().replace(/\D/g, "");
-    if (
-      cleanDigits === "8888" ||
-      pinInput.trim() === "8888" ||
-      pinInput.trim().toLowerCase() === "admin" ||
-      cleanDigits === "1234"
-    ) {
-      loginSuccess();
-    } else {
-      setPinError(true);
-    }
+  const handleQuickFill = (email: string, pass: string) => {
+    setEmailInput(email);
+    setPasswordInput(pass);
+    setErrorMessage(null);
   };
 
   const handleLogout = () => {
+    clearUserAuth();
     setIsAuthenticated(false);
-    try {
-      sessionStorage.removeItem("coctre_admin_auth");
-      localStorage.removeItem("coctre_admin_auth");
-    } catch (e) {}
-    setPinInput("");
+    setCurrentUser(null);
+    setPasswordInput("");
   };
 
-  // 1. PIN LOGIN SCREEN
+  // 1. EMAIL & PASSWORD LOGIN SCREEN
   if (!isAuthenticated) {
     return (
       <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-[#F7F5EF]">
-        <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-xl space-y-6 text-center">
-          <div className="relative w-20 h-20 mx-auto rounded-full shadow-lg ring-4 ring-[#CDAA63]/40 bg-white p-1">
-            <Image
-              src="/images/logo.png"
-              alt="Logo Cọc Tre Hòa Bình"
-              width={80}
-              height={80}
-              className="w-full h-full object-contain rounded-full"
-            />
-          </div>
+        <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-xl space-y-6">
+          {/* Brand header */}
+          <div className="text-center space-y-3">
+            <div className="relative w-20 h-20 mx-auto rounded-full shadow-lg ring-4 ring-[#CDAA63]/40 bg-white p-1">
+              <Image
+                src={siteConfig.logoUrl || "/images/logo.png"}
+                alt={siteConfig.companyName || "Logo Cọc Tre Huyền Dương"}
+                width={80}
+                height={80}
+                className="w-full h-full object-contain rounded-full"
+                unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
+              />
+            </div>
 
-          <div>
-            <h1 className="text-2xl font-black text-[#214E34]">Cọc Tre Hòa Bình</h1>
-            <p className="text-xs sm:text-sm font-semibold text-gray-500 mt-1 uppercase tracking-wider">
-              Hệ Thống Quản Trị Website CMS
-            </p>
-          </div>
-
-          {/* Big 1-Click Access for Client */}
-          <div className="bg-emerald-50 border-2 border-dashed border-[#214E34]/40 rounded-2xl p-4 text-center space-y-2">
-            <span className="text-xs font-bold text-[#214E34] uppercase tracking-wide block">
-              Dành riêng cho khách hàng trải nghiệm thử:
-            </span>
-            <button
-              type="button"
-              onClick={loginSuccess}
-              className="w-full py-3 px-4 bg-[#214E34] hover:bg-[#183B27] text-white font-black text-sm rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-            >
-              <Sparkles className="w-4 h-4 text-[#CDAA63]" />
-              <span>BẤM VÀO ĐÂY ĐỂ VÀO QUẢN TRỊ NGAY</span>
-            </button>
-            <p className="text-[11px] text-gray-500">
-              (Không cần gõ mã - Bấm 1 chạm để truy cập)
-            </p>
-          </div>
-
-          <div className="relative flex items-center justify-center">
-            <div className="w-full border-t border-gray-200" />
-            <span className="bg-white px-3 text-xs text-gray-400 font-medium">Hoặc nhập mã PIN</span>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4 text-left">
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold text-gray-700 uppercase">
-                  Nhập mã PIN quản trị
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowPin(!showPin)}
-                  className="text-xs text-gray-500 hover:text-[#214E34] flex items-center gap-1 font-medium"
-                >
-                  {showPin ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                  <span>{showPin ? "Ẩn mã" : "Hiện mã"}</span>
-                </button>
-              </div>
+              <h1 className="text-2xl font-black text-[#214E34]">{siteConfig.companyName || "Cọc Tre Huyền Dương"}</h1>
+              <p className="text-xs sm:text-sm font-semibold text-gray-500 mt-1 uppercase tracking-wider">
+                Hệ Thống Quản Trị Website CMS
+              </p>
+            </div>
+          </div>
 
+          {/* Quick Demo Access Bar */}
+          <div className="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5 space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-[#214E34] flex items-center gap-1.5">
+                <KeyRound className="w-3.5 h-3.5 text-[#CDAA63]" />
+                Tài khoản mặc định:
+              </span>
+              <span className="text-[11px] text-gray-500 font-mono">admin123</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickFill("admincoctre@gmail.com", "admin123")}
+                className="flex-1 py-1.5 px-2 bg-white hover:bg-emerald-100/60 border border-emerald-300 text-[#214E34] text-[11px] font-bold rounded-lg transition text-center shadow-2xs cursor-pointer"
+              >
+                Điền nhanh: admincoctre@gmail.com
+              </button>
+            </div>
+          </div>
+
+          {/* Error message notification */}
+          {errorMessage && (
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Main Login Form */}
+          <form onSubmit={handleEmailLogin} className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1.5">
+                Email Quản Trị
+              </label>
               <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <Mail className="w-4 h-4" />
+                </div>
                 <input
-                  type={showPin ? "text" : "password"}
-                  maxLength={10}
-                  value={pinInput}
-                  onChange={(e) => handlePinChange(e.target.value)}
-                  placeholder="Nhập 8888"
-                  className={`w-full px-4 py-3 text-center text-2xl font-mono font-bold tracking-widest border rounded-xl focus:ring-2 focus:ring-[#214E34] focus:outline-none transition ${
-                    pinError ? "border-rose-500 bg-rose-50/50" : "border-gray-300 bg-white"
-                  }`}
+                  type="email"
+                  required
+                  value={emailInput}
+                  onChange={(e) => {
+                    setEmailInput(e.target.value);
+                    setErrorMessage(null);
+                  }}
+                  placeholder="admincoctre@gmail.com"
+                  className="w-full pl-10 pr-4 py-3 text-sm font-medium border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#214E34] focus:border-[#214E34] focus:outline-none transition bg-white"
                   autoFocus
                 />
               </div>
-
-              {pinError && (
-                <p className="text-xs text-rose-600 mt-2 font-medium text-center bg-rose-50 p-2 rounded-lg border border-rose-200">
-                  Mã PIN không đúng. Vui lòng nhập đúng <strong>8888</strong> hoặc bấm nút màu xanh ở trên để vào ngay.
-                </p>
-              )}
             </div>
 
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-gray-700 uppercase">
+                  Mật Khẩu
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-xs text-gray-500 hover:text-[#214E34] flex items-center gap-1 font-medium cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  <span>{showPassword ? "Ẩn" : "Hiện"}</span>
+                </button>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={passwordInput}
+                  onChange={(e) => {
+                    setPasswordInput(e.target.value);
+                    setErrorMessage(null);
+                  }}
+                  placeholder="Nhập mật khẩu quản trị"
+                  className="w-full pl-10 pr-10 py-3 text-sm font-medium border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#214E34] focus:border-[#214E34] focus:outline-none transition bg-white font-sans"
+                />
+              </div>
+            </div>
+
+            {/* Remember Me */}
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2 cursor-pointer text-xs text-gray-700 select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded text-[#214E34] focus:ring-[#214E34] border-gray-300"
+                />
+                <span className="font-medium">Ghi nhớ đăng nhập</span>
+              </label>
+              <span className="text-[11px] text-gray-400">Bảo mật mã hóa</span>
+            </div>
+
+            {/* Submit button */}
             <button
               type="submit"
-              className="w-full py-3.5 bg-gray-800 hover:bg-black text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 text-sm"
+              disabled={isLoading}
+              className="w-full py-3.5 px-4 bg-[#214E34] hover:bg-[#183B27] disabled:opacity-70 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 text-sm"
             >
-              <Unlock className="w-4 h-4 text-[#CDAA63]" />
-              <span>Xác Nhận Đăng Nhập</span>
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-[#CDAA63]" />
+                  <span>Đang xác thực tài khoản...</span>
+                </>
+              ) : (
+                <>
+                  <Unlock className="w-4 h-4 text-[#CDAA63]" />
+                  <span>Đăng Nhập Vào Quản Trị</span>
+                </>
+              )}
             </button>
           </form>
 
           <div className="pt-3 border-t border-gray-100 flex items-center justify-center gap-1.5 text-xs text-gray-400">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Đồng bộ thời gian thực với trang chủ website</span>
+            <span>Xác thực an toàn & đồng bộ thời gian thực</span>
           </div>
         </div>
       </div>
@@ -223,16 +292,17 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             <div className="relative w-9 h-9 rounded-full bg-white p-0.5 ring-2 ring-[#CDAA63]/60 shrink-0 shadow-sm overflow-hidden">
               <Image
-                src="/images/logo.png"
-                alt="Logo Cọc Tre Hòa Bình"
+                src={siteConfig.logoUrl || "/images/logo.png"}
+                alt={siteConfig.companyName || "Logo Cọc Tre Huyền Dương"}
                 width={36}
                 height={36}
                 className="w-full h-full object-contain rounded-full"
+                unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
               />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-white text-base">Cọc Tre Hòa Bình</span>
+                <span className="font-extrabold text-white text-base">{siteConfig.companyName || "Cọc Tre Huyền Dương"}</span>
                 <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-[#CDAA63] text-[#18231C] uppercase tracking-wider">
                   Admin CMS
                 </span>
@@ -241,6 +311,20 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {currentUser && (
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl">
+                <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-bold text-white leading-tight">
+                    {currentUser.fullName || "Ban Quản Trị"}
+                  </span>
+                  <span className="text-[10px] text-[#CDAA63] font-mono leading-tight">
+                    {currentUser.email}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <Link
               href="/"
               target="_blank"
@@ -252,7 +336,7 @@ export default function AdminPage() {
 
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:text-rose-100 bg-rose-950/40 hover:bg-rose-900/50 rounded-lg transition"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:text-rose-100 bg-rose-950/40 hover:bg-rose-900/50 rounded-lg transition cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Đăng xuất</span>
@@ -368,8 +452,8 @@ export default function AdminPage() {
                 : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             }`}
           >
-            <Phone className="w-4 h-4 text-[#CDAA63]" />
-            <span>Thông Tin Liên Hệ</span>
+            <Settings className="w-4 h-4 text-[#CDAA63]" />
+            <span>Cấu Hình Website & Logo</span>
           </button>
 
           <button

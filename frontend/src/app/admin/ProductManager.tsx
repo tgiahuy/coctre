@@ -67,7 +67,7 @@ export default function ProductManager() {
     lengthMeters: 2.0,
     diameter: "Ø 60 – 80 mm",
     bambooType: "Tre đực già, tre gai tuyển chọn",
-    origin: "Rừng tre già Hòa Bình, Phú Thọ",
+    origin: "Vùng nguyên liệu tre già tuyển chọn",
     stockStatus: "Sẵn hàng số lượng lớn",
     shortDescription: "",
     description: "",
@@ -116,8 +116,8 @@ export default function ProductManager() {
       length: "2m",
       lengthMeters: 2.0,
       diameter: "Ø 60 – 80 mm",
-      bambooType: "Tre đực già Hòa Bình",
-      origin: "Hòa Bình",
+      bambooType: "Tre đực già tuyển chọn",
+      origin: "Vùng nguyên liệu tre già đạt chuẩn",
       stockStatus: "Sẵn hàng số lượng lớn",
       shortDescription: "",
       description: "",
@@ -490,7 +490,7 @@ export default function ProductManager() {
                   type="text"
                   value={formData.origin}
                   onChange={(e) => setFormData((prev) => ({ ...prev, origin: e.target.value }))}
-                  placeholder="Rừng tre già Hòa Bình, Phú Thọ"
+                  placeholder="Vùng nguyên liệu tre già chọn lọc"
                   className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#214E34] focus:outline-none"
                 />
               </div>

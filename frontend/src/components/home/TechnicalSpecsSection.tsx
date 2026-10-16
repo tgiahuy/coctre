@@ -47,7 +47,7 @@ export default function TechnicalSpecsSection() {
                   BẢNG THÔNG SỐ KỸ THUẬT TIÊU CHUẨN
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black text-white">
-                  Cọc Tre Luồng & Tre Gai Già Hòa Bình
+                  Cọc Tre Luồng & Tre Gai Già Tuyển Chọn
                 </h3>
               </div>
 

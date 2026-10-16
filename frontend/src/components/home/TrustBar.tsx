@@ -5,33 +5,33 @@ import { siteConfig } from "@/data/config";
 export default function TrustBar() {
   const stats = [
     {
-      value: "12+",
+      value: "30+",
       label: "Năm kinh nghiệm",
-      desc: "Khai thác & phân phối cọc tre",
+      desc: "Từ năm 1990 tại làng nghề Vác",
       icon: Award,
     },
     {
-      value: "5.000m²+",
-      label: "Diện tích kho bãi",
-      desc: "Kho Hòa Bình & Hà Nội",
+      value: "Kho Lớn",
+      label: "Quy mô kho bãi",
+      desc: "331 Phố Vác, Dân Hòa, Hà Nội",
       icon: Warehouse,
     },
     {
-      value: "100+",
-      label: "Nhân sự & xe tải",
-      desc: "Vận chuyển bốc dỡ 24/7",
+      value: "Trong Ngày",
+      label: "Tốc độ giao hàng",
+      desc: "Hệ thống xe tải tận chân công trình",
       icon: Users,
     },
     {
       value: "24/7",
       label: "Hỗ trợ công trình",
-      desc: "Tư vấn kỹ thuật tận tâm",
+      desc: "Tư vấn kỹ thuật & bốc xếp",
       icon: Clock,
     },
     {
       value: "Toàn Miền Bắc",
       label: "Phạm vi giao hàng",
-      desc: "Hà Nội, Nam Định, Hải Dương...",
+      desc: "Hà Nội & các tỉnh lân cận",
       icon: Globe,
     },
   ];

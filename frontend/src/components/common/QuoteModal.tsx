@@ -139,7 +139,7 @@ export default function QuoteModal() {
               </div>
               <h4 className="text-2xl font-black text-[#214E34]">GỬI YÊU CẦU THÀNH CÔNG!</h4>
               <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
-                Cảm ơn anh/chị <strong>{formData.fullName}</strong>. Kỹ sư kinh doanh của <strong>Cọc Tre Hòa Bình</strong> sẽ gọi điện thoại hoặc gửi bảng báo giá qua Zalo số <strong>{formData.phone}</strong> trong vòng 5–15 phút.
+                Cảm ơn anh/chị <strong>{formData.fullName}</strong>. Kỹ sư kinh doanh của <strong>Cọc Tre Huyền Dương</strong> sẽ gọi điện thoại hoặc gửi bảng báo giá qua Zalo số <strong>{formData.phone}</strong> trong vòng 5–15 phút.
               </p>
 
               <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 max-w-md mx-auto text-xs text-gray-700 text-left space-y-1">
@@ -328,7 +328,7 @@ export default function QuoteModal() {
               <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 flex items-start gap-2">
                 <span className="font-bold text-[#E57C23]">✓</span>
                 <span>
-                  Báo giá trực tiếp từ kho cọc tre Hòa Bình, hỗ trợ hóa đơn VAT & chứng chỉ lâm sản hợp pháp cho nhà thầu.
+                  Báo giá trực tiếp từ kho cọc tre Huyền Dương, hỗ trợ hóa đơn VAT & chứng chỉ lâm sản hợp pháp cho nhà thầu.
                 </span>
               </div>
 

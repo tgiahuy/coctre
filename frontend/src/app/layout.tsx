@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import FloatingContact from "@/components/layout/FloatingContact";
 import QuoteModal from "@/components/common/QuoteModal";
+import DynamicFavicon from "@/components/common/DynamicFavicon";
 import { QuoteModalProvider } from "@/context/QuoteModalContext";
 import { siteConfig } from "@/data/config";
 
@@ -17,49 +18,52 @@ const beVietnamPro = Be_Vietnam_Pro({
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.companyName} | Tổng Kho Cọc Tre Công Trình Giá Tại Bãi`,
+    default: `${siteConfig.companyName} | Tổng Kho Cọc Tre Công Trình Giá Tận Xưởng`,
     template: `%s | ${siteConfig.companyName}`,
   },
   description:
-    "Cung cấp cọc tre công trình chất lượng cao (1.5m - 4m & theo yêu cầu) số lượng lớn cho gia cố nền móng, cầu đường, kè cống, nhà dân dụng & công nghiệp. Giao tận công trình 24/7.",
+    "Công Ty TNHH Xây Dựng & TM Huyền Dương - Hơn 30 năm kinh nghiệm cung cấp cọc tre công trình (1.5m - 4m & theo yêu cầu) gia cố nền móng tại miền Bắc. Giao hàng tận chân công trình trong ngày, chiết khấu cao.",
   keywords: [
     "cọc tre",
     "cọc tre công trình",
-    "cọc tre hòa bình",
+    "cọc tre huyền dương",
     "giá cọc tre",
+    "cọc tre 1.5m",
     "cọc tre 2m",
     "cọc tre 2.5m",
     "cọc tre 3m",
     "cọc tre 4m",
+    "cọc tre theo yêu cầu",
     "cọc tre đóng móng",
     "gia cố nền móng cọc tre",
     "kỹ thuật đóng cọc tre",
+    "cọc tre dân hòa",
   ],
   authors: [{ name: siteConfig.legalName }],
   creator: siteConfig.legalName,
   publisher: siteConfig.companyName,
-  metadataBase: new URL("https://coctrehoabinh.com"),
+  metadataBase: new URL(siteConfig.website || "https://coctrehuyenduong.vn"),
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://coctrehoabinh.com",
+    url: siteConfig.website || "https://coctrehuyenduong.vn",
     siteName: siteConfig.companyName,
-    title: `${siteConfig.companyName} - Tổng Kho Cọc Tre Công Trình`,
+    title: `${siteConfig.companyName} - Tổng Kho Cọc Tre Công Trình Miền Bắc`,
     description:
-      "Cung cấp cọc tre số lượng lớn cho các công trình xây dựng, nền móng, cầu đường, cống, kè và dân dụng. Giao tận chân công trình.",
+      "Giao hàng tận chân công trình trong ngày – Hỗ trợ bốc xếp – Chiết khấu cao cho đơn hàng lớn. Hơn 30 năm kinh nghiệm từ năm 1990.",
     images: [
       {
         url: "/images/products/coc-tre-2m-1.webp",
         width: 800,
         height: 600,
-        alt: "Cọc tre công trình Hòa Bình",
+        alt: "Cọc tre công trình Huyền Dương",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.companyName} - Cọc Tre Công Trình`,
-    description: "Cung cấp cọc tre số lượng lớn giao tận công trình 24/7.",
+    description: "Cung cấp cọc tre số lượng lớn giao tận chân công trình trong ngày.",
     images: ["/images/products/coc-tre-2m-1.webp"],
   },
   icons: {
@@ -90,14 +94,14 @@ export default function RootLayout({
     "@type": "LocalBusiness",
     name: siteConfig.companyName,
     legalName: siteConfig.legalName,
-    image: "https://coctrehoabinh.com/images/logo.png",
-    logo: "https://coctrehoabinh.com/images/logo.png",
+    image: "/images/logo.png",
+    logo: "/images/logo.png",
     telephone: siteConfig.hotline,
     email: siteConfig.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Số 16, ngõ 228 Thanh Bình, Mộ Lao",
-      addressLocality: "Hà Đông",
+      streetAddress: "331 Phố Vác, Dân Hòa",
+      addressLocality: "Thanh Oai",
       addressRegion: "Hà Nội",
       addressCountry: "VN",
     },
@@ -116,6 +120,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-[#F7F5EF] text-[#232323] min-h-screen flex flex-col selection:bg-[#CDAA63]/30 selection:text-[#214E34]">
         <QuoteModalProvider>
+          <DynamicFavicon />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

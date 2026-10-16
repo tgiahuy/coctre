@@ -20,8 +20,8 @@ export default function HighTrustCommitmentSection() {
   const commitments = [
     {
       num: "01",
-      title: "100% Tre Già Đực 3 – 6 Năm Tuổi",
-      desc: "Khai thác trực tiếp từ rừng tre luồng Hòa Bình. Thân thẳng, thịt dày đặc ruột, chịu lực ép máy cuốc và búa rung cực tốt.",
+      title: "100% Tre Già Đực – Đạt Chuẩn Chịu Lực",
+      desc: "Khai thác tuyển chọn từ vùng nguyên liệu tre già đạt tiêu chuẩn. Thân thẳng, thịt dày đặc ruột, chịu lực ép máy cuốc và búa rung cực tốt.",
       icon: TreeDeciduous,
       color: "bg-[#214E34] text-[#CDAA63]",
     },
@@ -34,15 +34,15 @@ export default function HighTrustCommitmentSection() {
     },
     {
       num: "03",
-      title: "Giao Hàng Tận Chân Hố Móng 24/7",
-      desc: "Hệ thống kho bãi rộng lớn tại Hòa Bình & Hà Nội luôn sẵn 50.000+ cọc. Đội xe tải từ 2.5T đến 15T giao xuyên đêm.",
+      title: "Giao Hàng Tận Chân Công Trình Trong Ngày",
+      desc: "Kho bãi quy mô lớn tại 331 Phố Vác, Dân Hòa luôn có sẵn hàng chục vạn cọc. Đội xe tải đa dạng tải trọng giao ngay trong ngày.",
       icon: Truck,
       color: "bg-[#214E34] text-[#CDAA63]",
     },
     {
       num: "04",
       title: "Kiểm Tra Cọc Thoải Mái Trước Khi Nhận",
-      desc: "Khách hàng được kiểm tra đường kính và độ già của cọc ngay tại công trình trước khi hạ tải. Đầy đủ hóa đơn VAT.",
+      desc: "Khách hàng được kiểm tra đường kính, đếm đủ số lượng trực tiếp tại công trình trước khi nghiệm thu và thanh toán. Đầy đủ hóa đơn.",
       icon: ShieldCheck,
       color: "bg-[#214E34] text-[#CDAA63]",
     },
@@ -58,10 +58,10 @@ export default function HighTrustCommitmentSection() {
             UY TÍN & CHẤT LƯỢNG TẠI BÃI CỌC
           </span>
           <h2 className="text-2xl sm:text-4xl font-black text-[#18231C] tracking-tight">
-            4 CAM KẾT VÀNG KHI MUA CỌC TRE CỦA CHÚNG TÔI
+            4 CAM KẾT VÀNG KHI MUA CỌC TRE CỦA HUYỀN DƯƠNG
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-medium">
-            Với hơn 12 năm phục vụ các nhà thầu và bà con xây dựng, chúng tôi luôn đặt chất lượng cây cọc và sự an tâm của khách hàng lên hàng đầu.
+            Với hơn 30 năm kinh nghiệm từ năm 1990, chúng tôi luôn đặt chất lượng cây cọc và sự an tâm của khách hàng lên hàng đầu.
           </p>
         </div>
 
@@ -104,15 +104,15 @@ export default function HighTrustCommitmentSection() {
                 HÌNH ẢNH KHO BÃI THỰC TẾ
               </span>
               <h3 className="text-2xl sm:text-3xl font-black text-white">
-                Tổng Kho Cọc Tre Hòa Bình & Hà Nội
+                Tổng Kho Cọc Tre Huyền Dương
               </h3>
               <p className="text-sm text-gray-300 leading-relaxed">
-                Mời quý khách hàng và các bác cai thầu có thể qua trực tiếp bãi cọc để xem chất lượng tre già và đặt xe giao hàng tận nơi.
+                Mời quý khách hàng và các bác nhà thầu có thể qua trực tiếp bãi cọc để xem chất lượng tre già và đặt xe giao hàng tận nơi.
               </p>
               
               <div className="pt-2 space-y-2 text-xs sm:text-sm text-gray-200">
-                <p>📍 <strong>Bãi 1:</strong> {siteConfig.warehouse1}</p>
-                <p>📍 <strong>Bãi 2:</strong> {siteConfig.warehouse2}</p>
+                <p>📍 <strong>Kho bãi chính:</strong> {siteConfig.address}</p>
+                <p>📞 <strong>Hotline / Zalo:</strong> {siteConfig.hotlineFormatted} – {siteConfig.hotline2Formatted || "0369.928.040"}</p>
               </div>
 
               <div className="pt-3">

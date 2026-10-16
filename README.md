@@ -61,3 +61,5 @@ Mở trình duyệt truy cập:
 - **Dự án:** [http://localhost:3000/du-an](http://localhost:3000/du-an)
 - **Tin tức & Cẩm nang:** [http://localhost:3000/tin-tuc](http://localhost:3000/tin-tuc)
 - **Trang quản trị (Admin):** [http://localhost:3000/admin](http://localhost:3000/admin) (PIN mặc định: `8888`)
+
+# coctre

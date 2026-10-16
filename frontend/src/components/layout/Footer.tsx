@@ -45,9 +45,9 @@ export default function Footer() {
               <Warehouse className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="font-bold text-white text-base">Tổng Kho 5.000m² Sẵn Hàng</h4>
+              <h4 className="font-bold text-white text-base">Kho Bãi Quy Mô Lớn Sẵn Hàng</h4>
               <p className="text-xs text-gray-400 mt-1">
-                Luôn có sẵn 100.000 - 300.000 cọc tại bãi tập kết Hà Nội & Hòa Bình.
+                Luôn có sẵn hàng chục vạn cọc tại 331 Phố Vác, Dân Hòa, Hà Nội.
               </p>
             </div>
           </div>
@@ -72,26 +72,27 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-12 h-12 shrink-0 rounded-full shadow-lg overflow-hidden ring-2 ring-[#CDAA63] bg-white p-0.5 group-hover:scale-105 transition-transform">
                 <Image
-                  src="/images/logo.png"
-                  alt="Logo Cọc Tre Hòa Bình"
+                  src={siteConfig.logoUrl || "/images/logo.png"}
+                  alt={siteConfig.companyName || "Logo Cọc Tre Huyền Dương"}
                   width={48}
                   height={48}
                   className="w-full h-full object-contain rounded-full"
+                  unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
                 />
               </div>
               <div>
                 <span className="text-xl font-extrabold text-white tracking-tight">
-                  CỌC TRE <span className="text-[#CDAA63]">HÒA BÌNH</span>
+                  CỌC TRE <span className="text-[#CDAA63]">HUYỀN DƯƠNG</span>
                 </span>
               </div>
             </Link>
 
             <p className="text-sm text-gray-400 leading-relaxed">
-              {siteConfig.legalName} – Đơn vị tiên phong và uy tín hàng đầu trong lĩnh vực khai thác, gia công và cung cấp cọc tre công trình cho các dự án giao thông, thủy lợi, móng nhà dân dụng & công nghiệp.
+              {siteConfig.legalName} – Đơn vị hơn 30 năm kinh nghiệm uy tín hàng đầu trong lĩnh vực cung cấp cọc tre công trình và giải pháp gia cố nền móng tại khu vực miền Bắc.
             </p>
 
             <div className="pt-2 text-xs text-gray-400 space-y-1 border-t border-[#24362A]">
-              <p><strong className="text-gray-300">Năng lực cung ứng:</strong> 500.000 cọc/tháng</p>
+              <p><strong className="text-gray-300">Năng lực cung ứng:</strong> {siteConfig.supplyCapacity}</p>
               <p><strong className="text-gray-300">Hóa đơn chứng từ:</strong> Đầy đủ VAT & hồ sơ lâm sản</p>
             </div>
           </div>

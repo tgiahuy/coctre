@@ -119,17 +119,18 @@ export default function Header() {
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full shadow-md group-hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#CDAA63]/30 bg-white p-0.5">
                 <Image
-                  src="/images/logo.png"
-                  alt="Logo Cọc Tre Hòa Bình"
+                  src={siteConfig.logoUrl || "/images/logo.png"}
+                  alt={siteConfig.companyName || "Logo Cọc Tre Huyền Dương"}
                   width={48}
                   height={48}
                   className="w-full h-full object-contain rounded-full"
                   priority
+                  unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
                 />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl sm:text-2xl font-black tracking-tight text-[#214E34] leading-tight flex items-center gap-1">
-                  CỌC TRE <span className="text-[#CDAA63]">HÒA BÌNH</span>
+                  CỌC TRE <span className="text-[#CDAA63]">HUYỀN DƯƠNG</span>
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
                   Tổng Kho Cọc Tre Công Trình

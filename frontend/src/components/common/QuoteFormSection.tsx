@@ -93,7 +93,7 @@ export default function QuoteFormSection() {
             </h2>
 
             <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
-              Gửi thông tin để nhận tư vấn chủng loại cọc phù hợp nhất với địa chất nền móng và nhận bảng báo giá cạnh tranh trực tiếp từ bãi cọc tre Hòa Bình.
+              Gửi thông tin để nhận tư vấn chủng loại cọc phù hợp nhất với địa chất nền móng và nhận bảng báo giá cạnh tranh trực tiếp từ tổng kho cọc tre Huyền Dương.
             </p>
 
             {/* Guarantees */}

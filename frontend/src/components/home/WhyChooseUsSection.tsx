@@ -13,38 +13,38 @@ export default function WhyChooseUsSection() {
   const reasons = [
     {
       number: "01",
-      title: "Nguồn Hàng Lớn",
-      description: "Kho bãi và nguồn cung ổn định, đáp ứng các đơn hàng dự án lớn từ hàng vạn đến hàng chục vạn cọc.",
-      icon: Warehouse,
-    },
-    {
-      number: "02",
-      title: "Chất Lượng Đảm Bảo",
-      description: "Cọc tre già đực trên 3-5 năm, thân thẳng, thịt dày, vát nhọn 3 cạnh chuẩn, hạn chế tối đa nứt vỡ khi ép máy.",
+      title: "Nguồn Nguyên Liệu Chọn Lọc Khắt Khe",
+      description: "Tre được thu mua từ các vùng nguyên liệu tre già đạt tiêu chuẩn (tre đực, tre gai đặc ruột), tuổi tre đủ già để đảm bảo không bị mục hay vỡ đầu khi đóng máy.",
       icon: ShieldCheck,
     },
     {
-      number: "03",
-      title: "Giá Tại Bãi Tốt Nhất",
-      description: "Khai thác trực tiếp từ rừng Hòa Bình, xuất bán trực tiếp không qua trung gian, chiết khấu hấp dẫn cho nhà thầu.",
+      number: "02",
+      title: "Giá Tận Gốc – Không Qua Trung Gian",
+      description: "Sở hữu xưởng chế biến và kho bãi trực tiếp tại 331 Phố Vác, Dân Hòa, Hà Nội, mang đến mức giá cạnh tranh nhất thị trường và chiết khấu cực tốt cho đơn lớn.",
       icon: BadgeDollarSign,
     },
     {
+      number: "03",
+      title: "Năng Lực Cung Ứng Lớn & Nhanh Chóng",
+      description: "Kho bãi luôn có sẵn từ hàng chục nghìn đến hàng trăm nghìn cọc. Đội ngũ xe tải đa dạng tải trọng sẵn sàng vận chuyển tận chân công trình ngay khi có lệnh.",
+      icon: Warehouse,
+    },
+    {
       number: "04",
-      title: "Giao Tận Chân Công Trình",
-      description: "Hệ thống phương tiện vận chuyển đa dạng từ xe 2.5T đến xe 15T, giao hàng xuyên đêm vào tận hố móng ngõ nhỏ.",
+      title: "Minh Bạch & Kiểm Tra Trước Khi Thanh Toán",
+      description: "Khách hàng hoàn toàn được kiểm tra chất lượng, đếm số lượng cọc tre trực tiếp tại công trình trước khi tiến hành nghiệm thu và thanh toán.",
       icon: Truck,
     },
     {
       number: "05",
-      title: "Tư Vấn Kỹ Thuật Chuyên Sâu",
-      description: "Tư vấn chính xác chiều dài và mật độ cọc phù hợp với địa tầng đất bùn và tải trọng từng loại công trình.",
+      title: "Đội Ngũ Tư Vấn Am Hiểu Kỹ Thuật",
+      description: "Chúng tôi không chỉ bán cọc tre, chúng tôi tư vấn quy cách và mật độ đóng cọc phù hợp nhất với bản vẽ địa chất và móng công trình của bạn.",
       icon: Wrench,
     },
     {
       number: "06",
-      title: "Hỗ Trợ Nhanh Chóng 24/7",
-      description: "Tiếp nhận đơn hàng, lập báo giá trong 10 phút, hỗ trợ cấp bù cọc khẩn cấp cho công trường đang đổ bê tông.",
+      title: "Hỗ Trợ Bốc Xếp & Giao Trong Ngày",
+      description: "Giao hàng siêu tốc trong ngày tại Hà Nội và các tỉnh lân cận, hỗ trợ bốc dỡ xếp gọn gàng ngay tại hố móng công trường.",
       icon: HeadphonesIcon,
     },
   ];
@@ -54,8 +54,8 @@ export default function WhyChooseUsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="GIÁ TRỊ VƯỢT TRỘI"
-          title="TẠI SAO NÊN CHỌN CỌC TRE HÒA BÌNH?"
-          subtitle="Chúng tôi hiểu rằng chất lượng nền móng quyết định sự vững chãi của cả công trình qua hàng thập kỷ."
+          title="TẠI SAO BẠN NÊN LỰA CHỌN CỌC TRE HUYỀN DƯƠNG?"
+          subtitle="Hơn 30 năm kinh nghiệm từ làng nghề Dân Hòa, mang đến nền móng vững bền cho hàng nghìn công trình."
           alignment="center"
         />
 

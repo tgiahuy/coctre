@@ -99,37 +99,30 @@ export default function ContactPage() {
                 <div className="flex items-start gap-3.5">
                   <MapPin className="w-5 h-5 text-[#214E34] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-gray-900 block font-bold">Văn phòng đại diện:</strong>
-                    <span>{siteConfig.headquarters}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3.5">
-                  <Warehouse className="w-5 h-5 text-[#CDAA63] shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-gray-900 block font-bold">Bãi tập kết Hòa Bình (5.000m²):</strong>
-                    <span>{siteConfig.warehouse1}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3.5">
-                  <Warehouse className="w-5 h-5 text-[#CDAA63] shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-gray-900 block font-bold">Kho trung chuyển Hà Nội:</strong>
-                    <span>{siteConfig.warehouse2}</span>
+                    <strong className="text-gray-900 block font-bold">Trụ sở chính & Kho bãi:</strong>
+                    <span>{siteConfig.address}</span>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3.5">
                   <Phone className="w-5 h-5 text-[#E57C23] shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-gray-900 block font-bold">Hotline / Zalo:</strong>
-                    <a
-                      href={`tel:${siteConfig.hotline}`}
-                      className="text-base font-extrabold text-[#214E34] hover:text-[#E57C23] transition-colors"
-                    >
-                      {siteConfig.hotlineFormatted}
-                    </a>
+                    <strong className="text-gray-900 block font-bold">Hotline / SĐT / Zalo:</strong>
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                      <a
+                        href={`tel:${siteConfig.hotline}`}
+                        className="text-base font-extrabold text-[#214E34] hover:text-[#E57C23] transition-colors"
+                      >
+                        {siteConfig.hotlineFormatted}
+                      </a>
+                      <span className="text-gray-400 font-bold">-</span>
+                      <a
+                        href={`tel:${siteConfig.hotline2 || "0369928040"}`}
+                        className="text-base font-extrabold text-[#214E34] hover:text-[#E57C23] transition-colors"
+                      >
+                        {siteConfig.hotline2Formatted || "0369.928.040"}
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -137,7 +130,12 @@ export default function ContactPage() {
                   <Mail className="w-5 h-5 text-[#214E34] shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-gray-900 block font-bold">Hộp thư điện tử:</strong>
-                    <span>{siteConfig.email}</span>
+                    <a
+                      href={`mailto:${siteConfig.email}`}
+                      className="text-sm font-semibold text-[#214E34] hover:underline"
+                    >
+                      {siteConfig.email}
+                    </a>
                   </div>
                 </div>
 
@@ -153,9 +151,19 @@ export default function ContactPage() {
 
             {/* GOOGLE MAPS EMBED */}
             <div className="bg-white rounded-3xl p-4 border border-gray-200 shadow-sm overflow-hidden">
-              <h3 className="text-xs font-bold text-gray-600 uppercase mb-3 px-2">
-                Bản đồ vị trí văn phòng & kho bãi
-              </h3>
+              <div className="flex items-center justify-between mb-3 px-2">
+                <h3 className="text-xs font-bold text-gray-600 uppercase">
+                  Bản đồ vị trí kho bãi
+                </h3>
+                <a
+                  href="https://maps.app.goo.gl/QDkpD4tdXW2DPFJWA?g_st=ic"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-[#214E34] font-bold hover:underline"
+                >
+                  Mở Google Maps &rarr;
+                </a>
+              </div>
               <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100 border border-gray-200">
                 <iframe
                   src={siteConfig.mapEmbedUrl}
@@ -165,7 +173,7 @@ export default function ContactPage() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Google Maps Location"
+                  title="Google Maps Location - Cọc Tre Huyền Dương"
                   className="w-full h-full"
                 ></iframe>
               </div>
@@ -182,7 +190,7 @@ export default function ContactPage() {
                   </div>
                   <h3 className="text-2xl font-black text-[#214E34]">GỬI LIÊN HỆ THÀNH CÔNG!</h3>
                   <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
-                    Cảm ơn anh/chị <strong>{formData.fullName}</strong> đã liên hệ. Bộ phận kinh doanh và kỹ thuật của <strong>Cọc Tre Hòa Bình</strong> sẽ phản hồi trong thời gian sớm nhất.
+                    Cảm ơn anh/chị <strong>{formData.fullName}</strong> đã liên hệ. Bộ phận kinh doanh và kỹ thuật của <strong>Cọc Tre Huyền Dương</strong> sẽ phản hồi trong thời gian sớm nhất.
                   </p>
                   <button
                     onClick={() => {

@@ -14,8 +14,7 @@ import {
   ArrowRight,
   Phone,
   FileText,
-  CheckCircle2,
-  Edit3
+  CheckCircle2
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ArticleCard from "@/components/common/ArticleCard";
@@ -83,18 +82,10 @@ export default function ArticleDetailPage({
             <div className="bg-white rounded-3xl p-6 sm:p-10 border border-gray-200 shadow-sm space-y-6">
               {/* Category & Metadata */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
+                <div>
                   <span className="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-[#214E34]/10 text-[#214E34]">
                     {article.category}
                   </span>
-
-                  <Link
-                    href="/admin"
-                    className="text-[11px] font-bold text-gray-400 hover:text-[#214E34] flex items-center gap-1"
-                  >
-                    <Edit3 className="w-3 h-3" />
-                    <span>Quản lý trong Admin</span>
-                  </Link>
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#18231C] leading-tight">
@@ -187,7 +178,7 @@ export default function ArticleDetailPage({
               </h3>
 
               <p className="text-xs text-gray-300 leading-relaxed">
-                Đội ngũ kỹ sư của Cọc Tre Hòa Bình sẵn sàng hỗ trợ bạn tính toán mật độ cọc tre (cọc/m²), chủng loại và báo giá tại bãi 24/7.
+                Đội ngũ kỹ thuật của Cọc Tre Huyền Dương sẵn sàng hỗ trợ bạn tính toán mật độ cọc tre (cọc/m²), chủng loại và báo giá tại xưởng trong ngày.
               </p>
 
               <button
@@ -207,15 +198,15 @@ export default function ArticleDetailPage({
 
             <div className="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm space-y-3">
               <h4 className="font-extrabold text-sm text-[#18231C] border-b border-gray-100 pb-2">
-                HỆ THỐNG TỔNG KHO
+                THÔNG TIN KHO BÃI
               </h4>
               <p className="text-xs text-gray-600">
-                <strong className="text-gray-900 block">Kho Hòa Bình:</strong>
-                {siteConfig.warehouse1}
+                <strong className="text-gray-900 block">Trụ sở & Kho bãi chính:</strong>
+                {siteConfig.address}
               </p>
               <p className="text-xs text-gray-600">
-                <strong className="text-gray-900 block">Kho Hà Nội:</strong>
-                {siteConfig.warehouse2}
+                <strong className="text-gray-900 block">Hotline / Zalo liên hệ:</strong>
+                {siteConfig.hotlineFormatted} – {siteConfig.hotline2Formatted || "0369.928.040"}
               </p>
             </div>
           </div>

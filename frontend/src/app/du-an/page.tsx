@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Building2 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProjectCard from "@/components/common/ProjectCard";
 import SectionHeading from "@/components/common/SectionHeading";
@@ -42,7 +43,7 @@ export default function ProjectsPage() {
               CÁC DỰ ÁN ĐÃ CUNG CẤP CỌC TRE
             </h1>
             <p className="text-sm sm:text-base text-gray-300">
-              Tổng hợp những công trình trọng điểm cấp quốc gia và địa phương mà Cọc Tre Hòa Bình vinh dự là nhà cung ứng vật tư nền móng.
+              Tổng hợp những công trình trọng điểm cấp quốc gia và địa phương mà Cọc Tre Huyền Dương vinh dự là nhà cung ứng vật tư nền móng.
             </p>
           </div>
         </div>
@@ -68,9 +69,21 @@ export default function ProjectsPage() {
 
         {/* PROJECTS GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {filteredProjects.length === 0 ? (
+            <div className="col-span-full py-16 px-6 text-center bg-white rounded-3xl border border-gray-200 shadow-sm max-w-xl mx-auto w-full">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#214E34]/10 text-[#214E34] flex items-center justify-center">
+                <Building2 className="w-8 h-8" />
+              </div>
+              <h3 className="text-lg font-bold text-[#18231C] mb-2">Đang Cập Nhật Danh Sách Dự Án</h3>
+              <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                Hồ sơ các dự án và công trình thực tế đang được tổng hợp và chuẩn hóa thông tin để cập nhật lên hệ thống.
+              </p>
+            </div>
+          ) : (
+            filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))
+          )}
         </div>
       </div>
 

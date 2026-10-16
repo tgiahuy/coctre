@@ -163,7 +163,7 @@ export default function ProductsPage() {
             </div>
             <div>
               <h3 className="text-lg font-bold text-[#18231C]">
-                Tiêu chuẩn kỹ thuật cọc tre công trình tại Cọc Tre Hòa Bình
+                Tiêu chuẩn kỹ thuật cọc tre công trình tại Cọc Tre Huyền Dương
               </h3>
               <p className="text-xs sm:text-sm text-gray-600 mt-1.5 leading-relaxed">
                 Tất cả các loại cọc tre tại bãi chúng tôi đều được tuyển chọn từ tre đực già trên 3-5 năm tuổi, thân thẳng, thịt tre dày đặc ruột, không sâu mọt. Đầu cọc được máy vát nhọn 3 cạnh dài 15-25cm sắc bén, đầu trên cắt phẳng vuông góc đảm bảo không dập nát khi ép bằng máy cuốc hoặc búa đóng.

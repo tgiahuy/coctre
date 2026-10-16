@@ -13,6 +13,10 @@ export function getSiteConfig(): SiteConfig {
     const raw = localStorage.getItem(CONFIG_STORAGE_KEY);
     if (!raw) return initialSiteConfig;
     const parsed = JSON.parse(raw);
+    if (parsed.companyName && parsed.companyName.includes("Hòa Bình")) {
+      localStorage.removeItem(CONFIG_STORAGE_KEY);
+      return initialSiteConfig;
+    }
     return { ...initialSiteConfig, ...parsed };
   } catch (err) {
     console.error("Error loading custom site config:", err);

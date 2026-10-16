@@ -6,13 +6,13 @@ import SectionHeading from "@/components/common/SectionHeading";
 export default function SupplyCapacitySection() {
   const capabilities = [
     {
-      title: "Tổng Kho 5.000m²+",
-      desc: "Bãi tập kết quy mô lớn tại Lương Sơn (Hòa Bình) và Lĩnh Nam (Hà Nội), luôn sẵn trên 200.000 cọc.",
+      title: "Kho Bãi Quy Mô Lớn",
+      desc: "Kho bãi trực tiếp tại 331 Phố Vác, Dân Hòa, Hà Nội, luôn sẵn từ hàng chục nghìn đến hàng trăm nghìn cọc.",
       icon: Warehouse,
     },
     {
       title: "Nguồn Cung Chủ Động",
-      desc: "Khai thác trực tiếp từ các cánh rừng tre luồng lâu năm, không phụ thuộc đại lý trung gian.",
+      desc: "Thu mua trực tiếp từ các vùng nguyên liệu tre già chọn lọc (tre đực, đặc ruột), không phụ thuộc trung gian.",
       icon: Trees,
     },
     {
@@ -77,12 +77,12 @@ export default function SupplyCapacitySection() {
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md group">
             <Image
               src="/images/products/coc-tre-3m-1.webp"
-              alt="Bãi tập kết cọc tre Hòa Bình"
+              alt="Bãi tập kết cọc tre Huyền Dương"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-4">
-              <span className="text-xs font-bold text-white">Bãi tập kết cọc tre 5.000m²</span>
+              <span className="text-xs font-bold text-white">Bãi tập kết cọc tre quy mô lớn</span>
             </div>
           </div>
 

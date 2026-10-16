@@ -5,9 +5,24 @@ import { Article, articles as initialArticles } from "@/data/articles";
 
 const STORAGE_KEY = "coctre_custom_articles";
 const STORAGE_DELETED_KEY = "coctre_deleted_article_ids";
+const PURGE_MOCK_FLAG = "coctre_purged_mock_articles_v2";
+
+function purgeOldMocksIfNeeded() {
+  if (typeof window === "undefined") return;
+  try {
+    if (!localStorage.getItem(PURGE_MOCK_FLAG)) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_DELETED_KEY);
+      localStorage.setItem(PURGE_MOCK_FLAG, "true");
+    }
+  } catch (e) {
+    // Ignore storage errors
+  }
+}
 
 export function getDeletedArticleIds(): string[] {
   if (typeof window === "undefined") return [];
+  purgeOldMocksIfNeeded();
   try {
     const raw = localStorage.getItem(STORAGE_DELETED_KEY);
     return raw ? JSON.parse(raw) : [];
@@ -18,6 +33,7 @@ export function getDeletedArticleIds(): string[] {
 
 export function getCustomArticles(): Article[] {
   if (typeof window === "undefined") return [];
+  purgeOldMocksIfNeeded();
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];

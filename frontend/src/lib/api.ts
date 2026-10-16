@@ -25,6 +25,10 @@ export async function sendQuoteRequest(data: QuoteFormData): Promise<ApiResponse
   // Luôn lưu bản sao vào localStorage để không bao giờ bị mất khách
   if (typeof window !== "undefined") {
     try {
+      if (!localStorage.getItem("coctre_purged_mock_quotes_v1")) {
+        localStorage.removeItem("coctre_quote_requests");
+        localStorage.setItem("coctre_purged_mock_quotes_v1", "true");
+      }
       const existing = JSON.parse(localStorage.getItem("coctre_quote_requests") || "[]");
       existing.unshift({
         ...data,
