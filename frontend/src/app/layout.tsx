@@ -111,14 +111,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="vi" data-scroll-behavior="smooth" className={`${beVietnamPro.variable} scroll-smooth`}>
+    <html lang="vi" data-scroll-behavior="smooth" className={`${beVietnamPro.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="font-sans antialiased bg-[#F7F5EF] text-[#232323] min-h-screen flex flex-col selection:bg-[#CDAA63]/30 selection:text-[#214E34]">
+      <body className="font-sans antialiased bg-[#F7F5EF] text-[#232323] min-h-screen flex flex-col selection:bg-[#CDAA63]/30 selection:text-[#214E34]" suppressHydrationWarning>
         <QuoteModalProvider>
           <DynamicFavicon />
           <Header />

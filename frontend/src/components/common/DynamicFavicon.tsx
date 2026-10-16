@@ -3,46 +3,52 @@
 import { useEffect } from "react";
 import { useSiteConfig } from "@/lib/configStore";
 
+/**
+ * Safely updates browser favicon and apple-touch-icon in place without
+ * removing or destroying DOM nodes managed by React/Next.js metadata.
+ */
 export default function DynamicFavicon() {
   const config = useSiteConfig();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const targetFavicon = config.faviconUrl || config.logoUrl || "/favicon.ico";
+    const targetFavicon = config.faviconUrl || config.logoUrl;
     if (!targetFavicon) return;
 
     try {
-      const head = document.head || document.getElementsByTagName("head")[0];
-      if (!head) return;
-
-      // Clean up previous icon links
-      const existingIcons = document.querySelectorAll(
-        "link[rel='icon'], link[rel='shortcut icon'], link[rel='apple-touch-icon']"
+      // 1. Update existing icon links in place instead of calling el.remove()
+      // Calling el.remove() detaches nodes that React virtual DOM reconciles,
+      // which causes: "TypeError: Cannot read properties of null (reading 'removeChild')"
+      const existingIcons = document.querySelectorAll<HTMLLinkElement>(
+        "link[rel='icon'], link[rel='shortcut icon']"
       );
-      existingIcons.forEach((el) => el.remove());
 
-      // Create new icon link
-      const iconLink = document.createElement("link");
-      iconLink.rel = "icon";
-      if (targetFavicon.endsWith(".ico")) iconLink.type = "image/x-icon";
-      else if (targetFavicon.endsWith(".svg")) iconLink.type = "image/svg+xml";
-      else if (targetFavicon.endsWith(".png")) iconLink.type = "image/png";
-      else if (targetFavicon.endsWith(".webp")) iconLink.type = "image/webp";
-      iconLink.href = targetFavicon;
-      head.appendChild(iconLink);
+      if (existingIcons.length > 0) {
+        existingIcons.forEach((el) => {
+          el.href = targetFavicon;
+        });
+      } else {
+        let link = document.querySelector<HTMLLinkElement>("link#dynamic-favicon");
+        if (!link) {
+          link = document.createElement("link");
+          link.id = "dynamic-favicon";
+          link.rel = "icon";
+          document.head.appendChild(link);
+        }
+        link.href = targetFavicon;
+      }
 
-      // Create shortcut icon link
-      const shortcutLink = document.createElement("link");
-      shortcutLink.rel = "shortcut icon";
-      shortcutLink.href = targetFavicon;
-      head.appendChild(shortcutLink);
-
-      // Create apple-touch-icon link
-      const appleTouchLink = document.createElement("link");
-      appleTouchLink.rel = "apple-touch-icon";
-      appleTouchLink.href = config.logoUrl || targetFavicon;
-      head.appendChild(appleTouchLink);
+      // 2. Update apple-touch-icon in place
+      const appleIcons = document.querySelectorAll<HTMLLinkElement>(
+        "link[rel='apple-touch-icon']"
+      );
+      const targetTouchIcon = config.logoUrl || targetFavicon;
+      if (appleIcons.length > 0) {
+        appleIcons.forEach((el) => {
+          el.href = targetTouchIcon;
+        });
+      }
     } catch (e) {
       console.warn("Failed to update dynamic favicon:", e);
     }

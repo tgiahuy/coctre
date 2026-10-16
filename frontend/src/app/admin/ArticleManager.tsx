@@ -265,6 +265,7 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
                     src={art.coverImage || "/images/blog/ky-thuat-dong-coc-tre.webp"}
                     alt={art.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3">
@@ -572,7 +573,13 @@ Kiểm tra độ chối và cao trình đầu cọc sau khi đóng...`,
             </div>
 
             <div className="relative h-72 rounded-xl overflow-hidden bg-gray-100">
-              <Image src={formData.coverImage || "/images/blog/ky-thuat-dong-coc-tre.webp"} alt="Preview" fill className="object-cover" />
+              <Image
+                src={formData.coverImage || "/images/blog/ky-thuat-dong-coc-tre.webp"}
+                alt="Preview"
+                fill
+                sizes="(max-width: 768px) 100vw, 800px"
+                className="object-cover"
+              />
             </div>
 
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 italic text-sm text-gray-700">

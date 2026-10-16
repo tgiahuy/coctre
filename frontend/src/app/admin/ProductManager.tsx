@@ -283,6 +283,7 @@ export default function ProductManager() {
                     src={p.images[0] || "/images/products/coc-tre-2m-1.webp"}
                     alt={p.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
