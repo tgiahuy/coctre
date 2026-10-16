@@ -53,3 +53,9 @@ backend/target/
 backend/data/
 *.class
 .mvn/wrapper/maven-wrapper.jar
+
+# agent & auxiliary markdown files
+CLAUDE.md
+*AGENTS.md
+BACKEND_PLAN.md
+
