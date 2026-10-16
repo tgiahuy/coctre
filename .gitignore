@@ -57,5 +57,3 @@ backend/data/
 # agent & auxiliary markdown files
 CLAUDE.md
 *AGENTS.md
-# GitHub Actions workflows (managed via GitHub Web UI or PAT with workflow scope due to OAuth app limits)
-.github/
