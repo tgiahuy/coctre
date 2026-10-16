@@ -32,8 +32,8 @@ export const products: Product[] = [
     length: "1,5m",
     lengthMeters: 1.5,
     diameter: "Ø 60 – 80 mm",
-    bambooType: "Tre đực già, tre gai tuyển chọn",
-    origin: "Vùng nguyên liệu tre già tuyển chọn",
+    bambooType: "Tre đực già, tre gai, tre luồng Hòa Bình",
+    origin: "Vùng tre già Hòa Bình tuyển chọn",
     stockStatus: "Sẵn hàng số lượng lớn",
     shortDescription: "Cọc tre 1,5m cọc đặc, thịt dày, vát nhọn đầu sẵn, chuyên dùng gia cố móng hào, hố móng nông, công trình phụ và đường dẫn nước.",
     description: `Cọc tre 1,5m là loại cọc tre chiều dài ngắn, được khai thác từ những bụi tre già trên 3-4 năm tuổi. Cọc có độ bền dẻo cao, thành ống dày đặc, được xử lý vắt nhọn đầu cọc và cắt phẳng gốc giúp quá trình thi công ép cọc bằng máy cuốc hoặc vồ đóng không bị dập nát đầu cọc.
@@ -211,8 +211,8 @@ Sản phẩm thường được chỉ định trong các hồ sơ thiết kế k
     length: "4m",
     lengthMeters: 4.0,
     diameter: "Ø 80 – 110 mm",
-    bambooType: "Tre luồng đại thụ tuyển chọn",
-    origin: "Vùng nguyên liệu tre già chọn lọc",
+    bambooType: "Tre luồng đại thụ, tre gai già Hòa Bình",
+    origin: "Vùng tre già Hòa Bình chọn lọc",
     stockStatus: "Sẵn hàng số lượng lớn",
     shortDescription: "Cọc tre 4m thân khủng, độ bền cao, chuyên dùng cho các dự án thủy lợi quy mô lớn, kè sông sâu và gia cố móng đường cao tốc.",
     description: `Cọc tre 4m là dòng cọc tre dài nhất trong danh mục sản phẩm tiêu chuẩn. Việc khai thác và vận chuyển cọc 4m đòi hỏi quy trình tuyển chọn khắt khe tại các khu rừng tre luồng lâu năm để đảm bảo cọc giữ được độ thẳng tự nhiên, không bị vặn xoắn và thành thân dầy đặc.
@@ -255,8 +255,8 @@ Cọc có khả năng xuyên sâu qua nhiều lớp bùn lầy, giúp tạo liê
     length: "Theo yêu cầu",
     lengthMeters: 0,
     diameter: "Ø 50 – 120 mm tùy chọn",
-    bambooType: "Tre gai / Tre luồng / Tre đực theo thiết kế",
-    origin: "Vùng nguyên liệu tuyển chọn miền Bắc",
+    bambooType: "Tre luồng, tre gai, tre đực Hòa Bình tuyển chọn",
+    origin: "Vùng nguyên liệu tuyển chọn Hòa Bình",
     stockStatus: "Đặt hàng 1-2 ngày",
     shortDescription: "Cắt theo kích thước bản vẽ kỹ thuật: 1.2m, 1.8m, 2.2m, 3.5m, 5m, vát nhọn hoặc để thẳng, phân loại đường kính riêng.",
     description: `Dịch vụ gia công và cung cấp Cọc Tre Theo Yêu Cầu đáp ứng trọn vẹn các yêu cầu kỹ thuật đặc biệt trong hồ sơ thiết kế công trình xây dựng. Chúng tôi nhận cắt cọc theo mọi kích thước lẻ (như 1.2m, 1.8m, 2.2m, 2.7m, 3.2m, 3.6m...), chọn lọc đường kính gốc/ngọn theo chỉ định của tư vấn giám sát, hoặc yêu cầu xử lý chống mối mọt, vát nhọn theo góc đặc thù.

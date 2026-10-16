@@ -104,73 +104,170 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedProducts() {
-        if (productRepository.count() == 0) {
-            ProductEntity p2m = ProductEntity.builder()
-                    .id("coc-tre-2m")
-                    .slug("coc-tre-2m")
-                    .name("Cọc Tre 2m (Ø 6 - 9cm)")
-                    .length("2m")
-                    .lengthMeters(2.0)
-                    .diameter("Ø 65 – 90 mm")
-                    .bambooType("Tre luồng / Tre gai già đanh")
-                    .origin("Vùng tre già chọn lọc miền Bắc")
-                    .stockStatus("Sẵn hàng số lượng lớn")
-                    .shortDescription("Quy cách phổ biến nhất cho công trình nhà dân dụng, móng băng, móng bè trên nền đất ruộng, ao hồ san lấp.")
-                    .description("Cọc tre 2m là quy cách được sử dụng nhiều nhất trên 70% các công trình xây dựng dân dụng tại khu vực miền Bắc.")
-                    .applications(Arrays.asList("Thi công ép cọc móng nhà phố từ 2 – 5 tầng trên nền đất ao, đất lấp.", "Gia cố móng cầu, móng mố đường dẫn, cống hộp qua đường."))
-                    .advantages(Arrays.asList("Tre già đanh chọn lọc, đường kính đồng đều", "Giao hàng thần tốc 24/7 tận chân công trình"))
-                    .packaging("Bó 25 cây đai thép chắc chắn")
-                    .images(Arrays.asList("/images/products/coc-tre-2m-1.webp", "/images/products/coc-tre-2m-2.webp"))
-                    .featured(true)
-                    .rating(0.0)
-                    .reviewCount(0)
-                    .build();
+        List<ProductEntity> defaultProducts = Arrays.asList(
+            ProductEntity.builder()
+                .id("coc-tre-15m")
+                .slug("coc-tre-15m")
+                .name("Cọc Tre 1,5m (Ø 6 - 8cm)")
+                .length("1,5m")
+                .lengthMeters(1.5)
+                .diameter("Ø 60 – 80 mm")
+                .bambooType("Tre đực già, tre gai, tre luồng Hòa Bình")
+                .origin("Hòa Bình")
+                .stockStatus("Sẵn hàng số lượng lớn")
+                .shortDescription("Cọc tre 1,5m thân thẳng, cọc đặc thịt dày, vát nhọn sẵn, chuyên dùng gia cố nền móng nhà cấp 4, hố móng nông, cống hộp, kè kênh mương máng.")
+                .description("Cọc tre 1,5m công trình xây dựng có xuất xứ từ vùng nguyên liệu tre già Hòa Bình. Cọc dài từ 1,4m đến 1,6m, thân gốc và một phần ngọn đủ tiêu chuẩn đường kính từ 6cm đến 8cm, thân thẳng không bị vỡ đầu, không cong vênh nứt nẻ. Đảm bảo cọc tốt không bị gãy vỡ khi đóng, số lượng cung cấp không giới hạn.")
+                .applications(Arrays.asList(
+                    "Đóng móng nhà cấp 4, móng các công trình phụ trên nền đất ruộng, đất mới hoặc đất mượn.",
+                    "Gia cố móng kè ao hồ, rãnh thoát nước, cống hộp, kênh mương máng nội đồng.",
+                    "Lót móng đường giao thông nông thôn, đường nội bộ nhà xưởng.",
+                    "Chặn sạt lở bờ rãnh, gia cố vách hố móng chống sụt lún trong thi công."
+                ))
+                .advantages(Arrays.asList(
+                    "Tre đực già đặc ruột, không gãy vỡ hay dập nát đầu cọc khi đóng búa rung hoặc ép máy.",
+                    "Nguồn gốc tre già Hòa Bình chở trực tiếp từ nơi khai thác đến công trình, giá rẻ tận gốc.",
+                    "Chi phí tiết kiệm nhất trong các quy cách cọc tre công trình.",
+                    "Sẵn hàng số lượng lớn, vận chuyển tận chân công trình trong ngày."
+                ))
+                .packaging("Bó 25 cây hoặc 50 cây buộc dây thép chặt chẽ")
+                .images(Arrays.asList("/images/products/coc-tre-15m-1.webp", "/images/products/coc-tre-15m-2.webp", "/images/products/coc-tre-15m-3.webp"))
+                .featured(true)
+                .rating(0.0)
+                .reviewCount(0)
+                .build(),
 
-            ProductEntity p25m = ProductEntity.builder()
-                    .id("coc-tre-25m")
-                    .slug("coc-tre-25m")
-                    .name("Cọc Tre 2,5m (Ø 7 - 10cm)")
-                    .length("2.5m")
-                    .lengthMeters(2.5)
-                    .diameter("Ø 70 – 100 mm")
-                    .bambooType("Tre đực già đặc ruột")
-                    .origin("Vùng nguyên liệu tre già đạt chuẩn")
-                    .stockStatus("Sẵn hàng số lượng lớn")
-                    .shortDescription("Chuyên dùng cho gia cố móng nhà 3-4 tầng, móng kè đê bao kênh rạch.")
-                    .description("Cọc tre 2.5m chịu lực nén cọc cao, độ thẳng đều.")
-                    .applications(Arrays.asList("Kè sông, kè đê điều", "Gia cố nền móng nhà cao tầng"))
-                    .advantages(Arrays.asList("Thịt tre dày, chịu búa rung tốt", "Chống mối mọt tự nhiên trong bùn yếm khí"))
-                    .packaging("Bó 25 cây")
-                    .images(Arrays.asList("/images/products/coc-tre-25m-1.webp"))
-                    .featured(true)
-                    .rating(0.0)
-                    .reviewCount(0)
-                    .build();
+            ProductEntity.builder()
+                .id("coc-tre-2m")
+                .slug("coc-tre-2m")
+                .name("Cọc Tre 2m (Ø 6 - 9cm)")
+                .length("2m")
+                .lengthMeters(2.0)
+                .diameter("Ø 65 – 90 mm")
+                .bambooType("Tre luồng / Tre gai già đanh")
+                .origin("Hòa Bình – Thanh Hóa")
+                .stockStatus("Sẵn hàng số lượng lớn")
+                .shortDescription("Quy cách phổ biến nhất cho công trình nhà dân dụng, móng băng, móng bè trên nền đất ruộng, ao hồ san lấp.")
+                .description("Cọc tre 2m là quy cách được sử dụng nhiều nhất trên 70% các công trình xây dựng dân dụng tại khu vực miền Bắc.")
+                .applications(Arrays.asList("Thi công ép cọc móng nhà phố từ 2 – 5 tầng trên nền đất ao, đất lấp.", "Gia cố móng cầu, móng mố đường dẫn, cống hộp qua đường."))
+                .advantages(Arrays.asList("Tre già đanh chọn lọc, đường kính đồng đều", "Giao hàng thần tốc 24/7 tận chân công trình"))
+                .packaging("Bó 25 cây đai thép chắc chắn")
+                .images(Arrays.asList("/images/products/coc-tre-2m-1.webp", "/images/products/coc-tre-2m-2.webp"))
+                .featured(true)
+                .rating(0.0)
+                .reviewCount(0)
+                .build(),
 
-            ProductEntity p3m = ProductEntity.builder()
-                    .id("coc-tre-3m")
-                    .slug("coc-tre-3m")
-                    .name("Cọc Tre 3m (Ø 8 - 10cm)")
-                    .length("3m")
-                    .lengthMeters(3.0)
-                    .diameter("Ø 80 – 100 mm")
-                    .bambooType("Tre luồng già loại 1")
-                    .origin("Vùng nguyên liệu tre già chọn lọc")
-                    .stockStatus("Sẵn hàng số lượng lớn")
-                    .shortDescription("Quy cách cọc dài chuyên dụng xử lý tầng bùn sâu, kè bờ sông hồ.")
-                    .description("Cọc tre 3m đạt độ già từ 4-6 năm, thân cọc thẳng và dẻo dai.")
-                    .applications(Arrays.asList("Kè sông suối, đê điều chống sạt lở", "Móng sâu hố móng bùn lún"))
-                    .advantages(Arrays.asList("Đường kính lớn, chịu tải trọng lớn", "Khối lượng dồi dào sẵn tại bãi"))
-                    .packaging("Bó 20 cây")
-                    .images(Arrays.asList("/images/products/coc-tre-3m-1.webp"))
-                    .featured(true)
-                    .rating(0.0)
-                    .reviewCount(0)
-                    .build();
+            ProductEntity.builder()
+                .id("coc-tre-25m")
+                .slug("coc-tre-25m")
+                .name("Cọc Tre 2,5m (Ø 7 - 10cm)")
+                .length("2.5m")
+                .lengthMeters(2.5)
+                .diameter("Ø 70 – 100 mm")
+                .bambooType("Tre đực già đặc ruột")
+                .origin("Hòa Bình")
+                .stockStatus("Sẵn hàng số lượng lớn")
+                .shortDescription("Chuyên dùng cho gia cố móng nhà 3-4 tầng, móng kè đê bao kênh rạch.")
+                .description("Cọc tre 2.5m chịu lực nén cọc cao, độ thẳng đều.")
+                .applications(Arrays.asList("Kè sông, kè đê điều", "Gia cố nền móng nhà cao tầng"))
+                .advantages(Arrays.asList("Thịt tre dày, chịu búa rung tốt", "Chống mối mọt tự nhiên trong bùn yếm khí"))
+                .packaging("Bó 25 cây")
+                .images(Arrays.asList("/images/products/coc-tre-25m-1.webp"))
+                .featured(true)
+                .rating(0.0)
+                .reviewCount(0)
+                .build(),
 
-            productRepository.saveAll(Arrays.asList(p2m, p25m, p3m));
-            log.info("✓ Đã khởi tạo dữ liệu mẫu Products thành công");
+            ProductEntity.builder()
+                .id("coc-tre-3m")
+                .slug("coc-tre-3m")
+                .name("Cọc Tre 3m (Ø 8 - 10cm)")
+                .length("3m")
+                .lengthMeters(3.0)
+                .diameter("Ø 80 – 100 mm")
+                .bambooType("Tre luồng già loại 1")
+                .origin("Hòa Bình – Thanh Hóa")
+                .stockStatus("Sẵn hàng số lượng lớn")
+                .shortDescription("Quy cách cọc dài chuyên dụng xử lý tầng bùn sâu, kè bờ sông hồ.")
+                .description("Cọc tre 3m đạt độ già từ 4-6 năm, thân cọc thẳng và dẻo dai.")
+                .applications(Arrays.asList("Kè sông suối, đê điều chống sạt lở", "Móng sâu hố móng bùn lún"))
+                .advantages(Arrays.asList("Đường kính lớn, chịu tải trọng lớn", "Khối lượng dồi dào sẵn tại bãi"))
+                .packaging("Bó 20 cây")
+                .images(Arrays.asList("/images/products/coc-tre-3m-1.webp"))
+                .featured(true)
+                .rating(0.0)
+                .reviewCount(0)
+                .build(),
+
+            ProductEntity.builder()
+                .id("coc-tre-4m")
+                .slug("coc-tre-4m")
+                .name("Cọc Tre 4m (Ø 8 - 11cm)")
+                .length("4m")
+                .lengthMeters(4.0)
+                .diameter("Ø 80 – 110 mm")
+                .bambooType("Tre luồng đại thụ, tre gai già Hòa Bình")
+                .origin("Hòa Bình")
+                .stockStatus("Sẵn hàng số lượng lớn")
+                .shortDescription("Cọc tre 4m thân to dày, chịu tải trọng lớn, chuyên trị nền móng bùn lầy sâu, kè sông biển chống sạt lở, cầu đường và cống hộp khẩu độ lớn.")
+                .description("Cọc tre 4m công trình xây dựng khai thác từ các bụi tre luồng già lâu năm tại Hòa Bình. Cọc dài từ 3,9m đến 4,1m, đường kính gốc to tròn đạt từ 8cm đến 11cm, thân thẳng tắp đặc thịt tre. Chiều dài 4m nguyên khối giúp cọc cắm sâu vượt trội qua nhiều tầng bùn yếu, tạo lực ma sát thành cọc cực lớn.")
+                .applications(Arrays.asList(
+                    "Gia cố nền móng công trình cầu đường, đường dẫn cao tốc qua vùng đầm lầy, đất yếu sâu.",
+                    "Kè bờ sông, bờ kênh lớn, đê biển chống sạt lở và xói mòn mùa mưa lũ.",
+                    "Móng cống hộp khẩu độ lớn, trạm bơm thủy lợi, âu thuyền.",
+                    "Gia cố nền móng nhà máy, khu bến cảng, kho bãi tải trọng nặng."
+                ))
+                .advantages(Arrays.asList(
+                    "Chiều dài 4m nguyên khối tạo diện tích ma sát tiếp xúc nền đất lớn nhất.",
+                    "Đường kính gốc to khủng Ø80-110mm, chịu lực va đập cơ giới cao không bị nứt vỡ.",
+                    "Vận chuyển tận chân công trình bằng xe tải dài và xe cẩu chuyên dụng.",
+                    "Đầy đủ hóa đơn VAT và hồ sơ nguồn gốc xuất xứ lâm sản hợp pháp."
+                ))
+                .packaging("Kiện 10 - 15 cây xếp ngay ngắn, buộc đai nâng hạ xe cẩu")
+                .images(Arrays.asList("/images/products/coc-tre-4m-1.webp", "/images/products/coc-tre-4m-2.webp", "/images/products/coc-tre-4m-3.webp"))
+                .featured(true)
+                .rating(0.0)
+                .reviewCount(0)
+                .build(),
+
+            ProductEntity.builder()
+                .id("coc-tre-theo-yeu-cau")
+                .slug("coc-tre-theo-yeu-cau")
+                .name("Cọc Tre Theo Yêu Cầu (Đặt Cắt Quy Cách Riêng)")
+                .length("Theo yêu cầu")
+                .lengthMeters(0.0)
+                .diameter("Ø 50 – 120 mm tùy chọn")
+                .bambooType("Tre luồng, tre gai, tre đực Hòa Bình tuyển chọn")
+                .origin("Hòa Bình")
+                .stockStatus("Đặt hàng 1-2 ngày")
+                .shortDescription("Cắt theo kích thước bản vẽ kỹ thuật: 1.2m, 1.8m, 2.2m, 3.5m, 5m, vát nhọn hoặc để phẳng đầu, phân loại đường kính riêng.")
+                .description("Dịch vụ cung cấp cọc tre cắt theo yêu cầu phục vụ các công trình đặc thù theo hồ sơ thiết kế kỹ thuật. Chúng tôi nhận cắt theo mọi chiều dài yêu cầu (từ 1m đến 6m), tuyển chọn đường kính theo dải kích thước chỉ định, vát nhọn 3-4 cạnh hoặc để phẳng đầu.")
+                .applications(Arrays.asList(
+                    "Công trình có thiết kế địa chất chuyên biệt cần chiều dài cọc lẻ theo mặt cắt móng.",
+                    "Dự án ODA, công trình vốn ngân sách đòi hỏi nghiêm ngặt về sai số kích thước.",
+                    "Gia cố móng giếng chìm, hố móng tầng hầm sâu trong đô thị.",
+                    "Công trình cảnh quan sinh thái, resort, kè hồ kiến trúc đặc thù."
+                ))
+                .advantages(Arrays.asList(
+                    "Cắt đúng 100% kích thước thiết kế, loại bỏ hoàn toàn hao hụt đầu mẩu tại công trường.",
+                    "Chất lượng đồng đều cao nhờ phân loại thủ công kết hợp máy cắt chuyên dụng.",
+                    "Tư vấn kỹ thuật thực tế giúp tối ưu chi phí cho nhà thầu.",
+                    "Khả năng cung ứng số lượng lớn, giao hàng nhanh chóng tận công trình."
+                ))
+                .packaging("Đóng bó theo quy cách yêu cầu hoặc xếp gọn gàng trên xe tải")
+                .images(Arrays.asList("/images/products/coc-tre-theo-yeu-cau-1.webp", "/images/products/coc-tre-theo-yeu-cau-2.webp", "/images/products/coc-tre-theo-yeu-cau-3.webp"))
+                .featured(true)
+                .rating(0.0)
+                .reviewCount(0)
+                .build()
+        );
+
+        for (ProductEntity p : defaultProducts) {
+            if (!productRepository.existsById(p.getId())) {
+                productRepository.save(p);
+            }
         }
+        log.info("✓ Đã đồng bộ đầy đủ 6 danh mục sản phẩm cọc tre công trình");
     }
 
     private void seedProjects() {
