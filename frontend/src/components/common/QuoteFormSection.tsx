@@ -12,8 +12,7 @@ import {
   User,
   Calculator,
   ShieldCheck,
-  Truck,
-  MessageSquare
+  Truck
 } from "lucide-react";
 import { products } from "@/data/products";
 import { siteConfig } from "@/data/config";
@@ -32,6 +31,7 @@ export default function QuoteFormSection() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = () => {
     const errs: { [key: string]: string } = {};
@@ -40,7 +40,7 @@ export default function QuoteFormSection() {
     }
     if (!formData.phone.trim()) {
       errs.phone = "Vui lòng nhập số điện thoại";
-    } else if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(formData.phone.replace(/\s+/g, ""))) {
+    } else if (!/^(03|05|07|08|09)[0-9]{8}$/.test(formData.phone.replace(/\s+/g, ""))) {
       errs.phone = "Số điện thoại không hợp lệ (10 số)";
     }
     if (!formData.location.trim()) {
@@ -55,19 +55,22 @@ export default function QuoteFormSection() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
       const { sendQuoteRequest } = await import("@/lib/api");
       await sendQuoteRequest({
         customerName: formData.fullName,
         phone: formData.phone,
+        company: formData.company,
         deliveryAddress: formData.location,
-        bambooSpecs: `${formData.productType} - Số lượng: ${formData.quantity || "Chưa rõ"}`,
-        notes: `${formData.company ? `Công ty: ${formData.company}. ` : ""}${formData.notes}`
+        bambooSpecs: formData.productType,
+        quantity: formData.quantity,
+        notes: formData.notes,
       });
       setIsSuccess(true);
     } catch (err) {
-      console.error(err);
-      setIsSuccess(true); // Graceful fallback
+      setIsSuccess(false);
+      setSubmitError(err instanceof Error ? err.message : "Không thể gửi yêu cầu. Vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }
@@ -188,6 +191,12 @@ export default function QuoteFormSection() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {submitError && (
+                    <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
                   <div className="border-b border-gray-100 pb-3 mb-2">
                     <h3 className="text-xl font-black text-[#18231C]">
                       PHIẾU YÊU CẦU BÁO GIÁ CỌC TRE

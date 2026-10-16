@@ -2,14 +2,14 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, BookOpen, Calendar, Clock, ArrowRight, ShieldAlert } from "lucide-react";
+import { Search, BookOpen, Calendar, Clock, ArrowRight, ShieldAlert, Loader2 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ArticleCard from "@/components/common/ArticleCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { useArticles } from "@/lib/articleStore";
+import { useArticlesState } from "@/lib/articleStore";
 
 export default function NewsPage() {
-  const articlesList = useArticles();
+  const { data: articlesList, isLoading } = useArticlesState();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -90,30 +90,37 @@ export default function NewsPage() {
         </div>
 
         {/* ARTICLES GRID */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredArticles.length === 0 ? (
-            <div className="col-span-full py-16 px-6 text-center bg-white rounded-3xl border border-gray-200 shadow-sm max-w-xl mx-auto w-full">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#214E34]/10 text-[#214E34] flex items-center justify-center">
-                <BookOpen className="w-8 h-8" />
+        {isLoading ? (
+          <div className="py-24 flex flex-col items-center justify-center gap-3">
+            <Loader2 className="w-8 h-8 animate-spin text-[#214E34]" />
+            <p className="text-xs text-gray-500 font-medium">Đang tải danh sách bài viết...</p>
+          </div>
+        ) : (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredArticles.length === 0 ? (
+              <div className="col-span-full py-16 px-6 text-center bg-white rounded-3xl border border-gray-200 shadow-sm max-w-xl mx-auto w-full">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#214E34]/10 text-[#214E34] flex items-center justify-center">
+                  <BookOpen className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-bold text-[#18231C] mb-2">Chưa Có Bài Viết Nào</h3>
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed mb-6">
+                  Các bài viết chia sẻ cẩm nang kỹ thuật thi công móng và kinh nghiệm chọn cọc đang được biên tập.
+                </p>
+                <Link
+                  href="/san-pham"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#214E34] hover:bg-[#183B27] text-white text-xs font-bold transition-all shadow-sm"
+                >
+                  <span>Xem danh mục sản phẩm cọc tre</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#CDAA63]" />
+                </Link>
               </div>
-              <h3 className="text-lg font-bold text-[#18231C] mb-2">Chưa Có Bài Viết Nào</h3>
-              <p className="text-xs sm:text-sm text-gray-500 leading-relaxed mb-6">
-                Các bài viết chia sẻ cẩm nang kỹ thuật thi công móng và kinh nghiệm chọn cọc đang được biên tập.
-              </p>
-              <Link
-                href="/san-pham"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#214E34] hover:bg-[#183B27] text-white text-xs font-bold transition-all shadow-sm"
-              >
-                <span>Xem danh mục sản phẩm cọc tre</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#CDAA63]" />
-              </Link>
-            </div>
-          ) : (
-            filteredArticles.map((art) => (
-              <ArticleCard key={art.id} article={art} />
-            ))
-          )}
-        </div>
+            ) : (
+              filteredArticles.map((art) => (
+                <ArticleCard key={art.id} article={art} />
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* CTA SECTION */}

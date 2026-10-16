@@ -24,7 +24,8 @@ async function proxy(request: NextRequest, context: { params: Promise<{ resource
   if (!["GET", "HEAD"].includes(request.method)) init.body = await request.text();
 
   try {
-    const backendRes = request.method === "GET"
+    const isPublicRead = request.method === "GET" && resource !== "quotes";
+    const backendRes = isPublicRead
       ? await fetch(backendApiUrl(path), init)
       : await fetchBackendAsAdmin(request, path, init);
     const body = await backendRes.text();

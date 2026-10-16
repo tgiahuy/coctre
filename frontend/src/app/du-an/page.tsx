@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Building2 } from "lucide-react";
+import { Building2, Loader2 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProjectCard from "@/components/common/ProjectCard";
 import SectionHeading from "@/components/common/SectionHeading";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { useProjects } from "@/lib/projectStore";
+import { useProjectsState } from "@/lib/projectStore";
 
 export default function ProjectsPage() {
-  const projects = useProjects();
+  const { data: projects, isLoading } = useProjectsState();
   const [filterType, setFilterType] = useState<string>("all");
 
   const categories = [
@@ -68,23 +68,30 @@ export default function ProjectsPage() {
         </div>
 
         {/* PROJECTS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredProjects.length === 0 ? (
-            <div className="col-span-full py-16 px-6 text-center bg-white rounded-3xl border border-gray-200 shadow-sm max-w-xl mx-auto w-full">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#214E34]/10 text-[#214E34] flex items-center justify-center">
-                <Building2 className="w-8 h-8" />
+        {isLoading ? (
+          <div className="py-24 flex flex-col items-center justify-center gap-3">
+            <Loader2 className="w-8 h-8 animate-spin text-[#214E34]" />
+            <p className="text-xs text-gray-500 font-medium">Đang tải danh sách dự án...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredProjects.length === 0 ? (
+              <div className="col-span-full py-16 px-6 text-center bg-white rounded-3xl border border-gray-200 shadow-sm max-w-xl mx-auto w-full">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#214E34]/10 text-[#214E34] flex items-center justify-center">
+                  <Building2 className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-bold text-[#18231C] mb-2">Đang Cập Nhật Danh Sách Dự Án</h3>
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                  Hồ sơ các dự án và công trình thực tế đang được tổng hợp và chuẩn hóa thông tin để cập nhật lên hệ thống.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-[#18231C] mb-2">Đang Cập Nhật Danh Sách Dự Án</h3>
-              <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-                Hồ sơ các dự án và công trình thực tế đang được tổng hợp và chuẩn hóa thông tin để cập nhật lên hệ thống.
-              </p>
-            </div>
-          ) : (
-            filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))
-          )}
-        </div>
+            ) : (
+              filteredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       {/* CTA SECTION */}

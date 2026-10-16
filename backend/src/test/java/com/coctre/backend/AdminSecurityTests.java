@@ -1,6 +1,7 @@
 package com.coctre.backend;
 
 import com.coctre.backend.config.PasswordUtil;
+import com.coctre.backend.repository.QuoteRequestRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminSecurityTests {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private QuoteRequestRepository quoteRequestRepository;
 
     @Test
     void adminMutationsAndCustomerDataRequireAuthentication() throws Exception {
@@ -37,9 +40,44 @@ class AdminSecurityTests {
     @Test
     void publicQuoteSubmissionRemainsAvailable() throws Exception {
         mockMvc.perform(post("/api/v1/quotes")
+                        .header("X-Forwarded-For", "198.51.100.10")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"phone\":\"0988718013\",\"customerName\":\"Test\"}"))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void publicQuoteCannotChooseAdministrativeFields() throws Exception {
+        mockMvc.perform(post("/api/v1/quotes")
+                        .header("X-Forwarded-For", "198.51.100.11")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\":\"known-id\",\"phone\":\"0988718013\",\"status\":\"CLOSED\"}"))
+                .andExpect(status().isCreated());
+
+        assertFalse(quoteRequestRepository.existsById("known-id"));
+        assertTrue(quoteRequestRepository.findAll().stream().allMatch(quote -> "NEW".equals(quote.getStatus())));
+    }
+
+    @Test
+    void rejectsInvalidPhoneAndRateLimitsRepeatedSubmissions() throws Exception {
+        mockMvc.perform(post("/api/v1/quotes")
+                        .header("X-Forwarded-For", "198.51.100.12")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phone\":\"123\"}"))
+                .andExpect(status().isBadRequest());
+
+        for (int i = 0; i < 5; i++) {
+            mockMvc.perform(post("/api/v1/quotes")
+                            .header("X-Forwarded-For", "198.51.100.13")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"phone\":\"0988718013\"}"))
+                    .andExpect(status().isCreated());
+        }
+        mockMvc.perform(post("/api/v1/quotes")
+                        .header("X-Forwarded-For", "198.51.100.13")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phone\":\"0988718013\"}"))
+                .andExpect(status().isTooManyRequests());
     }
 
     @Test

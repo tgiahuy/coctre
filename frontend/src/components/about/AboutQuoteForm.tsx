@@ -27,16 +27,17 @@ export default function AboutQuoteForm() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = () => {
     const errs: { [key: string]: string } = {};
     if (!formData.fullName.trim()) {
       errs.fullName = "Vui lòng nhập họ và tên";
     }
-    const cleanPhone = formData.phone.replace(/\s+/g, "");
+    const cleanPhone = formData.phone.replace(/[\s.-]/g, "");
     if (!cleanPhone) {
       errs.phone = "Vui lòng nhập số điện thoại";
-    } else if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(cleanPhone)) {
+    } else if (!/^(03|05|07|08|09)[0-9]{8}$/.test(cleanPhone)) {
       errs.phone = "Số điện thoại không hợp lệ (cần 10 chữ số)";
     }
     setErrors(errs);
@@ -48,13 +49,14 @@ export default function AboutQuoteForm() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
       const selectedOption = PRODUCT_OPTIONS.find((p) => p.value === formData.productType);
       const specLabel = selectedOption ? selectedOption.label : formData.productType;
 
       await sendQuoteRequest({
         customerName: formData.fullName.trim(),
-        phone: formData.phone.trim(),
+        phone: formData.phone.replace(/[\s.-]/g, "").trim(),
         deliveryAddress: formData.location.trim() || "Chưa xác định",
         bambooSpecs: `${specLabel}${formData.quantity ? ` - Số lượng: ${formData.quantity}` : ""}`,
         notes: `[Trang Giới thiệu] ${formData.notes.trim()}`
@@ -70,9 +72,9 @@ export default function AboutQuoteForm() {
         notes: ""
       });
       setErrors({});
-    } catch (err) {
-      console.error(err);
-      setIsSuccess(true);
+    } catch (err: unknown) {
+      setIsSuccess(false);
+      setSubmitError(err instanceof Error ? err.message : "Không thể gửi yêu cầu. Vui lòng thử lại hoặc gọi Hotline.");
     } finally {
       setIsSubmitting(false);
     }
@@ -90,7 +92,10 @@ export default function AboutQuoteForm() {
         </p>
         <button
           type="button"
-          onClick={() => setIsSuccess(false)}
+          onClick={() => {
+            setIsSuccess(false);
+            setSubmitError(null);
+          }}
           className="text-xs text-[#214E34] hover:underline font-semibold pt-1"
         >
           Gửi yêu cầu khác
@@ -109,6 +114,13 @@ export default function AboutQuoteForm() {
           Nhập thông tin bên dưới, chúng tôi sẽ liên hệ báo giá nhanh cho công trình của bạn.
         </p>
       </div>
+
+      {submitError && (
+        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{submitError}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div>

@@ -36,12 +36,23 @@ export function resetProductsToDefault(): boolean {
 }
 
 export function useProducts(): Product[] {
+  return useProductsState().data;
+}
+
+export function useProductsState(): { data: Product[]; isLoading: boolean; error: string | null } {
   const [items, setItems] = useState<Product[]>(initialProducts);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    const refresh = () => void requestProducts().then(setItems).catch(() => undefined);
+    const refresh = () => {
+      void requestProducts()
+        .then((data) => { setItems(data); setError(null); })
+        .catch((err: unknown) => setError(err instanceof Error ? err.message : "Không thể tải sản phẩm"))
+        .finally(() => setIsLoading(false));
+    };
     refresh();
     window.addEventListener("coctre_products_updated", refresh);
     return () => window.removeEventListener("coctre_products_updated", refresh);
   }, []);
-  return items;
+  return { data: items, isLoading, error };
 }

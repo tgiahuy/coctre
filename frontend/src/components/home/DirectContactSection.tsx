@@ -7,7 +7,6 @@ import {
   MapPin,
   Clock,
   ShieldCheck,
-  Warehouse,
   ExternalLink,
   Navigation,
   Building,
@@ -17,8 +16,6 @@ import {
   Sparkles,
   FileText,
   AlertCircle,
-  Copy,
-  Check,
   Headphones
 } from "lucide-react";
 import { useSiteConfig } from "@/lib/configStore";
@@ -53,15 +50,6 @@ export default function DirectContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
-
-  const handleCopy = (phone: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    navigator.clipboard.writeText(phone.replace(/\./g, ""));
-    setCopiedPhone(phone);
-    setTimeout(() => setCopiedPhone(null), 2500);
-  };
 
   const handleQuickSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +60,7 @@ export default function DirectContactSection() {
       setErrorMessage("Vui lòng nhập số điện thoại của bạn.");
       return;
     }
-    if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(cleanPhone)) {
+    if (!/^(03|05|07|08|09)[0-9]{8}$/.test(cleanPhone)) {
       setErrorMessage("Số điện thoại không hợp lệ (cần 10 chữ số).");
       return;
     }
@@ -90,7 +78,8 @@ export default function DirectContactSection() {
       setPhoneInput("");
       setLocationInput("");
     } catch (err) {
-      setIsSuccess(true);
+      setIsSuccess(false);
+      setErrorMessage(err instanceof Error ? err.message : "Không thể gửi yêu cầu. Vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }

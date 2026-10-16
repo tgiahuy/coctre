@@ -4,9 +4,10 @@ import { backendApiUrl } from "@/lib/serverAuth";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const forwardedFor = request.headers.get("x-forwarded-for") || "unknown";
     const backendRes = await fetch(backendApiUrl("/quotes"), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Forwarded-For": forwardedFor },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(7000),
       cache: "no-store",

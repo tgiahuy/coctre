@@ -13,12 +13,13 @@ import {
   Star,
   ArrowRight,
   Send,
-  AlertCircle
+  AlertCircle,
+  Loader2,
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { useProducts } from "@/lib/productStore";
+import { useProductsState } from "@/lib/productStore";
 import { initialReviews, ProductReview } from "@/data/reviews";
 import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
@@ -30,7 +31,7 @@ export default function ProductDetailPage({
 }) {
   const resolvedParams = use(params);
   const siteConfig = useSiteConfig();
-  const products = useProducts();
+  const { data: products, isLoading, error } = useProductsState();
   const product = products.find((item) => item.slug === resolvedParams.slug || item.id === resolvedParams.slug);
   const { openQuoteModal } = useQuoteModal();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -46,8 +47,52 @@ export default function ProductDetailPage({
   const [reviewSuccess, setReviewSuccess] = useState(false);
   const [reviewError, setReviewError] = useState("");
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-3 max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-[#214E34] mx-auto" />
+          <h3 className="text-base font-bold text-gray-900">Đang tải thông tin sản phẩm...</h3>
+          <p className="text-xs text-gray-500">Vui lòng chờ trong giây lát.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-4 max-w-md bg-white p-8 rounded-3xl border border-red-200 shadow-sm">
+          <AlertCircle className="w-8 h-8 text-red-600 mx-auto" />
+          <h3 className="text-base font-bold text-red-900">Lỗi khi tải dữ liệu sản phẩm</h3>
+          <p className="text-xs text-red-600">{error}</p>
+          <Link
+            href="/san-pham"
+            className="inline-block px-5 py-2.5 rounded-xl bg-[#214E34] text-white font-bold text-xs"
+          >
+            Quay lại danh mục sản phẩm
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
-    return <div className="min-h-screen py-24 text-center text-gray-500">Không tìm thấy sản phẩm.</div>;
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-4 max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+          <AlertCircle className="w-8 h-8 text-amber-500 mx-auto" />
+          <h2 className="text-xl font-black text-gray-900">Không tìm thấy sản phẩm</h2>
+          <p className="text-xs text-gray-600">Sản phẩm bạn đang tìm kiếm có thể đã bị thay đổi hoặc không tồn tại.</p>
+          <Link
+            href="/san-pham"
+            className="inline-block px-5 py-2.5 rounded-xl bg-[#214E34] text-white font-bold text-xs"
+          >
+            Quay lại danh mục sản phẩm
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   const relatedProducts = products.filter((p) => p.slug !== product.slug && p.id !== product.id).slice(0, 4);

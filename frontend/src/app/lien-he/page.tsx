@@ -24,6 +24,7 @@ export default function ContactPage() {
     phone: "",
     email: "",
     company: "",
+    location: "",
     message: "",
   });
 
@@ -35,10 +36,11 @@ export default function ContactPage() {
   const validate = () => {
     const errs: { [key: string]: string } = {};
     if (!formData.fullName.trim()) errs.fullName = "Vui lòng nhập họ và tên";
-    if (!formData.phone.trim()) {
+    const cleanPhone = formData.phone.replace(/[\s.-]/g, "");
+    if (!cleanPhone) {
       errs.phone = "Vui lòng nhập số điện thoại";
-    } else if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(formData.phone.replace(/\s+/g, ""))) {
-      errs.phone = "Số điện thoại không hợp lệ";
+    } else if (!/^(03|05|07|08|09)[0-9]{8}$/.test(cleanPhone)) {
+      errs.phone = "Số điện thoại không hợp lệ (cần 10 chữ số)";
     }
     if (!formData.message.trim()) errs.message = "Vui lòng nhập nội dung liên hệ";
     setErrors(errs);
@@ -52,12 +54,14 @@ export default function ContactPage() {
     setIsSubmitting(true);
     setSubmitError(null);
     try {
+      const cleanPhone = formData.phone.replace(/[\s.-]/g, "");
       await sendQuoteRequest({
-        customerName: formData.fullName,
-        phone: formData.phone,
-        email: formData.email,
-        deliveryAddress: formData.company,
-        notes: formData.message,
+        customerName: formData.fullName.trim(),
+        phone: cleanPhone,
+        email: formData.email.trim() || undefined,
+        company: formData.company.trim() || undefined,
+        deliveryAddress: formData.location.trim() || undefined,
+        notes: formData.message.trim(),
       });
       setIsSuccess(true);
     } catch (err: unknown) {
@@ -203,7 +207,7 @@ export default function ContactPage() {
                   <button
                     onClick={() => {
                       setIsSuccess(false);
-                      setFormData({ fullName: "", phone: "", email: "", company: "", message: "" });
+                      setFormData({ fullName: "", phone: "", email: "", company: "", location: "", message: "" });
                     }}
                     className="px-6 py-2.5 bg-[#214E34] text-white rounded-xl text-xs font-bold"
                   >
@@ -307,6 +311,23 @@ export default function ContactPage() {
                           className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#214E34]"
                         />
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Location */}
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">
+                      Địa điểm công trình / Giao hàng (nếu có)
+                    </label>
+                    <div className="relative">
+                      <MapPin className="w-4 h-4 text-gray-400 absolute left-3 top-3" />
+                      <input
+                        type="text"
+                        placeholder="Ví dụ: KCN Đồng Văn, Hà Nam hoặc Nam Từ Liêm, Hà Nội"
+                        value={formData.location}
+                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#214E34]"
+                      />
                     </div>
                   </div>
 

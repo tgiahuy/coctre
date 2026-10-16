@@ -22,11 +22,13 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle2,
+  Users,
 } from "lucide-react";
 import ProductManager from "./ProductManager";
 import ArticleManager from "./ArticleManager";
 import ContactManager from "./ContactManager";
 import ProjectManager from "./ProjectManager";
+import QuoteManager from "./QuoteManager";
 import { useProducts } from "@/lib/productStore";
 import { useArticles } from "@/lib/articleStore";
 import { useProjects } from "@/lib/projectStore";
@@ -47,7 +49,7 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"products" | "articles" | "contact" | "projects">("products");
+  const [activeTab, setActiveTab] = useState<"products" | "articles" | "contact" | "projects" | "quotes">("products");
 
   const products = useProducts();
   const articles = useArticles();
@@ -317,7 +319,23 @@ export default function AdminPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
         {/* Quick Stats Bar */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div
+            onClick={() => setActiveTab("quotes")}
+            className={`p-4 rounded-2xl border transition cursor-pointer ${
+              activeTab === "quotes"
+                ? "bg-white border-[#214E34] shadow-md ring-2 ring-[#214E34]/20"
+                : "bg-white/80 border-gray-200 hover:bg-white"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-gray-500 uppercase">Báo giá</span>
+              <Users className="w-4 h-4 text-[#214E34]" />
+            </div>
+            <p className="text-2xl font-extrabold text-gray-900 mt-2">Khách hàng</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">Yêu cầu & khách tiềm năng</p>
+          </div>
+
           <div
             onClick={() => setActiveTab("products")}
             className={`p-4 rounded-2xl border transition cursor-pointer ${
@@ -389,6 +407,19 @@ export default function AdminPage() {
         <div className="flex flex-wrap gap-2 p-1.5 bg-white rounded-2xl border border-gray-200 shadow-sm">
           <button
             type="button"
+            onClick={() => setActiveTab("quotes")}
+            className={`flex-1 min-w-[140px] py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition ${
+              activeTab === "quotes"
+                ? "bg-[#214E34] text-white shadow"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            }`}
+          >
+            <Users className="w-4 h-4 text-[#CDAA63]" />
+            <span>Khách Hàng Báo Giá</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab("products")}
             className={`flex-1 min-w-[140px] py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition ${
               activeTab === "products"
@@ -446,6 +477,7 @@ export default function AdminPage() {
           {activeTab === "articles" && <ArticleManager />}
           {activeTab === "contact" && <ContactManager />}
           {activeTab === "projects" && <ProjectManager />}
+          {activeTab === "quotes" && <QuoteManager />}
         </div>
       </div>
     </div>

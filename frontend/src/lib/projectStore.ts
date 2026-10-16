@@ -36,12 +36,23 @@ export function resetProjectsToDefault(): boolean {
 }
 
 export function useProjects(): Project[] {
+  return useProjectsState().data;
+}
+
+export function useProjectsState(): { data: Project[]; isLoading: boolean; error: string | null } {
   const [items, setItems] = useState<Project[]>(initialProjects);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    const refresh = () => void requestProjects().then(setItems).catch(() => undefined);
+    const refresh = () => {
+      void requestProjects()
+        .then((data) => { setItems(data); setError(null); })
+        .catch((err: unknown) => setError(err instanceof Error ? err.message : "Không thể tải dự án"))
+        .finally(() => setIsLoading(false));
+    };
     refresh();
     window.addEventListener("coctre_projects_updated", refresh);
     return () => window.removeEventListener("coctre_projects_updated", refresh);
   }, []);
-  return items;
+  return { data: items, isLoading, error };
 }

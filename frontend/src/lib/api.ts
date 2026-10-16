@@ -13,8 +13,10 @@ export interface QuoteFormData {
   customerName?: string;
   phone: string;
   email?: string;
+  company?: string;
   deliveryAddress?: string;
   bambooSpecs?: string;
+  quantity?: string;
   notes?: string;
 }
 
@@ -22,16 +24,19 @@ export interface QuoteFormData {
  * 1. Báo giá: chỉ báo thành công sau khi backend đã lưu dữ liệu.
  */
 export async function sendQuoteRequest(data: QuoteFormData): Promise<ApiResponse<unknown>> {
+  const cleanPhone = (data.phone || "").replace(/[\s.-]/g, "").trim();
   const res = await fetch("/api/quotes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      customerName: data.customerName,
-      phone: data.phone,
-      email: data.email,
-      location: data.deliveryAddress,
-      productType: data.bambooSpecs,
-      notes: data.notes,
+      customerName: data.customerName?.trim(),
+      phone: cleanPhone,
+      email: data.email?.trim(),
+      company: data.company?.trim(),
+      location: data.deliveryAddress?.trim(),
+      productType: data.bambooSpecs?.trim(),
+      quantity: data.quantity?.trim(),
+      notes: data.notes?.trim(),
     }),
   });
   const result = await res.json().catch(() => ({ success: false, message: "Phản hồi máy chủ không hợp lệ" }));

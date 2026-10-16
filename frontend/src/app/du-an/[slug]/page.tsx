@@ -9,13 +9,15 @@ import {
   Layers,
   CheckCircle2,
   Building2,
-  ArrowRight
+  ArrowRight,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import ProjectCard from "@/components/common/ProjectCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { useProjects } from "@/lib/projectStore";
+import { useProjectsState } from "@/lib/projectStore";
 import { useProducts } from "@/lib/productStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
@@ -25,13 +27,57 @@ export default function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = use(params);
-  const allProjects = useProjects();
+  const { data: allProjects, isLoading, error } = useProjectsState();
   const allProducts = useProducts();
   const project = allProjects.find((item) => item.slug === resolvedParams.slug || item.id === resolvedParams.slug);
   const { openQuoteModal } = useQuoteModal();
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-3 max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-[#214E34] mx-auto" />
+          <h3 className="text-base font-bold text-gray-900">Đang tải thông tin dự án...</h3>
+          <p className="text-xs text-gray-500">Vui lòng chờ trong giây lát.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-4 max-w-md bg-white p-8 rounded-3xl border border-red-200 shadow-sm">
+          <AlertCircle className="w-8 h-8 text-red-600 mx-auto" />
+          <h3 className="text-base font-bold text-red-900">Lỗi khi tải dữ liệu dự án</h3>
+          <p className="text-xs text-red-600">{error}</p>
+          <Link
+            href="/du-an"
+            className="inline-block px-5 py-2.5 rounded-xl bg-[#214E34] text-white font-bold text-xs"
+          >
+            Quay lại danh mục dự án
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!project) {
-    return <div className="min-h-screen py-24 text-center text-gray-500">Không tìm thấy dự án.</div>;
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-4 max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+          <AlertCircle className="w-8 h-8 text-amber-500 mx-auto" />
+          <h2 className="text-xl font-black text-gray-900">Không tìm thấy dự án</h2>
+          <p className="text-xs text-gray-600">Dự án bạn đang tìm kiếm có thể đã bị gỡ hoặc đường dẫn không chính xác.</p>
+          <Link
+            href="/du-an"
+            className="inline-block px-5 py-2.5 rounded-xl bg-[#214E34] text-white font-bold text-xs"
+          >
+            Quay lại danh sách dự án
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   const relatedProjects = allProjects.filter((p) => p.slug !== project.slug && p.id !== project.id).slice(0, 3);

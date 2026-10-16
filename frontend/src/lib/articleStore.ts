@@ -36,12 +36,23 @@ export function resetArticlesToDefault(): boolean {
 }
 
 export function useArticles(): Article[] {
+  return useArticlesState().data;
+}
+
+export function useArticlesState(): { data: Article[]; isLoading: boolean; error: string | null } {
   const [items, setItems] = useState<Article[]>(initialArticles);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    const refresh = () => void requestArticles().then(setItems).catch(() => undefined);
+    const refresh = () => {
+      void requestArticles()
+        .then((data) => { setItems(data); setError(null); })
+        .catch((err: unknown) => setError(err instanceof Error ? err.message : "Không thể tải bài viết"))
+        .finally(() => setIsLoading(false));
+    };
     refresh();
     window.addEventListener("coctre_articles_updated", refresh);
     return () => window.removeEventListener("coctre_articles_updated", refresh);
   }, []);
-  return items;
+  return { data: items, isLoading, error };
 }

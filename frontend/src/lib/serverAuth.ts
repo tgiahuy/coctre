@@ -8,7 +8,13 @@ export function backendApiUrl(path: string): string {
 }
 
 export function getAdminToken(request: NextRequest): string | null {
-  return request.cookies.get(ADMIN_SESSION_COOKIE)?.value || null;
+  const cookie = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  if (cookie) return cookie;
+  const authHeader = request.headers.get("authorization");
+  if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
+    return authHeader.substring(7).trim();
+  }
+  return null;
 }
 
 export async function fetchBackendAsAdmin(

@@ -35,18 +35,23 @@ export default function QuoteModal() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     if (selectedProduct) {
       // Find matching product slug or fallback
       const found = products.find(
         (p) => p.slug === selectedProduct || p.name.includes(selectedProduct) || p.id === selectedProduct
       );
       if (found) {
-        setFormData((prev) => ({ ...prev, productType: found.slug }));
+        queueMicrotask(() => {
+          if (!cancelled) setFormData((prev) => ({ ...prev, productType: found.slug }));
+        });
       }
     }
-  }, [selectedProduct]);
+    return () => { cancelled = true; };
+  }, [selectedProduct, products]);
 
   if (!isOpen) return null;
 
@@ -57,7 +62,7 @@ export default function QuoteModal() {
     }
     if (!formData.phone.trim()) {
       errs.phone = "Vui lòng nhập số điện thoại";
-    } else if (!/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(formData.phone.replace(/\s+/g, ""))) {
+    } else if (!/^(03|05|07|08|09)[0-9]{8}$/.test(formData.phone.replace(/\s+/g, ""))) {
       errs.phone = "Số điện thoại không hợp lệ (gồm 10 chữ số)";
     }
     if (!formData.location.trim()) {
@@ -72,20 +77,23 @@ export default function QuoteModal() {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
 
     try {
       const { sendQuoteRequest } = await import("@/lib/api");
       await sendQuoteRequest({
         customerName: formData.fullName,
         phone: formData.phone,
+        company: formData.company,
         deliveryAddress: formData.location,
-        bambooSpecs: `${formData.productType} - Số lượng: ${formData.quantity || "Chưa rõ"}`,
-        notes: `${formData.company ? `Công ty: ${formData.company}. ` : ""}${formData.notes}`
+        bambooSpecs: formData.productType,
+        quantity: formData.quantity,
+        notes: formData.notes,
       });
       setIsSuccess(true);
     } catch (err) {
-      console.error(err);
-      setIsSuccess(true);
+      setIsSuccess(false);
+      setSubmitError(err instanceof Error ? err.message : "Không thể gửi yêu cầu. Vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }
@@ -103,6 +111,7 @@ export default function QuoteModal() {
       notes: "",
     });
     setErrors({});
+    setSubmitError(null);
     closeQuoteModal();
   };
 
@@ -166,6 +175,12 @@ export default function QuoteModal() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {submitError && (
+                <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{submitError}</span>
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Full name */}
                 <div>

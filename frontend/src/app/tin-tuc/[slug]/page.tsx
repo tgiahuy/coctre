@@ -8,17 +8,15 @@ import {
   Clock,
   User,
   Tag,
-  Share2,
   BookOpen,
   ArrowRight,
-  Phone,
-  FileText,
-  CheckCircle2
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ArticleCard from "@/components/common/ArticleCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
-import { useArticles } from "@/lib/articleStore";
+import { useArticlesState } from "@/lib/articleStore";
 import { siteConfig } from "@/data/config";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
@@ -28,11 +26,41 @@ export default function ArticleDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = use(params);
-  const allArticles = useArticles();
+  const { data: allArticles, isLoading, error } = useArticlesState();
   const article = allArticles.find((item) => item.slug === resolvedParams.slug || item.id === resolvedParams.slug);
   const relatedArticles = allArticles.filter((item) => item.slug !== resolvedParams.slug).slice(0, 3);
 
   const { openQuoteModal } = useQuoteModal();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-3 max-w-md bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-[#214E34] mx-auto" />
+          <h3 className="text-base font-bold text-gray-900">Đang tải bài viết...</h3>
+          <p className="text-xs text-gray-500">Vui lòng chờ trong giây lát.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EF] flex items-center justify-center p-4">
+        <div className="text-center space-y-4 max-w-md bg-white p-8 rounded-3xl border border-red-200 shadow-sm">
+          <AlertCircle className="w-8 h-8 text-red-600 mx-auto" />
+          <h3 className="text-base font-bold text-red-900">Lỗi khi tải bài viết</h3>
+          <p className="text-xs text-red-600">{error}</p>
+          <Link
+            href="/tin-tuc"
+            className="inline-block px-5 py-2.5 rounded-xl bg-[#214E34] text-white font-bold text-xs"
+          >
+            Quay lại trang tin tức
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!article) {
     return (
