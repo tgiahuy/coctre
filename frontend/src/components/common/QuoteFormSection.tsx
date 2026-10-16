@@ -14,10 +14,11 @@ import {
   ShieldCheck,
   Truck
 } from "lucide-react";
-import { products } from "@/data/products";
+import { useProducts } from "@/lib/productStore";
 import { siteConfig } from "@/data/config";
 
 export default function QuoteFormSection() {
+  const products = useProducts();
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",

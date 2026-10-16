@@ -1,5 +1,5 @@
 services:
-  # 1. Cơ sở dữ liệu PostgreSQL
+  # 1. Cơ sở dữ liệu PostgreSQL (chỉ truy cập trong mạng nội bộ docker / localhost)
   postgres:
     image: postgres:16-alpine
     container_name: coctre_postgres
@@ -8,10 +8,13 @@ services:
       POSTGRES_DB: coctre
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD in your environment}
+    # Bảo mật: Chỉ lắng nghe trên 127.0.0.1 của host để quản trị viên truy cập nội bộ, KHÔNG mở ra internet công khai
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - coctre_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d coctre"]
       interval: 5s
@@ -28,8 +31,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    # Bảo mật: Chỉ lắng nghe trên 127.0.0.1 để Reverse Proxy (Nginx/Next.js) chuyển tiếp, không mở cổng trực tiếp ra internet
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: prod
       DATABASE_URL: jdbc:postgresql://postgres:5432/coctre
@@ -40,6 +44,12 @@ services:
       APP_CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000"
     volumes:
       - ./backend/uploads:/app/uploads
+    networks:
+      - coctre_network
+
+networks:
+  coctre_network:
+    driver: bridge
 
 volumes:
   pgdata:

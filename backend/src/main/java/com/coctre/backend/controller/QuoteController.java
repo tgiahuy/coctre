@@ -41,16 +41,24 @@ public class QuoteController {
             HttpServletRequest httpRequest
     ) {
         String clientIp = getClientIp(httpRequest);
-        if (!quoteRateLimiter.allow(clientIp)) {
+        String cleanPhone = request.getPhone() == null ? "" : request.getPhone().trim();
+
+        if (!quoteRateLimiter.allowIp(clientIp)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                     .header("Retry-After", "900")
-                    .body(ApiResponse.error("Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 15 phút."));
+                    .body(ApiResponse.error("Địa chỉ IP của bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 15 phút."));
+        }
+
+        if (!cleanPhone.isEmpty() && !quoteRateLimiter.allowPhone(cleanPhone)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .header("Retry-After", "900")
+                    .body(ApiResponse.error("Số điện thoại này đã gửi quá nhiều yêu cầu gần đây. Vui lòng thử lại sau 15 phút hoặc gọi trực tiếp Hotline."));
         }
 
         QuoteRequestEntity quote = QuoteRequestEntity.builder()
                 .id("quote-" + UUID.randomUUID())
                 .customerName(clean(request.getCustomerName()))
-                .phone(request.getPhone().trim())
+                .phone(cleanPhone)
                 .email(clean(request.getEmail()))
                 .company(clean(request.getCompany()))
                 .location(clean(request.getLocation()))
@@ -97,10 +105,19 @@ public class QuoteController {
 
     private String getClientIp(HttpServletRequest request) {
         String remote = request.getRemoteAddr() == null ? "unknown" : request.getRemoteAddr();
-        String forwarded = request.getHeader("X-Forwarded-For");
         boolean trustedProxy = remote.equals("127.0.0.1") || remote.equals("::1") || remote.startsWith("10.")
                 || remote.startsWith("192.168.") || remote.startsWith("172.");
-        if (trustedProxy && forwarded != null && !forwarded.isBlank()) return forwarded.split(",")[0].trim();
+
+        if (trustedProxy) {
+            String realIp = request.getHeader("X-Real-IP");
+            if (realIp != null && !realIp.isBlank()) {
+                return realIp.trim();
+            }
+            String forwarded = request.getHeader("X-Forwarded-For");
+            if (forwarded != null && !forwarded.isBlank()) {
+                return forwarded.split(",")[0].trim();
+            }
+        }
         return remote;
     }
 

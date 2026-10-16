@@ -66,17 +66,33 @@ class AdminSecurityTests {
                         .content("{\"phone\":\"123\"}"))
                 .andExpect(status().isBadRequest());
 
+        // Test IP rate limit (5 requests per IP)
+        String[] phones = {"0988718010", "0988718011", "0988718012", "0988718013", "0988718014"};
         for (int i = 0; i < 5; i++) {
             mockMvc.perform(post("/api/v1/quotes")
                             .header("X-Forwarded-For", "198.51.100.13")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"phone\":\"0988718013\"}"))
+                            .content("{\"phone\":\"" + phones[i] + "\"}"))
                     .andExpect(status().isCreated());
         }
         mockMvc.perform(post("/api/v1/quotes")
                         .header("X-Forwarded-For", "198.51.100.13")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"phone\":\"0988718013\"}"))
+                        .content("{\"phone\":\"0988718015\"}"))
+                .andExpect(status().isTooManyRequests());
+
+        // Test Phone rate limit (3 requests per phone even from different IPs)
+        for (int i = 1; i <= 3; i++) {
+            mockMvc.perform(post("/api/v1/quotes")
+                            .header("X-Forwarded-For", "198.51.100.2" + i)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"phone\":\"0977112233\"}"))
+                    .andExpect(status().isCreated());
+        }
+        mockMvc.perform(post("/api/v1/quotes")
+                        .header("X-Forwarded-For", "198.51.100.99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phone\":\"0977112233\"}"))
                 .andExpect(status().isTooManyRequests());
     }
 

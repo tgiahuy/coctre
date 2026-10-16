@@ -59,3 +59,6 @@ CLAUDE.md
 *AGENTS.md
 BACKEND_PLAN.md
 
+# github workflows (managed separately or enabled via PAT with workflow scope)
+.github/
+

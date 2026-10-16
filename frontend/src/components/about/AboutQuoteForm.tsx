@@ -4,17 +4,21 @@ import React, { useState } from "react";
 import { Send, Phone, CheckCircle2, AlertCircle } from "lucide-react";
 import { sendQuoteRequest } from "@/lib/api";
 import { siteConfig } from "@/data/config";
-
-const PRODUCT_OPTIONS = [
-  { value: "coc-tre-2m", label: "Cọc tre 2.0m (Phổ biến móng nhà)" },
-  { value: "coc-tre-25m", label: "Cọc tre 2.5m (Móng nhà 2 - 3 tầng)" },
-  { value: "coc-tre-3m", label: "Cọc tre 3.0m (Móng công trình lớn, kè sông hồ)" },
-  { value: "coc-tre-15m", label: "Cọc tre 1.5m (Kè mương rãnh, công trình nhỏ)" },
-  { value: "coc-tre-4m", label: "Cọc tre 4.0m (Thủy lợi, đê kè lớn)" },
-  { value: "coc-tre-theo-yeu-cau", label: "Cọc tre theo quy cách yêu cầu" }
-];
+import { useProducts } from "@/lib/productStore";
 
 export default function AboutQuoteForm() {
+  const products = useProducts();
+  const productOptions = products.length > 0
+    ? products.map((p) => ({ value: p.slug, label: p.name }))
+    : [
+        { value: "coc-tre-2m", label: "Cọc tre 2.0m (Phổ biến móng nhà)" },
+        { value: "coc-tre-25m", label: "Cọc tre 2.5m (Móng nhà 2 - 3 tầng)" },
+        { value: "coc-tre-3m", label: "Cọc tre 3.0m (Móng công trình lớn, kè sông hồ)" },
+        { value: "coc-tre-15m", label: "Cọc tre 1.5m (Kè mương rãnh, công trình nhỏ)" },
+        { value: "coc-tre-4m", label: "Cọc tre 4.0m (Thủy lợi, đê kè lớn)" },
+        { value: "coc-tre-theo-yeu-cau", label: "Cọc tre theo quy cách yêu cầu" }
+      ];
+
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -51,7 +55,7 @@ export default function AboutQuoteForm() {
     setIsSubmitting(true);
     setSubmitError(null);
     try {
-      const selectedOption = PRODUCT_OPTIONS.find((p) => p.value === formData.productType);
+      const selectedOption = productOptions.find((p) => p.value === formData.productType);
       const specLabel = selectedOption ? selectedOption.label : formData.productType;
 
       await sendQuoteRequest({
@@ -166,7 +170,7 @@ export default function AboutQuoteForm() {
             onChange={(e) => setFormData({ ...formData, productType: e.target.value })}
             className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#214E34] focus:border-[#214E34]"
           >
-            {PRODUCT_OPTIONS.map((opt) => (
+            {productOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>

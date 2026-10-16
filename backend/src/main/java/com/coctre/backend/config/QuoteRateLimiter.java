@@ -1,5 +1,6 @@
 package com.coctre.backend.config;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -10,24 +11,73 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class QuoteRateLimiter {
-    private static final int MAX_REQUESTS = 5;
-    private static final long WINDOW_SECONDS = 15 * 60;
-    private static final int MAX_TRACKED_CLIENTS = 10_000;
-    private final Map<String, Deque<Long>> attempts = new ConcurrentHashMap<>();
+    private static final int MAX_IP_REQUESTS = 5;
+    private static final int MAX_PHONE_REQUESTS = 3;
+    private static final long WINDOW_SECONDS = 15 * 60; // 15 phút
+    private static final int MAX_TRACKED_ENTRIES = 10_000;
 
+    private final Map<String, Deque<Long>> ipAttempts = new ConcurrentHashMap<>();
+    private final Map<String, Deque<Long>> phoneAttempts = new ConcurrentHashMap<>();
+
+    public boolean allowIp(String clientIp) {
+        return checkAndRecord(ipAttempts, "ip:" + normalizeKey(clientIp), MAX_IP_REQUESTS);
+    }
+
+    public boolean allowPhone(String phone) {
+        return checkAndRecord(phoneAttempts, "phone:" + normalizeKey(phone), MAX_PHONE_REQUESTS);
+    }
+
+    // Tương thích ngược với call cũ
     public boolean allow(String clientKey) {
+        return allowIp(clientKey);
+    }
+
+    private boolean checkAndRecord(Map<String, Deque<Long>> map, String key, int maxRequests) {
         long now = Instant.now().getEpochSecond();
         long cutoff = now - WINDOW_SECONDS;
-        if (attempts.size() > MAX_TRACKED_CLIENTS) {
-            attempts.entrySet().removeIf(entry -> entry.getValue().isEmpty() || entry.getValue().peekLast() < cutoff);
+
+        if (map.size() > MAX_TRACKED_ENTRIES) {
+            evictExpired(map, cutoff);
         }
 
-        Deque<Long> timestamps = attempts.computeIfAbsent(clientKey, ignored -> new ArrayDeque<>());
+        Deque<Long> timestamps = map.computeIfAbsent(key, ignored -> new ArrayDeque<>());
         synchronized (timestamps) {
-            while (!timestamps.isEmpty() && timestamps.peekFirst() < cutoff) timestamps.removeFirst();
-            if (timestamps.size() >= MAX_REQUESTS) return false;
+            while (!timestamps.isEmpty() && timestamps.peekFirst() < cutoff) {
+                timestamps.removeFirst();
+            }
+            if (timestamps.size() >= maxRequests) {
+                return false;
+            }
             timestamps.addLast(now);
             return true;
         }
+    }
+
+    @Scheduled(fixedRate = 300_000) // Dọn dẹp bộ nhớ định kỳ mỗi 5 phút
+    public void cleanupPeriodic() {
+        long cutoff = Instant.now().getEpochSecond() - WINDOW_SECONDS;
+        evictExpired(ipAttempts, cutoff);
+        evictExpired(phoneAttempts, cutoff);
+    }
+
+    private void evictExpired(Map<String, Deque<Long>> map, long cutoff) {
+        map.entrySet().removeIf(entry -> {
+            Deque<Long> dq = entry.getValue();
+            synchronized (dq) {
+                while (!dq.isEmpty() && dq.peekFirst() < cutoff) {
+                    dq.removeFirst();
+                }
+                return dq.isEmpty();
+            }
+        });
+    }
+
+    public void clear() {
+        ipAttempts.clear();
+        phoneAttempts.clear();
+    }
+
+    private String normalizeKey(String key) {
+        return key == null ? "unknown" : key.trim().toLowerCase();
     }
 }

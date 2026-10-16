@@ -19,6 +19,7 @@ import {
   Headphones
 } from "lucide-react";
 import { useSiteConfig } from "@/lib/configStore";
+import { useProducts } from "@/lib/productStore";
 import { sendQuoteRequest } from "@/lib/api";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
@@ -39,13 +40,14 @@ function cleanMapUrl(input: string): string {
 
 export default function DirectContactSection() {
   const siteConfig = useSiteConfig();
+  const products = useProducts();
   const { openQuoteModal } = useQuoteModal();
   const mapSrc = cleanMapUrl(siteConfig.mapEmbedUrl);
   const googleMapsDirectionsUrl = "https://maps.app.goo.gl/QDkpD4tdXW2DPFJWA?g_st=ic";
 
   // Smart Quick Callback form state
   const [phoneInput, setPhoneInput] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState("Cọc tre 2m (Phổ biến móng nhà)");
+  const [selectedProduct, setSelectedProduct] = useState("Cọc tre 2.0m (Phổ biến móng nhà)");
   const [locationInput, setLocationInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -218,12 +220,22 @@ export default function DirectContactSection() {
                         onChange={(e) => setSelectedProduct(e.target.value)}
                         className="w-full px-3 py-2.5 rounded-xl bg-[#1C3325] border border-gray-600/80 text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#CDAA63]"
                       >
-                        <option value="Cọc tre 2m (Phổ biến móng nhà)">Cọc tre 2m (Phổ biến móng nhà)</option>
-                        <option value="Cọc tre 2.5m (Kè sông, móng sâu)">Cọc tre 2.5m (Kè sông, móng sâu)</option>
-                        <option value="Cọc tre 3m (Công trình thủy lợi)">Cọc tre 3m (Công trình thủy lợi)</option>
-                        <option value="Cọc tre 1.5m (Móng hào, rãnh)">Cọc tre 1.5m (Móng hào, rãnh)</option>
-                        <option value="Cọc tre 4m (Công trình lớn)">Cọc tre 4m (Công trình lớn)</option>
-                        <option value="Cọc tre theo yêu cầu riêng">Cọc tre theo yêu cầu riêng</option>
+                        {products.length > 0 ? (
+                          products.map((p) => (
+                            <option key={p.id} value={p.name}>
+                              {p.name}
+                            </option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="Cọc tre 2.0m (Phổ biến móng nhà)">Cọc tre 2.0m (Phổ biến móng nhà)</option>
+                            <option value="Cọc tre 2.5m (Kè sông, móng sâu)">Cọc tre 2.5m (Kè sông, móng sâu)</option>
+                            <option value="Cọc tre 3.0m (Công trình thủy lợi)">Cọc tre 3.0m (Công trình thủy lợi)</option>
+                            <option value="Cọc tre 1.5m (Móng hào, rãnh)">Cọc tre 1.5m (Móng hào, rãnh)</option>
+                            <option value="Cọc tre 4.0m (Công trình lớn)">Cọc tre 4.0m (Công trình lớn)</option>
+                            <option value="Cọc tre theo yêu cầu riêng">Cọc tre theo yêu cầu riêng</option>
+                          </>
+                        )}
                       </select>
                     </div>
 
