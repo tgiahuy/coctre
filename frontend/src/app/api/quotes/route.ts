@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isIP } from "node:net";
 import { backendApiUrl } from "@/lib/serverAuth";
+import { sendQuoteEmailNotification } from "@/lib/emailService";
 
 function isValidIp(ip: string | null | undefined): boolean {
   if (!ip) return false;
@@ -56,6 +57,25 @@ export async function POST(request: NextRequest) {
     });
 
     const data = await backendRes.json().catch(() => ({ success: false, message: "Phản hồi không hợp lệ" }));
+
+    // Tự động gửi email thông báo khi báo giá được lưu thành công
+    if (backendRes.ok && data?.success) {
+      try {
+        await sendQuoteEmailNotification({
+          customerName: body.customerName,
+          phone: body.phone,
+          email: body.email,
+          company: body.company,
+          location: body.location,
+          productType: body.productType,
+          quantity: body.quantity,
+          notes: body.notes,
+        });
+      } catch (emailErr) {
+        console.error("[Email Notification Error]", emailErr);
+      }
+    }
+
     return NextResponse.json(data, { status: backendRes.status });
   } catch {
     return NextResponse.json(

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="bg-[#FAF9F6] min-h-screen py-6 sm:py-10 text-gray-800">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-6">
         
         {/* Breadcrumb */}
         <Breadcrumb items={[{ name: "Giới thiệu" }]} />
@@ -50,7 +50,7 @@ export default function AboutPage() {
                   src="/images/banner/bamboo-poles.jpg"
                   alt={`Kho bãi và xưởng chế biến cọc tre ${siteConfig.companyName} tại Dân Hòa, Hà Nội`}
                   fill
-                  sizes="(max-width: 896px) 100vw, 896px"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
                   priority
                 />
@@ -177,7 +177,7 @@ export default function AboutPage() {
                   src="/images/banner/bamboo-sunlight.jpg"
                   alt={`Nguồn nguyên liệu tre già chọn lọc khắt khe và hệ thống vận chuyển Cọc Tre Huyền Dương`}
                   fill
-                  sizes="(max-width: 896px) 100vw, 896px"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
                 />
               </div>
