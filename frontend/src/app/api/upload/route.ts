@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { randomUUID } from "crypto";
 import { fetchBackendAsAdmin } from "@/lib/serverAuth";
+import { uploadImageFile } from "@/lib/storageService";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const FILE_TYPES: Record<string, { extension: string; signatures: number[][] }> = {
@@ -57,17 +56,11 @@ export async function POST(request: NextRequest) {
 
     const filename = `${randomUUID()}.${fileType.extension}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
-
-    const filePath = path.join(uploadDir, filename);
-    await writeFile(filePath, buffer);
-
-    const publicUrl = `/uploads/${filename}`;
+    const { url: publicUrl, provider } = await uploadImageFile(buffer, filename, file.type);
 
     return NextResponse.json({
       success: true,
-      message: "Tải ảnh lên máy chủ thành công",
+      message: `Tải ảnh lên máy chủ thành công (${provider})`,
       url: publicUrl,
     });
   } catch (error: unknown) {

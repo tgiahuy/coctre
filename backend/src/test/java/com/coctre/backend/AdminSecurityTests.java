@@ -104,4 +104,23 @@ class AdminSecurityTests {
         assertFalse(PasswordUtil.verify("wrong-password", hash));
         assertFalse(PasswordUtil.needsRehash(hash));
     }
+
+    @Test
+    void loginRateLimiterBlocksBruteForceAfterRepeatedFailures() throws Exception {
+        String failedLoginPayload = "{\"email\":\"attacker@test.com\",\"password\":\"wrongpassword123\"}";
+        for (int i = 0; i < 5; i++) {
+            mockMvc.perform(post("/api/v1/auth/login")
+                            .header("X-Forwarded-For", "198.51.100.200")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(failedLoginPayload))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        // 6th attempt from the same IP or email must be blocked with 429 Too Many Requests
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .header("X-Forwarded-For", "198.51.100.200")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(failedLoginPayload))
+                .andExpect(status().isTooManyRequests());
+    }
 }

@@ -19,7 +19,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.com").replace(/\/$/, "");
   const canonicalUrl = `${baseUrl}/tin-tuc/${article.slug}`;
   const title = `${article.title} | Cẩm Nang Kỹ Thuật Cọc Tre`;
   const description =

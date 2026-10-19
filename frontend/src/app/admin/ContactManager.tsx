@@ -91,8 +91,9 @@ export default function ContactManager() {
         }
       }
       throw new Error("Không thể lưu ảnh lên máy chủ");
-    } catch (err: any) {
-      setUploadError(err?.message || "Không thể tải ảnh. Vui lòng thử lại!");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Không thể tải ảnh. Vui lòng thử lại!";
+      setUploadError(message);
       setIsUploading(false);
     }
   };
@@ -132,8 +133,9 @@ export default function ContactManager() {
         }
       }
       throw new Error("Không thể lưu favicon lên máy chủ");
-    } catch (err: any) {
-      setFaviconUploadError(err?.message || "Không thể tải favicon. Vui lòng thử lại!");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Không thể tải favicon. Vui lòng thử lại!";
+      setFaviconUploadError(message);
       setIsUploadingFavicon(false);
     }
   };
@@ -907,7 +909,7 @@ export default function ContactManager() {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#214E34] shrink-0" />
                 <span>
-                  Tài khoản đang đăng nhập: <strong>{getStoredUser()?.email || "admin@coctrehoabinh.com"}</strong>
+                  Tài khoản đang đăng nhập: <strong>{getStoredUser()?.email || "admin@coctrehuyenduong.com"}</strong>
                 </span>
               </div>
               <span className="text-[11px] font-semibold text-[#214E34] bg-white px-2.5 py-0.5 rounded-full border border-emerald-300 self-start sm:self-auto">

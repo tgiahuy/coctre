@@ -3,32 +3,42 @@ import { isIP } from "node:net";
 import { backendApiUrl } from "@/lib/serverAuth";
 import { sendQuoteEmailNotification } from "@/lib/emailService";
 
+// Rate limiting tại tầng Edge/Frontend: Tối đa 5 yêu cầu / 15 phút cho mỗi IP
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const ipRequestTimestamps = new Map<string, number[]>();
+
 function isValidIp(ip: string | null | undefined): boolean {
   if (!ip) return false;
   const clean = ip.trim();
-  // isIP returns 4 for valid IPv4 (0-255 per octet), 6 for valid IPv6, 0 for invalid
   return isIP(clean) !== 0;
 }
 
+/**
+ * Xác định địa chỉ IP của Client một cách an toàn, chống giả mạo header:
+ * - Chỉ tin cậy CF-Connecting-IP khi có header CF-Ray do Cloudflare Edge gắn kèm.
+ * - Loại trừ các header giả mạo từ client thông thường.
+ */
 function resolveClientIp(request: NextRequest): string {
-  // 1. Cloudflare CDN connecting IP (overwritten by Cloudflare edge, cannot be spoofed by client)
+  // 1. Nếu có Cloudflare Ray ID hợp lệ -> Tin cậy CF-Connecting-IP từ Cloudflare Edge
+  const cfRay = request.headers.get("cf-ray");
   const cfIp = request.headers.get("cf-connecting-ip")?.trim();
-  if (cfIp && isValidIp(cfIp)) return cfIp;
+  if (cfRay && cfIp && isValidIp(cfIp)) {
+    return cfIp;
+  }
 
-  // 2. Reverse proxy / Nginx real-ip (set by Nginx proxy_set_header X-Real-IP $remote_addr)
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp && isValidIp(realIp)) return realIp;
-
-  // 3. Next.js / Vercel runtime client socket IP
-  // @ts-expect-error ip property is populated in production NextRequest
+  // 2. Next.js runtime socket remote address (Vercel/Node runtime - không thể bị client giả mạo)
+  // @ts-expect-error ip property is populated in NextRequest runtime
   const nextIp = typeof request.ip === "string" ? request.ip.trim() : "";
-  if (nextIp && isValidIp(nextIp)) return nextIp;
+  if (nextIp && isValidIp(nextIp)) {
+    return nextIp;
+  }
 
-  // 4. Fallback to right-most valid IP from X-Forwarded-For (the one appended by the nearest reverse proxy)
+  // 3. Fallback theo chuỗi X-Forwarded-For nếu đi qua Reverse Proxy (Nginx/Docker)
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
     const list = forwardedFor.split(",").map((s) => s.trim()).filter(Boolean);
-    // When proxies chain, nearest proxy appends to the end
+    // Lấy IP gần nhất từ proxy tin cậy
     for (let i = list.length - 1; i >= 0; i--) {
       if (isValidIp(list[i])) {
         return list[i];
@@ -36,7 +46,40 @@ function resolveClientIp(request: NextRequest): string {
     }
   }
 
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp && isValidIp(realIp)) {
+    return realIp;
+  }
+
   return "127.0.0.1";
+}
+
+function checkEdgeRateLimit(clientIp: string): boolean {
+  const now = Date.now();
+  const cutoff = now - RATE_LIMIT_WINDOW_MS;
+
+  // Dọn dẹp định kỳ nếu map quá lớn
+  if (ipRequestTimestamps.size > 5000) {
+    for (const [key, timestamps] of ipRequestTimestamps.entries()) {
+      const active = timestamps.filter((t) => t > cutoff);
+      if (active.length === 0) {
+        ipRequestTimestamps.delete(key);
+      } else {
+        ipRequestTimestamps.set(key, active);
+      }
+    }
+  }
+
+  const timestamps = ipRequestTimestamps.get(clientIp) || [];
+  const validTimestamps = timestamps.filter((t) => t > cutoff);
+
+  if (validTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+    return false;
+  }
+
+  validTimestamps.push(now);
+  ipRequestTimestamps.set(clientIp, validTimestamps);
+  return true;
 }
 
 export async function POST(request: NextRequest) {
@@ -44,6 +87,37 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const clientIp = resolveClientIp(request);
 
+    // 1. Honeypot Anti-Spam: Nếu bot điền vào trường ẩn này -> Từ chối ngay lập tức
+    if (body._gotcha || body.website_url || body.fax) {
+      console.warn(`[Anti-Spam] Phát hiện bot gửi form báo giá qua honeypot từ IP: ${clientIp}`);
+      return NextResponse.json(
+        { success: true, message: "Đã nhận yêu cầu báo giá thành công!" },
+        { status: 200 }
+      );
+    }
+
+    // 2. Kiểm tra định dạng số điện thoại Việt Nam hợp lệ
+    const cleanPhone = typeof body.phone === "string" ? body.phone.trim() : "";
+    const phoneRegex = /^(03|05|07|08|09)[0-9]{8}$/;
+    if (!phoneRegex.test(cleanPhone)) {
+      return NextResponse.json(
+        { success: false, message: "Số điện thoại không hợp lệ (cần 10 chữ số, bắt đầu bằng 03, 05, 07, 08 hoặc 09)" },
+        { status: 400 }
+      );
+    }
+
+    // 3. Giới hạn tần suất gửi tại Edge (5 lượt / 15 phút)
+    if (!checkEdgeRateLimit(clientIp)) {
+      return NextResponse.json(
+        { success: false, message: "Bạn đã gửi quá nhiều yêu cầu trong thời gian ngắn. Vui lòng thử lại sau 15 phút hoặc gọi trực tiếp Hotline." },
+        {
+          status: 429,
+          headers: { "Retry-After": "900" }
+        }
+      );
+    }
+
+    // 4. Chuyển tiếp tới backend kèm IP đã xác thực
     const backendRes = await fetch(backendApiUrl("/quotes"), {
       method: "POST",
       headers: {

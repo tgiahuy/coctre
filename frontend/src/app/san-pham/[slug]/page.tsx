@@ -19,7 +19,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.com").replace(/\/$/, "");
   const canonicalUrl = `${baseUrl}/san-pham/${product.slug}`;
   const title = `${product.name} - Giá Bãi & Tiêu Chuẩn Kỹ Thuật`;
   const description =

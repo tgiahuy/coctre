@@ -3,7 +3,7 @@ import { siteConfig } from "@/data/config";
 import { getServerProducts, getServerArticles, getServerProjects } from "@/lib/serverData";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.com").replace(/\/$/, "");
   const now = new Date();
 
   // 1. Static Core Pages

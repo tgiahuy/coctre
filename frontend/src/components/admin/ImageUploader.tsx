@@ -99,8 +99,9 @@ export default function ImageUploader({
       });
 
       onChange(newImages.slice(0, maxFiles));
-    } catch (err: any) {
-      setUploadError("Lỗi tải ảnh: " + (err.message || "Vui lòng thử lại"));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Vui lòng thử lại";
+      setUploadError("Lỗi tải ảnh: " + message);
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {

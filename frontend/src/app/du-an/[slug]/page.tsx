@@ -19,7 +19,7 @@ export async function generateMetadata({
     };
   }
 
-  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.vn").replace(/\/$/, "");
+  const baseUrl = (siteConfig.website || "https://coctrehuyenduong.com").replace(/\/$/, "");
   const canonicalUrl = `${baseUrl}/du-an/${project.slug}`;
   const title = `${project.title} - Hồ Sơ Năng Lực Dự Án`;
   const description =

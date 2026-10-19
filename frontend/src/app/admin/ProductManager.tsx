@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -93,12 +93,21 @@ export default function ProductManager() {
   const [appsInput, setAppsInput] = useState("");
   const [advsInput, setAdvsInput] = useState("");
 
-  const loadProducts = async () => {
-    setProductsList(await requestProducts());
-  };
+  const loadProducts = useCallback(async () => {
+    const list = await requestProducts();
+    setProductsList(list);
+  }, []);
 
   useEffect(() => {
-    void loadProducts();
+    let ignore = false;
+    void requestProducts().then((data) => {
+      if (!ignore) {
+        setProductsList(data);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const showToast = (msg: string) => {

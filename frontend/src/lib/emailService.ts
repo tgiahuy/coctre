@@ -197,7 +197,7 @@ function buildQuoteEmailHtml(quote: QuoteEmailPayload, submittedAt: string): str
               <p style="font-size: 12px; color: #6b7280; text-align: center; margin: 16px 0 0;">
                 Bạn có thể cập nhật trạng thái liên hệ hoặc xóa yêu cầu này trực tiếp tại trang Quản trị:
                 <br>
-                <a href="https://coctrehuyenduong.vn/admin" style="color: #214E34; font-weight: 600; text-decoration: underline;">
+                <a href="https://coctrehuyenduong.com/admin" style="color: #214E34; font-weight: 600; text-decoration: underline;">
                   Truy cập Trang Quản Trị Website (/admin)
                 </a>
               </p>
@@ -208,7 +208,7 @@ function buildQuoteEmailHtml(quote: QuoteEmailPayload, submittedAt: string): str
           <tr>
             <td style="background-color: #f9fafb; padding: 16px 24px; text-align: center; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af;">
               Email thông báo tự động từ Website <strong>Cọc Tre Huyền Dương</strong>.<br>
-              Làng nghề Dân Hòa, Thanh Oai, Hà Nội • Hotline: 0973.914.809
+              Làng nghề Dân Hòa, Thanh Oai, Hà Nội • Hotline: 0988.718.013 - 0369.928.040
             </td>
           </tr>
 
@@ -267,45 +267,17 @@ export async function sendQuoteEmailNotification(
 
     const data = await res.json().catch(() => null);
 
-    // Xử lý tự động khi Resend ở chế độ dùng thử (chưa xác minh domain riêng):
-    // Resend chỉ cho phép gửi về email đăng ký tài khoản (ví dụ: tgiahuy.shu@gmail.com)
-    if (!res.ok && res.status === 403 && typeof data?.message === "string") {
-      const match = data.message.match(/to your own email address \(([^)]+)\)/i);
-      const fallbackEmail = match?.[1]?.trim();
-      if (fallbackEmail && fallbackEmail.toLowerCase() !== recipient.toLowerCase()) {
-        console.warn(
-          `[Resend Email] Tài khoản Resend chưa xác thực domain riêng để gửi tới ${recipient}. Tự động chuyển tiếp tới email chủ tài khoản Resend: ${fallbackEmail}`
-        );
-        const noticeBanner = `
-          <div style="background-color: #FEF3C7; border: 1px solid #F59E0B; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 13px; color: #92400E; font-family: sans-serif; line-height: 1.5;">
-            ⚠️ <strong>Lưu ý Resend (Chế độ thử nghiệm):</strong><br>
-            Email này được gửi đến <strong>${fallbackEmail}</strong> vì tài khoản Resend chưa xác minh tên miền riêng để gửi trực tiếp tới <strong>${recipient}</strong>.<br>
-            👉 Khi sẵn sàng, bạn hãy vào <a href="https://resend.com/domains" target="_blank" style="color: #B45309; font-weight: bold; text-decoration: underline;">resend.com/domains</a> để xác thực domain, sau đó email sẽ gửi thẳng về <strong>${recipient}</strong>.
-          </div>
-        `;
-        const retryRes = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            from: sender,
-            to: [fallbackEmail],
-            subject: `[Báo giá mới cho ${recipient}] ${customerName} (${phone}) - ${productType}`,
-            html: htmlContent.replace("<!-- INFO CARD -->", `${noticeBanner}<!-- INFO CARD -->`),
-          }),
-          signal: AbortSignal.timeout(10000),
-        });
-        const retryData = await retryRes.json().catch(() => null);
-        if (retryRes.ok) {
-          console.log(`[Resend Email Fallback Success] Đã gửi thông báo tới ${fallbackEmail}, Email ID: ${retryData?.id}`);
-          return { success: true, id: retryData?.id };
-        }
-      }
-    }
-
     if (!res.ok) {
+      if (res.status === 403) {
+        console.error(
+          `[Resend Email Error 403] Không thể gửi email tới ${recipient}. Tài khoản Resend chưa xác thực domain để gửi tới người nhận tùy chỉnh. Vui lòng xác minh tên miền tại https://resend.com/domains.`
+        );
+        return {
+          success: false,
+          error: "RESEND_DOMAIN_NOT_VERIFIED: Tài khoản Resend chưa xác thực domain để gửi tới hòm thư quản trị viên.",
+        };
+      }
+
       const errorMsg = data?.message || data?.error || `HTTP ${res.status}`;
       console.error("[Resend Email Error]", errorMsg);
       return { success: false, error: String(errorMsg) };

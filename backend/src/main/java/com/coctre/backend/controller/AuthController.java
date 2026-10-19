@@ -29,15 +29,28 @@ public class AuthController {
 
     private final AdminUserRepository adminUserRepository;
     private final AdminSessionService sessions;
+    private final com.coctre.backend.config.AuthRateLimiter authRateLimiter;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(
+            @Valid @RequestBody LoginRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        String clientIp = getClientIp(httpRequest);
         String email = request.getEmail() != null ? request.getEmail().trim() : "";
         String password = request.getPassword() != null ? request.getPassword() : "";
+
+        if (!authRateLimiter.isAllowed(clientIp, email)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .header("Retry-After", "900")
+                    .body(ApiResponse.error("Tài khoản hoặc địa chỉ IP này đã nhập sai mật khẩu quá 5 lần. Vui lòng thử lại sau 15 phút."));
+        }
 
         Optional<AdminUserEntity> userOpt = adminUserRepository.findByEmailIgnoreCase(email);
 
         if (userOpt.isEmpty()) {
+            authRateLimiter.recordFailure(clientIp, email);
+            log.warn("[Security] Đăng nhập thất bại từ IP {} cho email không tồn tại: {}", clientIp, email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse.error("Email hoặc mật khẩu không chính xác"));
         }
@@ -50,9 +63,14 @@ public class AuthController {
         }
 
         if (!PasswordUtil.verify(password, user.getPasswordHash())) {
+            authRateLimiter.recordFailure(clientIp, email);
+            log.warn("[Security] Mật khẩu sai từ IP {} cho tài khoản {}", clientIp, email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse.error("Email hoặc mật khẩu không chính xác"));
         }
+
+        // Login success - clear failed rate limit counter
+        authRateLimiter.recordSuccess(clientIp, email);
 
         if (PasswordUtil.needsRehash(user.getPasswordHash())) {
             user.setPasswordHash(PasswordUtil.hashPassword(password));
@@ -71,7 +89,26 @@ public class AuthController {
                 .role(user.getRole())
                 .build();
 
+        log.info("[Security] Quản trị viên {} đã đăng nhập thành công từ IP {}", email, clientIp);
         return ResponseEntity.ok(ApiResponse.ok("Đăng nhập thành công", responseData));
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String remote = request.getRemoteAddr() == null ? "unknown" : request.getRemoteAddr();
+        boolean trustedProxy = remote.equals("127.0.0.1") || remote.equals("::1") || remote.startsWith("10.")
+                || remote.startsWith("192.168.") || remote.startsWith("172.");
+
+        if (trustedProxy) {
+            String realIp = request.getHeader("X-Real-IP");
+            if (realIp != null && !realIp.isBlank()) {
+                return realIp.trim();
+            }
+            String forwarded = request.getHeader("X-Forwarded-For");
+            if (forwarded != null && !forwarded.isBlank()) {
+                return forwarded.split(",")[0].trim();
+            }
+        }
+        return remote;
     }
 
     @PostMapping("/change-password")

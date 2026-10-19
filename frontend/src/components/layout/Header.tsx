@@ -44,10 +44,12 @@ export default function Header() {
   }, []);
 
   // Close mobile menu on route change
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setMobileMenuOpen(false);
     setProductDropdownOpen(false);
-  }, [pathname]);
+  }
 
   const navLinks = [
     { name: "TRANG CHỦ", href: "/" },

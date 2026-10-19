@@ -42,11 +42,11 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.legalName }],
   creator: siteConfig.legalName,
   publisher: siteConfig.companyName,
-  metadataBase: new URL(siteConfig.website || "https://coctrehuyenduong.vn"),
+  metadataBase: new URL(siteConfig.website || "https://coctrehuyenduong.com"),
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: siteConfig.website || "https://coctrehuyenduong.vn",
+    url: siteConfig.website || "https://coctrehuyenduong.com",
     siteName: siteConfig.companyName,
     title: `${siteConfig.companyName} - Tổng Kho Cọc Tre Công Trình Miền Bắc`,
     description:

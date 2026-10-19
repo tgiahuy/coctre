@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -77,12 +77,21 @@ export default function ProjectManager() {
 
   const [customImageUrl, setCustomImageUrl] = useState("");
 
-  const loadProjects = async () => {
-    setProjectsList(await requestProjects());
-  };
+  const loadProjects = useCallback(async () => {
+    const list = await requestProjects();
+    setProjectsList(list);
+  }, []);
 
   useEffect(() => {
-    void loadProjects();
+    let ignore = false;
+    void requestProjects().then((data) => {
+      if (!ignore) {
+        setProjectsList(data);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const showToast = (msg: string) => {
