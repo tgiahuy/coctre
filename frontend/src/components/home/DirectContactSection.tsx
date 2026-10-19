@@ -196,10 +196,10 @@ export default function DirectContactSection() {
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
                   <h4 className="text-sm font-bold text-emerald-200">
-                    Đã Tiếp Nhận Yêu Cầu Báo Giá Thành Công!
+                    Đã Mở Kênh Gửi Yêu Cầu
                   </h4>
                   <p className="text-xs text-gray-300 max-w-md mx-auto">
-                    Kỹ sư tổng kho Huyền Dương sẽ liên hệ tư vấn và gửi bảng báo giá theo số điện thoại của bạn trong ít phút.
+                    Vui lòng kiểm tra thông tin và bấm Gửi trong Google Form hoặc ứng dụng email vừa mở. Yêu cầu chỉ được ghi nhận sau khi bạn hoàn tất bước đó.
                   </p>
                   <button
                     type="button"

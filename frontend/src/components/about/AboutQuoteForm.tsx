@@ -89,10 +89,10 @@ export default function AboutQuoteForm() {
       <div className="bg-[#FAF8F5] border border-gray-200 rounded-xl p-6 text-center space-y-3 my-6">
         <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
         <h4 className="text-base font-bold text-gray-900">
-          Gửi yêu cầu báo giá thành công!
+          Đã mở kênh gửi yêu cầu
         </h4>
         <p className="text-sm text-gray-600">
-          Cảm ơn Quý khách. Đội ngũ <strong>Cọc Tre Huyền Dương</strong> sẽ liên hệ lại qua số điện thoại để tư vấn và báo giá trong thời gian sớm nhất.
+          Vui lòng kiểm tra thông tin và bấm <strong>Gửi</strong> trong Google Form hoặc ứng dụng email vừa mở. Yêu cầu chỉ được ghi nhận sau khi Quý khách hoàn tất bước đó.
         </p>
         <button
           type="button"
@@ -228,7 +228,7 @@ export default function AboutQuoteForm() {
         ) : (
           <>
             <Send className="w-4 h-4 text-[#CDAA63]" />
-            <span>GỬI YÊU CẦU BÁO GIÁ</span>
+            <span>MỞ BIỂU MẪU BÁO GIÁ</span>
           </>
         )}
       </button>

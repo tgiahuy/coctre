@@ -2,36 +2,7 @@ import { products as staticProducts, Product } from "@/data/products";
 import { articles as staticArticles, Article } from "@/data/articles";
 import { projects as staticProjects, Project } from "@/data/projects";
 
-function getBackendInternalUrl(): string {
-  const raw = (
-    process.env.INTERNAL_BACKEND_URL ||
-    process.env.BACKEND_INTERNAL_URL ||
-    process.env.BACKEND_API_URL ||
-    "http://127.0.0.1:8080"
-  ).replace(/\/$/, "");
-  return raw.endsWith("/api/v1") ? raw : `${raw}/api/v1`;
-}
-
-async function fetchFromBackend<T>(endpoint: string): Promise<T[] | null> {
-  try {
-    const res = await fetch(`${getBackendInternalUrl()}${endpoint}`, {
-      next: { revalidate: 60 },
-      signal: AbortSignal.timeout(3000),
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    if (json?.success && Array.isArray(json?.data)) {
-      return json.data as T[];
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 export async function getServerProducts(): Promise<Product[]> {
-  const backendData = await fetchFromBackend<Product>("/products");
-  if (backendData !== null) return backendData;
   return staticProducts;
 }
 
@@ -41,8 +12,6 @@ export async function getServerProductBySlug(slug: string): Promise<Product | un
 }
 
 export async function getServerArticles(): Promise<Article[]> {
-  const backendData = await fetchFromBackend<Article>("/articles");
-  if (backendData !== null) return backendData;
   return staticArticles;
 }
 
@@ -52,8 +21,6 @@ export async function getServerArticleBySlug(slug: string): Promise<Article | un
 }
 
 export async function getServerProjects(): Promise<Project[]> {
-  const backendData = await fetchFromBackend<Project>("/projects");
-  if (backendData !== null) return backendData;
   return staticProjects;
 }
 

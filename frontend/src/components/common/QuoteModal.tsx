@@ -146,9 +146,9 @@ export default function QuoteModal() {
               <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto animate-bounce">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-              <h4 className="text-2xl font-black text-[#214E34]">GỬI YÊU CẦU THÀNH CÔNG!</h4>
+              <h4 className="text-2xl font-black text-[#214E34]">ĐÃ MỞ KÊNH GỬI YÊU CẦU</h4>
               <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
-                Cảm ơn anh/chị <strong>{formData.fullName}</strong>. Kỹ sư kinh doanh của <strong>Cọc Tre Huyền Dương</strong> sẽ gọi điện thoại hoặc gửi bảng báo giá qua Zalo số <strong>{formData.phone}</strong> trong vòng 5–15 phút.
+                Vui lòng kiểm tra thông tin và bấm <strong>Gửi</strong> trong Google Form hoặc ứng dụng email vừa mở. Yêu cầu chỉ được ghi nhận sau khi anh/chị hoàn tất bước đó.
               </p>
 
               <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 max-w-md mx-auto text-xs text-gray-700 text-left space-y-1">
@@ -358,7 +358,7 @@ export default function QuoteModal() {
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    <span>GỬI YÊU CẦU BÁO GIÁ NGAY</span>
+                    <span>MỞ BIỂU MẪU BÁO GIÁ</span>
                   </>
                 )}
               </button>

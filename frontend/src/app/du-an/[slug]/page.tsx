@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/data/config";
+import { projects } from "@/data/projects";
 import { getServerProjectBySlug } from "@/lib/serverData";
 import ProjectDetailClient from "./ProjectDetailClient";
+
+export function generateStaticParams() {
+  return projects.map((project) => ({ slug: project.slug }));
+}
 
 export async function generateMetadata({
   params,

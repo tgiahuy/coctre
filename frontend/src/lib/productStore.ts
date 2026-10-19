@@ -1,13 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { products as initialProducts, Product } from "@/data/products";
 
 export async function requestProducts(): Promise<Product[]> {
-  const res = await fetch("/api/content/products", { cache: "no-store" });
-  const json = await res.json();
-  if (!res.ok || !json.success || !Array.isArray(json.data)) throw new Error(json.message || "Không thể tải sản phẩm");
-  return json.data;
+  return initialProducts;
 }
 
 export const getDeletedProductIds = (): string[] => [];
@@ -17,21 +13,16 @@ export const getProductBySlug = (slug: string): Product | undefined =>
   initialProducts.find((product) => product.slug === slug || product.id === slug);
 
 export async function saveProduct(product: Product): Promise<boolean> {
-  const res = await fetch("/api/content/products", {
-    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(product),
-  });
-  if (res.ok) window.dispatchEvent(new Event("coctre_products_updated"));
-  return res.ok;
+  void product;
+  return false;
 }
 
 export async function deleteProduct(idOrSlug: string): Promise<boolean> {
-  const res = await fetch(`/api/content/products/${encodeURIComponent(idOrSlug)}`, { method: "DELETE" });
-  if (res.ok) window.dispatchEvent(new Event("coctre_products_updated"));
-  return res.ok;
+  void idOrSlug;
+  return false;
 }
 
 export function resetProductsToDefault(): boolean {
-  window.dispatchEvent(new Event("coctre_products_updated"));
   return true;
 }
 
@@ -40,19 +31,5 @@ export function useProducts(): Product[] {
 }
 
 export function useProductsState(): { data: Product[]; isLoading: boolean; error: string | null } {
-  const [items, setItems] = useState<Product[]>(initialProducts);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    const refresh = () => {
-      void requestProducts()
-        .then((data) => { setItems(data); setError(null); })
-        .catch((err: unknown) => setError(err instanceof Error ? err.message : "Không thể tải sản phẩm"))
-        .finally(() => setIsLoading(false));
-    };
-    refresh();
-    window.addEventListener("coctre_products_updated", refresh);
-    return () => window.removeEventListener("coctre_products_updated", refresh);
-  }, []);
-  return { data: items, isLoading, error };
+  return { data: initialProducts, isLoading: false, error: null };
 }

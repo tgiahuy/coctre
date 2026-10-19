@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/data/config";
+import { articles } from "@/data/articles";
 import { getServerArticleBySlug } from "@/lib/serverData";
 import ArticleDetailClient from "./ArticleDetailClient";
+
+export function generateStaticParams() {
+  return articles.map((article) => ({ slug: article.slug }));
+}
 
 export async function generateMetadata({
   params,

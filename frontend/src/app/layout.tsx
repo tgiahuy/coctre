@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -8,13 +7,6 @@ import QuoteModal from "@/components/common/QuoteModal";
 import DynamicFavicon from "@/components/common/DynamicFavicon";
 import { QuoteModalProvider } from "@/context/QuoteModalContext";
 import { siteConfig } from "@/data/config";
-
-const beVietnamPro = Be_Vietnam_Pro({
-  subsets: ["vietnamese", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-be-vietnam-pro",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -111,7 +103,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="vi" data-scroll-behavior="smooth" className={`${beVietnamPro.variable} scroll-smooth`} suppressHydrationWarning>
+    <html lang="vi" data-scroll-behavior="smooth" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

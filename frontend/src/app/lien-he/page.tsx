@@ -200,9 +200,9 @@ export default function ContactPage() {
                   <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto animate-bounce">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <h3 className="text-2xl font-black text-[#214E34]">GỬI LIÊN HỆ THÀNH CÔNG!</h3>
+                  <h3 className="text-2xl font-black text-[#214E34]">ĐÃ MỞ KÊNH GỬI LIÊN HỆ</h3>
                   <p className="text-gray-600 text-sm max-w-md mx-auto leading-relaxed">
-                    Cảm ơn anh/chị <strong>{formData.fullName}</strong> đã liên hệ. Bộ phận kinh doanh và kỹ thuật của <strong>Cọc Tre Huyền Dương</strong> sẽ phản hồi trong thời gian sớm nhất.
+                    Vui lòng kiểm tra thông tin và bấm <strong>Gửi</strong> trong Google Form hoặc ứng dụng email vừa mở. Yêu cầu chỉ được ghi nhận sau khi anh/chị hoàn tất bước đó.
                   </p>
                   <button
                     onClick={() => {
@@ -363,7 +363,7 @@ export default function ContactPage() {
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        <span>GỬI LIÊN HỆ NGAY</span>
+                        <span>MỞ KÊNH GỬI LIÊN HỆ</span>
                       </>
                     )}
                   </button>
