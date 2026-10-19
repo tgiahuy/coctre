@@ -22,16 +22,19 @@ export type QuoteHandoff = {
   url: string;
 };
 
-const googleFormUrl = process.env.NEXT_PUBLIC_GOOGLE_FORM_URL?.trim();
+const defaultGoogleFormUrl =
+  "https://docs.google.com/forms/d/e/1FAIpQLSefT_o4W2ABiz4xMdc7WJjNNtU8k0iLwR2GvDEHKCF8mua7EQ/viewform";
+
+const googleFormUrl = process.env.NEXT_PUBLIC_GOOGLE_FORM_URL?.trim() || defaultGoogleFormUrl;
 const googleFormFields = {
-  customerName: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_NAME?.trim(),
-  phone: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_PHONE?.trim(),
-  email: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_EMAIL?.trim(),
-  company: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_COMPANY?.trim(),
-  deliveryAddress: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_ADDRESS?.trim(),
-  bambooSpecs: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_PRODUCT?.trim(),
-  quantity: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_QUANTITY?.trim(),
-  notes: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_NOTES?.trim(),
+  customerName: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_NAME?.trim() || "entry.1532961624",
+  phone: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_PHONE?.trim() || "entry.1998010128",
+  email: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_EMAIL?.trim() || "entry.2085342272",
+  company: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_COMPANY?.trim() || "entry.233242103",
+  deliveryAddress: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_ADDRESS?.trim() || "entry.785649356",
+  bambooSpecs: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_PRODUCT?.trim() || "entry.1077567526",
+  quantity: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_QUANTITY?.trim() || "entry.1103630816",
+  notes: process.env.NEXT_PUBLIC_GOOGLE_FORM_FIELD_NOTES?.trim() || "entry.258662212",
 } as const;
 
 function buildGoogleFormUrl(data: QuoteFormData): string | null {
