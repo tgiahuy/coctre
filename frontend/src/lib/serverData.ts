@@ -2,14 +2,19 @@ import { products as staticProducts, Product } from "@/data/products";
 import { articles as staticArticles, Article } from "@/data/articles";
 import { projects as staticProjects, Project } from "@/data/projects";
 
-const BACKEND_INTERNAL_URL =
-  process.env.INTERNAL_BACKEND_URL ||
-  process.env.BACKEND_INTERNAL_URL ||
-  "http://127.0.0.1:8080/api/v1";
+function getBackendInternalUrl(): string {
+  const raw = (
+    process.env.INTERNAL_BACKEND_URL ||
+    process.env.BACKEND_INTERNAL_URL ||
+    process.env.BACKEND_API_URL ||
+    "http://127.0.0.1:8080"
+  ).replace(/\/$/, "");
+  return raw.endsWith("/api/v1") ? raw : `${raw}/api/v1`;
+}
 
 async function fetchFromBackend<T>(endpoint: string): Promise<T[] | null> {
   try {
-    const res = await fetch(`${BACKEND_INTERNAL_URL}${endpoint}`, {
+    const res = await fetch(`${getBackendInternalUrl()}${endpoint}`, {
       next: { revalidate: 60 },
       signal: AbortSignal.timeout(3000),
     });

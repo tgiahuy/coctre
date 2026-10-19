@@ -93,6 +93,35 @@ public class QuoteController {
         return ResponseEntity.ok(ApiResponse.ok("Cập nhật trạng thái thành công", updated));
     }
 
+    @PatchMapping("/{id}/email-status")
+    public ResponseEntity<ApiResponse<QuoteRequestEntity>> updateEmailStatus(
+            @PathVariable String id,
+            @RequestParam String emailStatus,
+            @RequestParam(required = false) String emailError
+    ) {
+        String normalizedStatus = emailStatus == null ? "" : emailStatus.trim().toUpperCase();
+        if (!Set.of("PENDING", "SENT", "FAILED", "SKIPPED").contains(normalizedStatus)) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Trạng thái email không hợp lệ"));
+        }
+        Optional<QuoteRequestEntity> found = quoteRequestRepository.findById(id);
+        if (found.isEmpty()) {
+            return ResponseEntity.status(404).body(ApiResponse.error("Không tìm thấy yêu cầu báo giá"));
+        }
+        QuoteRequestEntity entity = found.get();
+        entity.setEmailStatus(normalizedStatus);
+        if ("SENT".equals(normalizedStatus)) {
+            entity.setEmailError(null);
+        } else if (emailError != null && !emailError.isBlank()) {
+            entity.setEmailError(emailError.trim());
+        }
+        if ("FAILED".equals(normalizedStatus)) {
+            entity.setEmailRetryCount((entity.getEmailRetryCount() == null ? 0 : entity.getEmailRetryCount()) + 1);
+        }
+        QuoteRequestEntity updated = quoteRequestRepository.save(entity);
+        return ResponseEntity.ok(ApiResponse.ok("Cập nhật trạng thái email thành công", updated));
+    }
+
+
     @DeleteMapping("/{id}")
     @AdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteQuote(@PathVariable String id) {

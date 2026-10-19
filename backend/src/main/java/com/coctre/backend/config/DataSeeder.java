@@ -41,10 +41,28 @@ public class DataSeeder implements CommandLineRunner {
     public void run(String... args) {
         seedSiteConfig();
         seedAdminUsers();
+
+        // Kiểm tra xem dữ liệu mẫu đã từng được khởi tạo hay chưa
+        Optional<SiteConfigEntity> configOpt = siteConfigRepository.findById("main-config");
+        boolean alreadySeeded = configOpt.map(cfg -> Boolean.TRUE.equals(cfg.getIsDataSeeded())).orElse(false);
+
+        if (alreadySeeded) {
+            log.info("ℹ Dữ liệu ban đầu đã được khởi tạo trước đó. Tôn trọng thao tác của quản trị viên (không tự ý re-seed khi bảng trống).");
+            return;
+        }
+
         seedProducts();
         seedProjects();
         seedArticles();
+
+        // Đánh dấu đã seed xong để các lần khởi động tiếp theo không tự động tạo lại
+        configOpt.ifPresent(cfg -> {
+            cfg.setIsDataSeeded(true);
+            siteConfigRepository.save(cfg);
+            log.info("✓ Đã đánh dấu hoàn tất khởi tạo dữ liệu ban đầu (isDataSeeded = true)");
+        });
     }
+
 
     private void seedAdminUsers() {
         if (initialAdminEmail.isBlank() || initialAdminPassword.isBlank()) {
@@ -301,8 +319,8 @@ public class DataSeeder implements CommandLineRunner {
                     .bambooSupplied("Cọc tre 4m thân to gốc già & Cọc tre 3m")
                     .totalQuantity("250.000 cọc tre")
                     .completionYear("2024")
-                    .coverImage("/images/projects/ke-song-day-1.webp")
-                    .gallery(Arrays.asList("/images/projects/ke-song-day-1.webp", "/images/projects/ke-song-day-2.webp"))
+                    .coverImage("/images/projects/du-an-ke-de-ha-nam-1.webp")
+                    .gallery(Arrays.asList("/images/projects/du-an-ke-de-ha-nam-1.webp", "/images/projects/du-an-ke-de-ha-nam-2.webp"))
                     .shortDescription("Gia cố toàn tuyến chân đê bao sông Đáy với cọc tre 4m đường kính lớn, chống xói lở dòng chảy ngầm.")
                     .overview("Tuyến kè chống sạt lở xung yếu sông Đáy đi qua khu vực địa chất đất pha cát và bùn lỏng sâu.")
                     .challenge("Mực nước biến đổi liên tục, yêu cầu cọc tre ngâm bùn không bị mục rỗng và chịu va đập cơ giới mạnh.")
@@ -321,8 +339,8 @@ public class DataSeeder implements CommandLineRunner {
                     .bambooSupplied("Cọc tre 2m & Cọc tre 2,5m đặc ruột")
                     .totalQuantity("120.000 cọc tre")
                     .completionYear("2024")
-                    .coverImage("/images/projects/nha-xuong-hung-yen-1.webp")
-                    .gallery(Arrays.asList("/images/projects/nha-xuong-hung-yen-1.webp"))
+                    .coverImage("/images/projects/du-an-nha-xuong-dong-van-1.webp")
+                    .gallery(Arrays.asList("/images/projects/du-an-nha-xuong-dong-van-1.webp", "/images/projects/du-an-nha-xuong-dong-van-2.webp"))
                     .shortDescription("Cung cấp 120.000 cọc tre ép mật độ 25 cọc/m² xử lý tầng đất ruộng san lấp cho cụm nhà xưởng kho vận.")
                     .overview("Khu đất dự án trước đây là đất trũng trồng lúa nước, lớp bùn dẻo dày từ 1.8m đến 2.6m.")
                     .challenge("Yêu cầu tiến độ ép cọc đồng loạt để kịp bàn giao mặt bằng đổ bê tông móng đài.")
@@ -374,7 +392,7 @@ public class DataSeeder implements CommandLineRunner {
                     .slug("so-sanh-mong-coc-tre-va-coc-be-tong-cot-thep")
                     .title("So Sánh Hiệu Quả Kinh Tế Giữa Móng Cọc Tre Và Cọc Bê Tông Cốt Thép")
                     .category("Kiến thức nền móng")
-                    .coverImage("/images/blog/so-sanh-mong-coc-tre-be-tong.webp")
+                    .coverImage("/images/blog/so-sanh-coc-tre-be-tong.webp")
                     .publishDate("2024-04-20")
                     .author("Kỹ sư Kết cấu Lê Thanh Tùng")
                     .readTime("6 phút đọc")

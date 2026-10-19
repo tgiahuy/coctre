@@ -50,4 +50,8 @@ public class SiteConfigEntity {
     private String completedProjects;
     private String supplyCapacity;
     private String deliveryCoverage;
+
+    @Builder.Default
+    private Boolean isDataSeeded = false;
 }
+

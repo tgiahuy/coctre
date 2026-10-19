@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ADMIN_SESSION_COOKIE, backendApiUrl } from "@/lib/serverAuth";
+import { resolveClientIp } from "@/lib/clientIp";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,10 +17,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const clientIp = resolveClientIp(request);
+
     try {
       const backendRes = await fetch(backendApiUrl("/auth/login"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Real-IP": clientIp,
+          "X-Forwarded-For": clientIp,
+        },
         body: JSON.stringify({ email: cleanEmail, password: cleanPassword, rememberMe }),
         signal: AbortSignal.timeout(5000),
         cache: "no-store",

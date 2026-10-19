@@ -116,11 +116,18 @@ class AdminSecurityTests {
                     .andExpect(status().isUnauthorized());
         }
 
-        // 6th attempt from the same IP or email must be blocked with 429 Too Many Requests
+        // 6th attempt for the same email must be blocked with 429 Too Many Requests
         mockMvc.perform(post("/api/v1/auth/login")
                         .header("X-Forwarded-For", "198.51.100.200")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(failedLoginPayload))
                 .andExpect(status().isTooManyRequests());
+
+        // A different account from the same IP should still be allowed (not blocked by another user's failure)
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .header("X-Forwarded-For", "198.51.100.200")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"otheradmin@test.com\",\"password\":\"wrongpassword123\"}"))
+                .andExpect(status().isUnauthorized());
     }
 }

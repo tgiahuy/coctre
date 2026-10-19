@@ -1,58 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isIP } from "node:net";
 import { backendApiUrl } from "@/lib/serverAuth";
 import { sendQuoteEmailNotification } from "@/lib/emailService";
+import { resolveClientIp } from "@/lib/clientIp";
 
 // Rate limiting tại tầng Edge/Frontend: Tối đa 5 yêu cầu / 15 phút cho mỗi IP
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 5;
 const ipRequestTimestamps = new Map<string, number[]>();
-
-function isValidIp(ip: string | null | undefined): boolean {
-  if (!ip) return false;
-  const clean = ip.trim();
-  return isIP(clean) !== 0;
-}
-
-/**
- * Xác định địa chỉ IP của Client một cách an toàn, chống giả mạo header:
- * - Chỉ tin cậy CF-Connecting-IP khi có header CF-Ray do Cloudflare Edge gắn kèm.
- * - Loại trừ các header giả mạo từ client thông thường.
- */
-function resolveClientIp(request: NextRequest): string {
-  // 1. Nếu có Cloudflare Ray ID hợp lệ -> Tin cậy CF-Connecting-IP từ Cloudflare Edge
-  const cfRay = request.headers.get("cf-ray");
-  const cfIp = request.headers.get("cf-connecting-ip")?.trim();
-  if (cfRay && cfIp && isValidIp(cfIp)) {
-    return cfIp;
-  }
-
-  // 2. Next.js runtime socket remote address (Vercel/Node runtime - không thể bị client giả mạo)
-  // @ts-expect-error ip property is populated in NextRequest runtime
-  const nextIp = typeof request.ip === "string" ? request.ip.trim() : "";
-  if (nextIp && isValidIp(nextIp)) {
-    return nextIp;
-  }
-
-  // 3. Fallback theo chuỗi X-Forwarded-For nếu đi qua Reverse Proxy (Nginx/Docker)
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  if (forwardedFor) {
-    const list = forwardedFor.split(",").map((s) => s.trim()).filter(Boolean);
-    // Lấy IP gần nhất từ proxy tin cậy
-    for (let i = list.length - 1; i >= 0; i--) {
-      if (isValidIp(list[i])) {
-        return list[i];
-      }
-    }
-  }
-
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp && isValidIp(realIp)) {
-    return realIp;
-  }
-
-  return "127.0.0.1";
-}
 
 function checkEdgeRateLimit(clientIp: string): boolean {
   const now = Date.now();
@@ -134,8 +88,12 @@ export async function POST(request: NextRequest) {
 
     // Tự động gửi email thông báo khi báo giá được lưu thành công
     if (backendRes.ok && data?.success) {
+      const quoteId = data?.data?.id;
+      let emailSuccess = false;
+      let emailErrorMsg: string | null = null;
+
       try {
-        await sendQuoteEmailNotification({
+        const emailResult = await sendQuoteEmailNotification({
           customerName: body.customerName,
           phone: body.phone,
           email: body.email,
@@ -145,10 +103,43 @@ export async function POST(request: NextRequest) {
           quantity: body.quantity,
           notes: body.notes,
         });
+
+        if (emailResult.success) {
+          emailSuccess = true;
+        } else {
+          emailErrorMsg = emailResult.error || "Gửi email thất bại";
+          console.warn("[Email Notification Error]", emailErrorMsg);
+        }
       } catch (emailErr) {
-        console.error("[Email Notification Error]", emailErr);
+        emailErrorMsg = emailErr instanceof Error ? emailErr.message : "Ngoại lệ khi gửi email";
+        console.error("[Email Notification Exception]", emailErr);
+      }
+
+      // Cập nhật trạng thái gửi email vào cơ sở dữ liệu để quản trị viên theo dõi & retry
+      if (quoteId) {
+        const status = emailSuccess ? "SENT" : "FAILED";
+        const emailStatusUrl = backendApiUrl(
+          `/quotes/${encodeURIComponent(quoteId)}/email-status?emailStatus=${status}${
+            emailErrorMsg ? `&emailError=${encodeURIComponent(emailErrorMsg)}` : ""
+          }`
+        );
+
+        fetch(emailStatusUrl, {
+          method: "PATCH",
+          headers: {
+            "X-Real-IP": clientIp,
+            "X-Forwarded-For": clientIp,
+          },
+          cache: "no-store",
+        }).catch((err) => console.error("[Update Email Status Error]", err));
+
+        if (data.data) {
+          data.data.emailStatus = status;
+          data.data.emailError = emailErrorMsg;
+        }
       }
     }
+
 
     return NextResponse.json(data, { status: backendRes.status });
   } catch {

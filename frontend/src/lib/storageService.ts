@@ -63,7 +63,13 @@ export async function uploadImageFile(
       })
     );
 
-    const fileUrl = publicUrl ? `${publicUrl}/${filename}` : `https://${bucketName}.r2.dev/${filename}`;
+    if (!publicUrl) {
+      throw new Error(
+        "R2_PUBLIC_URL chưa được cấu hình. Vui lòng thiết lập R2_PUBLIC_URL (ví dụ: https://pub-xxx.r2.dev hoặc tên miền riêng đã bật Public Access) trong biến môi trường."
+      );
+    }
+
+    const fileUrl = `${publicUrl}/${filename}`;
     return { url: fileUrl, provider: "r2" };
   }
 

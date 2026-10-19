@@ -95,7 +95,7 @@ Khi xe chở cọc đến công trình, chỉ huy trưởng hoặc cán bộ k�
     slug: "so-sanh-mong-coc-tre-va-coc-be-tong-cot-thep",
     title: "So Sánh Hiệu Quả Kinh Tế Giữa Móng Cọc Tre Và Cọc Bê Tông Cốt Thép",
     category: "Kiến thức nền móng",
-    coverImage: "/images/blog/so-sanh-mong-coc-tre-be-tong.webp",
+    coverImage: "/images/blog/so-sanh-coc-tre-be-tong.webp",
     publishDate: "2024-04-20",
     author: "Kỹ sư Kết cấu Lê Thanh Tùng",
     readTime: "6 phút đọc",

@@ -50,10 +50,10 @@ export const projects: Project[] = [
     bambooSupplied: "Cọc tre 4m thân to gốc già & Cọc tre 3m",
     totalQuantity: "250.000 cọc tre",
     completionYear: "2024",
-    coverImage: "/images/projects/ke-song-day-1.webp",
+    coverImage: "/images/projects/du-an-ke-de-ha-nam-1.webp",
     gallery: [
-      "/images/projects/ke-song-day-1.webp",
-      "/images/projects/ke-song-day-2.webp"
+      "/images/projects/du-an-ke-de-ha-nam-1.webp",
+      "/images/projects/du-an-ke-de-ha-nam-2.webp"
     ],
     shortDescription: "Gia cố toàn tuyến chân đê bao sông Đáy với cọc tre 4m đường kính lớn, chống xói lở dòng chảy ngầm.",
     overview: "Tuyến kè chống sạt lở xung yếu sông Đáy đi qua khu vực địa chất đất pha cát và bùn lỏng sâu.",
@@ -72,9 +72,10 @@ export const projects: Project[] = [
     bambooSupplied: "Cọc tre 2m & Cọc tre 2,5m đặc ruột",
     totalQuantity: "120.000 cọc tre",
     completionYear: "2024",
-    coverImage: "/images/projects/nha-xuong-hung-yen-1.webp",
+    coverImage: "/images/projects/du-an-nha-xuong-dong-van-1.webp",
     gallery: [
-      "/images/projects/nha-xuong-hung-yen-1.webp"
+      "/images/projects/du-an-nha-xuong-dong-van-1.webp",
+      "/images/projects/du-an-nha-xuong-dong-van-2.webp"
     ],
     shortDescription: "Cung cấp 120.000 cọc tre ép mật độ 25 cọc/m² xử lý tầng đất ruộng san lấp cho cụm nhà xưởng kho vận.",
     overview: "Khu đất dự án trước đây là đất trũng trồng lúa nước, lớp bùn dẻo dày từ 1.8m đến 2.6m.",

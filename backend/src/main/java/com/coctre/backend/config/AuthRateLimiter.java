@@ -10,17 +10,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Giới hạn số lần thử đăng nhập quản trị viên sai (Rate Limiter chống Brute Force).
- * Quy tắc:
- * - Tối đa 5 lần thử sai trong vòng 15 phút cho mỗi địa chỉ IP hoặc Email.
- * - Khóa 15 phút nếu vượt ngưỡng và ghi nhận nhật ký bảo mật.
- * - Xóa bộ đếm khi đăng nhập thành công.
+ * Quy tắc an toàn:
+ * - Khóa theo tài khoản (Email): Tối đa 5 lần thử sai trong 15 phút cho một email cụ thể.
+ *   Điều này đảm bảo nếu 1 tài khoản nhập sai, KHÔNG ảnh hưởng đến các quản trị viên khác.
+ * - Khóa theo IP diện rộng: Tối đa 20 lần thử sai trong 15 phút cho một địa chỉ IP (chống dò mật khẩu hàng loạt).
+ *   Tránh khóa nhầm toàn bộ người dùng khi nhiều quản trị viên cùng truy cập qua mạng công ty / Docker NAT.
  */
 @Component
 @Slf4j
 public class AuthRateLimiter {
-    private static final int MAX_FAILED_ATTEMPTS = 5;
+    private static final int MAX_FAILED_ACCOUNT_ATTEMPTS = 5;
+    private static final int MAX_FAILED_IP_ATTEMPTS = 20;
     private static final long LOCK_WINDOW_SECONDS = 15 * 60; // 15 phút
-    private static final int MAX_TRACKED_ENTRIES = 5_000;
+    private static final int MAX_TRACKED_ENTRIES = 10_000;
 
     private final Map<String, Deque<Long>> failedAttempts = new ConcurrentHashMap<>();
 
@@ -32,14 +34,18 @@ public class AuthRateLimiter {
         long now = Instant.now().getEpochSecond();
         long cutoff = now - LOCK_WINDOW_SECONDS;
 
-        if (isKeyBlocked("ip:" + normalize(clientIp), cutoff)) {
-            log.warn("[Security Alert] Địa chỉ IP {} bị chặn do đăng nhập sai quá {} lần", clientIp, MAX_FAILED_ATTEMPTS);
-            return false;
+        // 1. Kiểm tra khóa theo tài khoản trước (ưu tiên bảo vệ tài khoản cụ thể)
+        if (email != null && !email.isBlank()) {
+            if (isKeyBlocked("email:" + normalize(email), cutoff, MAX_FAILED_ACCOUNT_ATTEMPTS)) {
+                log.warn("[Security Alert] Tài khoản {} bị khóa tạm thời 15 phút do nhập sai mật khẩu quá {} lần", email, MAX_FAILED_ACCOUNT_ATTEMPTS);
+                return false;
+            }
         }
 
-        if (email != null && !email.isBlank()) {
-            if (isKeyBlocked("email:" + normalize(email), cutoff)) {
-                log.warn("[Security Alert] Tài khoản {} bị khóa tạm thời do nhập sai mật khẩu quá {} lần", email, MAX_FAILED_ATTEMPTS);
+        // 2. Kiểm tra khóa theo IP nếu có hành vi dò quét quy mô lớn (trên 20 lần thử sai từ 1 IP)
+        if (clientIp != null && !clientIp.isBlank() && !isInternalIp(clientIp)) {
+            if (isKeyBlocked("ip:" + normalize(clientIp), cutoff, MAX_FAILED_IP_ATTEMPTS)) {
+                log.warn("[Security Alert] Địa chỉ IP {} bị khóa tạm thời do có hành vi tấn công dò quét mật khẩu ({} lần thử sai)", clientIp, MAX_FAILED_IP_ATTEMPTS);
                 return false;
             }
         }
@@ -52,33 +58,34 @@ public class AuthRateLimiter {
      */
     public void recordFailure(String clientIp, String email) {
         long now = Instant.now().getEpochSecond();
-        recordFailureKey("ip:" + normalize(clientIp), now);
+        if (clientIp != null && !clientIp.isBlank()) {
+            recordFailureKey("ip:" + normalize(clientIp), now, MAX_FAILED_IP_ATTEMPTS);
+        }
         if (email != null && !email.isBlank()) {
-            recordFailureKey("email:" + normalize(email), now);
+            recordFailureKey("email:" + normalize(email), now, MAX_FAILED_ACCOUNT_ATTEMPTS);
         }
     }
 
     /**
-     * Xóa dữ liệu lỗi khi đăng nhập thành công.
+     * Xóa dữ liệu lỗi khi đăng nhập thành công cho tài khoản đó.
      */
     public void recordSuccess(String clientIp, String email) {
-        failedAttempts.remove("ip:" + normalize(clientIp));
         if (email != null && !email.isBlank()) {
             failedAttempts.remove("email:" + normalize(email));
         }
     }
 
-    private boolean isKeyBlocked(String key, long cutoff) {
+    private boolean isKeyBlocked(String key, long cutoff, int maxAllowed) {
         Deque<Long> timestamps = failedAttempts.get(key);
         if (timestamps == null) return false;
 
         synchronized (timestamps) {
             cleanExpired(timestamps, cutoff);
-            return timestamps.size() >= MAX_FAILED_ATTEMPTS;
+            return timestamps.size() >= maxAllowed;
         }
     }
 
-    private void recordFailureKey(String key, long now) {
+    private void recordFailureKey(String key, long now, int limitThreshold) {
         if (failedAttempts.size() >= MAX_TRACKED_ENTRIES) {
             cleanupPeriodic();
         }
@@ -88,8 +95,8 @@ public class AuthRateLimiter {
             cleanExpired(timestamps, now - LOCK_WINDOW_SECONDS);
             timestamps.addLast(now);
             int attempts = timestamps.size();
-            if (attempts >= MAX_FAILED_ATTEMPTS) {
-                log.warn("[Security Violation] Khóa đối tượng {} trong 15 phút do đạt {} lần thử sai", key, attempts);
+            if (attempts >= limitThreshold) {
+                log.warn("[Security Violation] Khóa đối tượng {} trong 15 phút do đạt ngưỡng thử sai ({} lần)", key, attempts);
             }
         }
     }
@@ -98,6 +105,11 @@ public class AuthRateLimiter {
         while (!timestamps.isEmpty() && timestamps.peekFirst() < cutoff) {
             timestamps.removeFirst();
         }
+    }
+
+    private boolean isInternalIp(String ip) {
+        String clean = ip.trim();
+        return clean.equals("127.0.0.1") || clean.equals("::1") || clean.equals("localhost");
     }
 
     @Scheduled(fixedRate = 300_000) // Dọn dẹp bộ nhớ mỗi 5 phút
