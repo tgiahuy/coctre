@@ -22,12 +22,12 @@ export function resolveClientIp(request: NextRequest): string {
     return nextSocketIp;
   }
 
-  const trustProxy = process.env.TRUST_PROXY === "true" || process.env.NODE_ENV === "production";
-
-  // 2. Nếu có cấu hình mã bí mật Proxy (Proxy Secret / Cloudflare Authenticated Header)
+  // 2. Chỉ tin cậy các header của reverse proxy khi được cấu hình rõ ràng qua TRUST_PROXY
+  const trustProxy = process.env.TRUST_PROXY === "true";
   const proxySecret = process.env.PROXY_SECRET;
   const requestSecret = request.headers.get("x-proxy-secret");
   const isSecretVerified = Boolean(proxySecret && requestSecret && proxySecret === requestSecret);
+
 
   // 3. Nếu là Reverse Proxy tin cậy (hoặc Cloudflare có secret)
   if (trustProxy || isSecretVerified) {

@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import com.coctre.backend.config.AdminSessionService;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +29,11 @@ public class QuoteController {
 
     private final QuoteRequestRepository quoteRequestRepository;
     private final QuoteRateLimiter quoteRateLimiter;
+    private final AdminSessionService adminSessionService;
+
+    @Value("${app.internal-secret:coctre-internal-shared-secret-key-2026}")
+    private String internalSecret;
+
     private static final Set<String> ALLOWED_STATUSES = Set.of("NEW", "CONTACTED", "CLOSED", "CANCELLED");
 
     @GetMapping
@@ -34,6 +42,17 @@ public class QuoteController {
         List<QuoteRequestEntity> list = quoteRequestRepository.findAllByOrderByCreatedAtDesc();
         return ResponseEntity.ok(ApiResponse.ok("Lấy danh sách yêu cầu báo giá thành công", list));
     }
+
+    @GetMapping("/{id}")
+    @AdminOnly
+    public ResponseEntity<ApiResponse<QuoteRequestEntity>> getQuoteById(@PathVariable String id) {
+        Optional<QuoteRequestEntity> found = quoteRequestRepository.findById(id);
+        if (found.isEmpty()) {
+            return ResponseEntity.status(404).body(ApiResponse.error("Không tìm thấy yêu cầu báo giá"));
+        }
+        return ResponseEntity.ok(ApiResponse.ok("Lấy chi tiết yêu cầu báo giá thành công", found.get()));
+    }
+
 
     @PostMapping
     public ResponseEntity<ApiResponse<QuoteRequestEntity>> submitQuote(
@@ -97,8 +116,14 @@ public class QuoteController {
     public ResponseEntity<ApiResponse<QuoteRequestEntity>> updateEmailStatus(
             @PathVariable String id,
             @RequestParam String emailStatus,
-            @RequestParam(required = false) String emailError
+            @RequestParam(required = false) String emailError,
+            HttpServletRequest request
     ) {
+        if (!isAuthorizedForEmailStatus(request)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Yêu cầu quyền quản trị viên hoặc kết nối nội bộ tin cậy"));
+        }
+
         String normalizedStatus = emailStatus == null ? "" : emailStatus.trim().toUpperCase();
         if (!Set.of("PENDING", "SENT", "FAILED", "SKIPPED").contains(normalizedStatus)) {
             return ResponseEntity.badRequest().body(ApiResponse.error("Trạng thái email không hợp lệ"));
@@ -121,7 +146,6 @@ public class QuoteController {
         return ResponseEntity.ok(ApiResponse.ok("Cập nhật trạng thái email thành công", updated));
     }
 
-
     @DeleteMapping("/{id}")
     @AdminOnly
     public ResponseEntity<ApiResponse<Void>> deleteQuote(@PathVariable String id) {
@@ -132,12 +156,34 @@ public class QuoteController {
         return ResponseEntity.ok(ApiResponse.ok("Đã xóa yêu cầu báo giá", null));
     }
 
+    private boolean isAuthorizedForEmailStatus(HttpServletRequest request) {
+        // 1. Kiểm tra session Admin hợp lệ
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7).trim();
+            if (adminSessionService.validate(token).isPresent()) {
+                return true;
+            }
+        }
+
+        // 2. Kiểm tra Internal Secret từ reverse proxy / container Next.js nội bộ
+        String secretHeader = request.getHeader("X-Internal-Secret");
+        if (secretHeader != null && !secretHeader.isBlank() && secretHeader.equals(internalSecret)) {
+            return isTrustedProxy(request);
+        }
+
+        return false;
+    }
+
+    private boolean isTrustedProxy(HttpServletRequest request) {
+        String remote = request.getRemoteAddr() == null ? "" : request.getRemoteAddr();
+        return remote.equals("127.0.0.1") || remote.equals("::1") || remote.startsWith("10.")
+                || remote.startsWith("192.168.") || remote.startsWith("172.");
+    }
+
     private String getClientIp(HttpServletRequest request) {
         String remote = request.getRemoteAddr() == null ? "unknown" : request.getRemoteAddr();
-        boolean trustedProxy = remote.equals("127.0.0.1") || remote.equals("::1") || remote.startsWith("10.")
-                || remote.startsWith("192.168.") || remote.startsWith("172.");
-
-        if (trustedProxy) {
+        if (isTrustedProxy(request)) {
             String realIp = request.getHeader("X-Real-IP");
             if (realIp != null && !realIp.isBlank()) {
                 return realIp.trim();
@@ -149,6 +195,7 @@ public class QuoteController {
         }
         return remote;
     }
+
 
     private String clean(String value) {
         if (value == null) return null;

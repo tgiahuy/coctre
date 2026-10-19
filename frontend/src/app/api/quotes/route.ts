@@ -124,14 +124,20 @@ export async function POST(request: NextRequest) {
           }`
         );
 
-        fetch(emailStatusUrl, {
-          method: "PATCH",
-          headers: {
-            "X-Real-IP": clientIp,
-            "X-Forwarded-For": clientIp,
-          },
-          cache: "no-store",
-        }).catch((err) => console.error("[Update Email Status Error]", err));
+        try {
+          await fetch(emailStatusUrl, {
+            method: "PATCH",
+            headers: {
+              "X-Real-IP": clientIp,
+              "X-Forwarded-For": clientIp,
+              "X-Internal-Secret": process.env.INTERNAL_SECRET || "coctre-internal-shared-secret-key-2026",
+            },
+            signal: AbortSignal.timeout(3500),
+            cache: "no-store",
+          });
+        } catch (updateErr) {
+          console.error("[Update Email Status Error]", updateErr);
+        }
 
         if (data.data) {
           data.data.emailStatus = status;
@@ -139,6 +145,7 @@ export async function POST(request: NextRequest) {
         }
       }
     }
+
 
 
     return NextResponse.json(data, { status: backendRes.status });

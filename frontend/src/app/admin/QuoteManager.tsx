@@ -106,8 +106,9 @@ export default function QuoteManager() {
       const res = await fetch("/api/quotes/resend", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(quote),
+        body: JSON.stringify({ id: quote.id }),
       });
+
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.success) {
         throw new Error(data?.message || "Gửi email thất bại");

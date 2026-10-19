@@ -42,6 +42,7 @@ services:
       APP_ADMIN_INITIAL_EMAIL: ${APP_ADMIN_INITIAL_EMAIL:-}
       APP_ADMIN_INITIAL_PASSWORD: ${APP_ADMIN_INITIAL_PASSWORD:-}
       APP_CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,https://coctrehuyenduong.com,https://coctrehuyenduong.vn"
+      APP_INTERNAL_SECRET: ${INTERNAL_SECRET:-coctre-internal-shared-secret-key-2026}
     volumes:
       - uploads_data:/app/uploads
     networks:
@@ -63,16 +64,20 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    # Bảo mật: Chỉ lắng nghe trên 127.0.0.1 của host để quản trị viên truy cập hoặc qua Nginx Reverse Proxy
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
       NODE_ENV: production
       PORT: 3000
+      TRUST_PROXY: "true"
+      INTERNAL_SECRET: ${INTERNAL_SECRET:-coctre-internal-shared-secret-key-2026}
       BACKEND_API_URL: http://backend:8080
       BACKEND_INTERNAL_URL: http://backend:8080/api/v1
       INTERNAL_BACKEND_URL: http://backend:8080/api/v1
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       NOTIFICATION_EMAIL: ${NOTIFICATION_EMAIL:-huyenduong70@gmail.com}
+
       RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-Cọc Tre Huyền Dương <onboarding@resend.dev>}
       UPLOAD_DIR: /app/public/uploads
     volumes:
