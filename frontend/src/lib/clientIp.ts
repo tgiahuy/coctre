@@ -29,22 +29,24 @@ export function resolveClientIp(request: NextRequest): string {
   const isSecretVerified = Boolean(proxySecret && requestSecret && proxySecret === requestSecret);
 
 
-  // 3. Nếu là Reverse Proxy tin cậy (hoặc Cloudflare có secret)
+  // 3. Nếu là Reverse Proxy tin cậy (Nginx hoặc proxy có mã bí mật)
   if (trustProxy || isSecretVerified) {
-    // Ưu tiên CF-Connecting-IP nếu có cấu hình Cloudflare và header CF-Ray
-    const cfIp = request.headers.get("cf-connecting-ip")?.trim();
-    const cfRay = request.headers.get("cf-ray");
-    if (cfIp && cfRay && isValidIp(cfIp)) {
-      return cfIp;
-    }
-
-    // Header do Nginx proxy_set_header X-Real-IP $remote_addr gắn
+    // Ưu tiên 1: Header X-Real-IP do Nginx reverse proxy thiết lập trực tiếp từ $remote_addr
     const realIp = request.headers.get("x-real-ip")?.trim();
     if (realIp && isValidIp(realIp)) {
       return realIp;
     }
 
-    // X-Forwarded-For từ chuỗi proxy
+    // Ưu tiên 2: Chỉ tin cậy Cloudflare header khi có cấu hình BEHIND_CLOUDFLARE=true rõ ràng
+    const isBehindCloudflare = process.env.BEHIND_CLOUDFLARE === "true";
+    if (isBehindCloudflare) {
+      const cfIp = request.headers.get("cf-connecting-ip")?.trim();
+      if (cfIp && isValidIp(cfIp)) {
+        return cfIp;
+      }
+    }
+
+    // Ưu tiên 3: X-Forwarded-For từ chuỗi proxy hợp lệ
     const forwardedFor = request.headers.get("x-forwarded-for");
     if (forwardedFor) {
       const list = forwardedFor.split(",").map((s) => s.trim()).filter(Boolean);
@@ -55,6 +57,7 @@ export function resolveClientIp(request: NextRequest): string {
       }
     }
   }
+
 
   return "127.0.0.1";
 }

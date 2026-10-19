@@ -10,6 +10,7 @@ set -eo pipefail
 #   ./scripts/init-ssl.sh [staging|production]
 # ====================================================================
 
+COMPOSE_CMD="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
 DOMAINS=("coctrehuyenduong.com" "www.coctrehuyenduong.com")
 RSA_KEY_SIZE=4096
 DATA_PATH="./certbot"
@@ -27,8 +28,8 @@ echo "=== [1/5] Kiểm tra chứng chỉ SSL hiện có cho $PRIMARY_DOMAIN ==="
 if [ -d "$CERT_PATH" ] && [ -f "$CERT_PATH/fullchain.pem" ]; then
   read -p "Chứng chỉ SSL đã tồn tại. Bạn có muốn cấp mới lại không? (y/N) " decision
   if [ "$decision" != "y" ] && [ "$decision" != "Y" ]; then
-    echo "Giữ nguyên chứng chỉ hiện tại. Khởi động Nginx..."
-    docker compose -f docker-compose.prod.yml up -d
+    echo "Giữ nguyên chứng chỉ hiện tại. Khởi động toàn bộ dịch vụ..."
+    $COMPOSE_CMD up -d
     exit 0
   fi
 fi
@@ -45,7 +46,7 @@ openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
 echo "✓ Đã tạo chứng chỉ tạm thời."
 
 echo "=== [3/5] Khởi động Nginx với chứng chỉ tạm thời để phục vụ HTTP-01 Challenge ==="
-docker compose -f docker-compose.prod.yml up --force-recreate -d nginx
+$COMPOSE_CMD up --force-recreate -d nginx
 
 echo "=== [4/5] Xóa chứng chỉ tạm thời và yêu cầu chứng chỉ thật từ Let's Encrypt ==="
 rm -rf "$CERT_PATH"
@@ -65,7 +66,7 @@ if [ $STAGING != "0" ]; then
   STAGING_ARG="--staging"
 fi
 
-docker compose -f docker-compose.prod.yml run --rm --entrypoint "\
+$COMPOSE_CMD run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $STAGING_ARG \
     $EMAIL_ARG \
@@ -76,12 +77,13 @@ docker compose -f docker-compose.prod.yml run --rm --entrypoint "\
     --non-interactive" certbot
 
 echo "=== [5/5] Nạp lại chứng chỉ SSL chính thức vào Nginx ==="
-docker compose -f docker-compose.prod.yml exec nginx nginx -s reload
+$COMPOSE_CMD exec nginx nginx -s reload
 
-# Khởi động dịch vụ certbot gia hạn định kỳ
-docker compose -f docker-compose.prod.yml up -d certbot
+# Khởi động toàn bộ stack production (Postgres, Backend, Frontend, Nginx, Certbot)
+echo "Khởi động toàn bộ hệ thống..."
+$COMPOSE_CMD up -d
 
 echo "===================================================================="
-echo "✓ HOÀN TẤT: Website đã được bảo vệ bằng HTTPS với chứng chỉ Let's Encrypt!"
-echo "Certbot daemon đang chạy ngầm tự động gia hạn chứng chỉ mỗi 12 giờ."
+echo "✓ HOÀN TẤT: Toàn bộ hệ thống và HTTPS đã sẵn sàng hoạt động!"
+echo "Website: https://$PRIMARY_DOMAIN"
 echo "===================================================================="

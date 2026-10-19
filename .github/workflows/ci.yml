@@ -66,3 +66,19 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+
+  docker-compose-validate:
+    name: Docker Compose Production Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose Configurations
+        env:
+          DATABASE_PASSWORD: test_secure_password_1234
+          INTERNAL_SECRET: ci_test_internal_secret_key_1234
+        run: |
+          docker compose -f docker-compose.yml config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml config --quiet
+          echo "✓ Tất cả các tệp Docker Compose cấu hình hợp lệ 100%!"

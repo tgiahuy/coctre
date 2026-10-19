@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import com.coctre.backend.config.AdminSessionService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
@@ -31,10 +32,22 @@ public class QuoteController {
     private final QuoteRateLimiter quoteRateLimiter;
     private final AdminSessionService adminSessionService;
 
-    @Value("${app.internal-secret:coctre-internal-shared-secret-key-2026}")
+    @Value("${app.internal-secret:}")
     private String internalSecret;
 
+    @Value("${spring.profiles.active:dev}")
+    private String activeProfile;
+
     private static final Set<String> ALLOWED_STATUSES = Set.of("NEW", "CONTACTED", "CLOSED", "CANCELLED");
+
+    @PostConstruct
+    public void validateInternalSecret() {
+        if ("prod".equalsIgnoreCase(activeProfile)) {
+            if (internalSecret == null || internalSecret.trim().length() < 16) {
+                throw new IllegalStateException("FATAL: APP_INTERNAL_SECRET bắt buộc phải được thiết lập trong môi trường Production (tối thiểu 16 ký tự)");
+            }
+        }
+    }
 
     @GetMapping
     @AdminOnly
@@ -42,6 +55,7 @@ public class QuoteController {
         List<QuoteRequestEntity> list = quoteRequestRepository.findAllByOrderByCreatedAtDesc();
         return ResponseEntity.ok(ApiResponse.ok("Lấy danh sách yêu cầu báo giá thành công", list));
     }
+
 
     @GetMapping("/{id}")
     @AdminOnly

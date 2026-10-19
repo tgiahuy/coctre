@@ -37,9 +37,10 @@ fi
 
 # 1. PHỤC HỒI CƠ SỞ DỮ LIỆU
 echo "=== [1/2] Đang khôi phục cơ sở dữ liệu từ $DB_BACKUP_FILE ==="
-gunzip -c "$DB_BACKUP_FILE" | docker exec -i "$PG_CONTAINER" psql -U "$DB_USER" -d "$TARGET_DB"
+gunzip -c "$DB_BACKUP_FILE" | docker exec -i "$PG_CONTAINER" psql -v ON_ERROR_STOP=1 -U "$DB_USER" -d "$TARGET_DB"
 
 echo "✓ Khôi phục cơ sở dữ liệu '$TARGET_DB' thành công!"
+
 
 # 2. PHỤC HỒI ẢNH TẢI LÊN CMS (NẾU CÓ)
 if [ -n "$UPLOADS_BACKUP_FILE" ] && [ -f "$UPLOADS_BACKUP_FILE" ]; then

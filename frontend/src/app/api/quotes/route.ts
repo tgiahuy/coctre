@@ -124,20 +124,28 @@ export async function POST(request: NextRequest) {
           }`
         );
 
+        const internalSecret = process.env.INTERNAL_SECRET;
+        const patchHeaders: Record<string, string> = {
+          "X-Real-IP": clientIp,
+          "X-Forwarded-For": clientIp,
+        };
+        if (internalSecret) {
+          patchHeaders["X-Internal-Secret"] = internalSecret;
+        } else {
+          console.warn("[Security] Cảnh báo: Biến INTERNAL_SECRET chưa được cấu hình cho frontend.");
+        }
+
         try {
           await fetch(emailStatusUrl, {
             method: "PATCH",
-            headers: {
-              "X-Real-IP": clientIp,
-              "X-Forwarded-For": clientIp,
-              "X-Internal-Secret": process.env.INTERNAL_SECRET || "coctre-internal-shared-secret-key-2026",
-            },
+            headers: patchHeaders,
             signal: AbortSignal.timeout(3500),
             cache: "no-store",
           });
         } catch (updateErr) {
           console.error("[Update Email Status Error]", updateErr);
         }
+
 
         if (data.data) {
           data.data.emailStatus = status;
