@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   backend-test:
-    name: Backend Tests & Security Checks
+    name: Backend Tests (Unit & Security)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,6 +34,53 @@ jobs:
 
       - name: Run unit & integration tests
         run: ./mvnw clean test --batch-mode
+
+  postgres-flyway-prod-test:
+    name: Production Stack Test (PostgreSQL 16 + Flyway + Hibernate Validate)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: coctre
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_secure_password_ci_123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Grant execute permission for Maven wrapper
+        run: chmod +x mvnw
+
+      - name: Test Flyway Migration and Hibernate Schema Validation on real PostgreSQL 16
+        env:
+          SPRING_PROFILES_ACTIVE: prod
+          DATABASE_URL: jdbc:postgresql://localhost:5432/coctre
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: test_secure_password_ci_123
+          APP_INTERNAL_SECRET: ci_test_internal_secret_key_1234
+        run: |
+          ./mvnw test -Dtest=BackendApplicationTests --batch-mode
+          echo "✓ Flyway migration và Hibernate ddl-auto=validate thành công 100% trên PostgreSQL 16 thật!"
 
   frontend-build:
     name: Frontend TypeScript & Next.js Build

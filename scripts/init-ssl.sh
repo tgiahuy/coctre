@@ -26,13 +26,21 @@ CERT_PATH="$DATA_PATH/conf/live/$PRIMARY_DOMAIN"
 
 echo "=== [1/5] Kiểm tra chứng chỉ SSL hiện có cho $PRIMARY_DOMAIN ==="
 if [ -d "$CERT_PATH" ] && [ -f "$CERT_PATH/fullchain.pem" ]; then
-  read -p "Chứng chỉ SSL đã tồn tại. Bạn có muốn cấp mới lại không? (y/N) " decision
-  if [ "$decision" != "y" ] && [ "$decision" != "Y" ]; then
-    echo "Giữ nguyên chứng chỉ hiện tại. Khởi động toàn bộ dịch vụ..."
-    $COMPOSE_CMD up -d
-    exit 0
+  ISSUER=$(openssl x509 -in "$CERT_PATH/fullchain.pem" -noout -issuer 2>/dev/null || echo "")
+  if echo "$ISSUER" | grep -qi "localhost"; then
+    echo "⚠ Phát hiện chứng chỉ tạm (Dummy Self-signed) còn sót lại từ lần chạy trước chưa hoàn tất."
+    echo "Tiến hành dọn dẹp để yêu cầu chứng chỉ Let's Encrypt thật..."
+    rm -rf "$CERT_PATH"
+  else
+    read -p "Chứng chỉ SSL chính thức (Issuer: $ISSUER) đã tồn tại. Bạn có muốn cấp mới lại không? (y/N) " decision
+    if [ "$decision" != "y" ] && [ "$decision" != "Y" ]; then
+      echo "Giữ nguyên chứng chỉ hiện tại. Khởi động toàn bộ dịch vụ..."
+      $COMPOSE_CMD up -d
+      exit 0
+    fi
   fi
 fi
+
 
 echo "=== [2/5] Tạo chứng chỉ Dummy (Self-Signed) tạm thời để Nginx có thể khởi động ==="
 mkdir -p "$DATA_PATH/conf/live/$PRIMARY_DOMAIN"

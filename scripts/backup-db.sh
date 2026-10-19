@@ -69,8 +69,10 @@ echo "[2/3] Đang sao lưu thư mục ảnh tải lên CMS (/app/public/uploads)
 if docker ps --format '{{.Names}}' | grep -q "^${FRONTEND_CONTAINER}$"; then
   docker exec "$FRONTEND_CONTAINER" tar -czf - -C /app/public/uploads . > "$UPLOADS_BACKUP_FILE"
 else
-  # Fallback nếu container không chạy: Mount trực tiếp docker volume uploads_data
-  docker run --rm -v uploads_data:/data alpine tar -czf - -C /data . > "$UPLOADS_BACKUP_FILE"
+  # Tự động phát hiện tên volume chuẩn coctre_uploads_data
+  UPLOADS_VOL=$(docker volume ls -q | grep -E '(^coctre_uploads_data$|_uploads_data$|^uploads_data$)' | head -n 1 || echo "coctre_uploads_data")
+  echo "Container frontend không chạy, sao lưu trực tiếp từ Docker volume '$UPLOADS_VOL'..."
+  docker run --rm -v "$UPLOADS_VOL":/data alpine tar -czf - -C /data . > "$UPLOADS_BACKUP_FILE"
 fi
 
 if [ -f "$UPLOADS_BACKUP_FILE" ]; then
@@ -85,6 +87,18 @@ fi
 echo "[3/3] Dọn dẹp các bản sao lưu cũ hơn ${RETENTION_DAYS} ngày..."
 find "$DB_BACKUP_DIR" -type f -name "coctre_db_*.sql.gz" -mtime +"$RETENTION_DAYS" -exec rm -vf {} \;
 find "$UPLOADS_BACKUP_DIR" -type f -name "coctre_uploads_*.tar.gz" -mtime +"$RETENTION_DAYS" -exec rm -vf {} \;
+
+# 4. TÙY CHỌN: ĐỒNG BỘ OFFSITE (R2 / S3 / RCLONE / REMOTE STORAGE)
+if [ -n "$RCLONE_REMOTE" ]; then
+  echo "Đang đồng bộ bản sao lưu ra Cloud Offsite qua rclone ($RCLONE_REMOTE)..."
+  rclone copy "$DB_BACKUP_FILE" "$RCLONE_REMOTE/database/" || echo "⚠ Cảnh báo: Lỗi sao lưu offsite database"
+  rclone copy "$UPLOADS_BACKUP_FILE" "$RCLONE_REMOTE/uploads/" || echo "⚠ Cảnh báo: Lỗi sao lưu offsite uploads"
+  echo "✓ Đồng bộ offsite hoàn tất."
+elif [ -n "$OFFSITE_BACKUP_CMD" ]; then
+  echo "Thực thi lệnh sao lưu offsite tùy biến..."
+  eval "$OFFSITE_BACKUP_CMD" || echo "⚠ Cảnh báo: Lỗi thực thi lệnh offsite tùy biến."
+fi
+
 
 echo "===================================================================="
 echo "✓ HOÀN TẤT SAO LƯU: Cả Database và Media Assets đều đã được lưu an toàn."
