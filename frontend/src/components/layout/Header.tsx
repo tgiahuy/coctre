@@ -96,13 +96,24 @@ export default function Header() {
               <Mail className="w-3.5 h-3.5 text-[#CDAA63]" />
               <span>{siteConfig.email}</span>
             </a>
-            <a
-              href={`tel:${siteConfig.hotline}`}
-              className="flex items-center gap-1.5 font-bold text-white hover:text-[#CDAA63] transition-colors bg-[#214E34]/80 px-2.5 py-1 rounded"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#E57C23] animate-pulse" />
-              <span>Hotline: {siteConfig.hotlineFormatted}</span>
-            </a>
+            <div className="flex items-center gap-2">
+              <a
+                href={`tel:${siteConfig.hotline}`}
+                className="flex items-center gap-1.5 font-bold text-white hover:text-[#CDAA63] transition-colors bg-[#214E34]/80 px-2.5 py-1 rounded"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#E57C23] animate-pulse" />
+                <span>Hotline: {siteConfig.hotlineFormatted}</span>
+              </a>
+              {siteConfig.hotline2 && (
+                <a
+                  href={`tel:${siteConfig.hotline2}`}
+                  className="flex items-center gap-1.5 font-bold text-[#CDAA63] hover:text-white transition-colors bg-[#214E34]/50 hover:bg-[#214E34]/80 px-2 py-1 rounded"
+                >
+                  <Phone className="w-3 h-3 text-[#CDAA63]" />
+                  <span>{siteConfig.hotline2Formatted || siteConfig.hotline2}</span>
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -260,16 +271,28 @@ export default function Header() {
           <div className="lg:hidden fixed inset-x-0 top-[60px] sm:top-[70px] bg-white border-b border-gray-200 shadow-2xl max-h-[calc(100vh-70px)] overflow-y-auto z-50">
             <div className="px-4 pt-3 pb-6 space-y-2">
               {/* Quick hotline bar in mobile menu */}
-              <a
-                href={`tel:${siteConfig.hotline}`}
-                className="flex items-center justify-between p-3 rounded-xl bg-[#214E34] text-white font-bold mb-4 shadow-sm"
-              >
-                <div className="flex items-center gap-2">
-                  <Phone className="w-5 h-5 text-[#CDAA63]" />
-                  <span>Gọi Hotline Tư Vấn</span>
-                </div>
-                <span className="text-[#CDAA63]">{siteConfig.hotlineFormatted}</span>
-              </a>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                <a
+                  href={`tel:${siteConfig.hotline}`}
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#214E34] text-white font-bold shadow-sm"
+                >
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-[#CDAA63]" />
+                    <span>Hotline 1</span>
+                  </div>
+                  <span className="text-[#CDAA63]">{siteConfig.hotlineFormatted}</span>
+                </a>
+                <a
+                  href={`tel:${siteConfig.hotline2 || "0369928040"}`}
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#1d3c2a] text-white font-bold shadow-sm border border-[#2B3E32]"
+                >
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-[#CDAA63]" />
+                    <span>Hotline 2</span>
+                  </div>
+                  <span className="text-[#CDAA63]">{siteConfig.hotline2Formatted || "0369.928.040"}</span>
+                </a>
+              </div>
 
               {navLinks.map((link) => {
                 if (link.hasDropdown) {

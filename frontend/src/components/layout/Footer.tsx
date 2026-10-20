@@ -188,8 +188,18 @@ export default function Footer() {
                 className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[#214E34] hover:bg-[#183B27] text-white font-bold text-sm transition-colors"
               >
                 <Phone className="w-4 h-4 text-[#E57C23]" />
-                <span>Hotline: {siteConfig.hotlineFormatted}</span>
+                <span>Hotline 1: {siteConfig.hotlineFormatted}</span>
               </a>
+
+              {siteConfig.hotline2 && (
+                <a
+                  href={`tel:${siteConfig.hotline2}`}
+                  className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[#18261E] hover:bg-[#214E34] text-white font-bold text-sm transition-colors border border-[#2B3E32]"
+                >
+                  <Phone className="w-4 h-4 text-[#CDAA63]" />
+                  <span>Hotline 2: {siteConfig.hotline2Formatted || siteConfig.hotline2}</span>
+                </a>
+              )}
 
               <a
                 href={`mailto:${siteConfig.email}`}

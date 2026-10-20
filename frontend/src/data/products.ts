@@ -62,9 +62,12 @@ export const products: Product[] = [
     ],
     packaging: "Bó 25 cây hoặc 50 cây buộc dây thép chặt chẽ, dễ dàng kiểm đếm và bốc xếp.",
     images: [
-      "/images/products/coc-tre-15m-1.webp",
-      "/images/products/coc-tre-15m-2.webp",
-      "/images/products/coc-tre-15m-3.webp"
+      "/images/products/warehouse/kho-coctre-06.jpg",
+      "/images/products/warehouse/kho-coctre-02.jpg",
+      "/images/products/warehouse/kho-coctre-05.jpg",
+      "/images/products/warehouse/kho-coctre-08.jpg",
+      "/images/products/warehouse/kho-coctre-12.jpg",
+      "/images/products/warehouse/kho-coctre-01.jpg"
     ],
     featured: true,
     rating: 0,
@@ -107,9 +110,12 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
     ],
     packaging: "Bó 25 cây xếp ngay ngắn, kiểm kê số lượng nhanh chóng khi hạ hàng.",
     images: [
-      "/images/products/coc-tre-2m-1.webp",
-      "/images/products/coc-tre-2m-2.webp",
-      "/images/products/coc-tre-2m-3.webp"
+      "/images/products/warehouse/kho-coctre-08.jpg",
+      "/images/products/warehouse/kho-coctre-02.jpg",
+      "/images/products/warehouse/kho-coctre-03.jpg",
+      "/images/products/warehouse/kho-coctre-05.jpg",
+      "/images/products/warehouse/kho-coctre-07.jpg",
+      "/images/products/warehouse/kho-coctre-01.jpg"
     ],
     featured: true,
     rating: 0,
@@ -152,9 +158,12 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
     ],
     packaging: "Bó 20 cây chắc chắn, đầu ngọn cùng chiều.",
     images: [
-      "/images/products/coc-tre-25m-1.webp",
-      "/images/products/coc-tre-25m-2.webp",
-      "/images/products/coc-tre-25m-3.webp"
+      "/images/products/warehouse/kho-coctre-11.jpg",
+      "/images/products/warehouse/kho-coctre-02.jpg",
+      "/images/products/warehouse/kho-coctre-14.jpg",
+      "/images/products/warehouse/kho-coctre-09.jpg",
+      "/images/products/warehouse/kho-coctre-16.jpg",
+      "/images/products/warehouse/kho-coctre-01.jpg"
     ],
     featured: true,
     rating: 0,
@@ -196,9 +205,12 @@ Sản phẩm thường được chỉ định trong các hồ sơ thiết kế k
     ],
     packaging: "Bó 15 - 20 cây / bó hoặc xếp cây gọn gàng trên thùng xe.",
     images: [
-      "/images/products/coc-tre-3m-1.webp",
-      "/images/products/coc-tre-3m-2.webp",
-      "/images/products/coc-tre-3m-3.webp"
+      "/images/products/warehouse/kho-coctre-03.jpg",
+      "/images/products/warehouse/kho-coctre-14.jpg",
+      "/images/products/warehouse/kho-coctre-05.jpg",
+      "/images/products/warehouse/kho-coctre-13.jpg",
+      "/images/products/warehouse/kho-coctre-17.jpg",
+      "/images/products/warehouse/kho-coctre-01.jpg"
     ],
     featured: true,
     rating: 0,
@@ -240,9 +252,12 @@ Cọc có khả năng xuyên sâu qua nhiều lớp bùn lầy, giúp tạo liê
     ],
     packaging: "Xếp cây gọn gàng theo kiện 10 - 15 cây, buộc đai nâng hạ xe cẩu.",
     images: [
-      "/images/products/coc-tre-4m-1.webp",
-      "/images/products/coc-tre-4m-2.webp",
-      "/images/products/coc-tre-4m-3.webp"
+      "/images/products/warehouse/kho-coctre-04.jpg",
+      "/images/products/warehouse/kho-coctre-11.jpg",
+      "/images/products/warehouse/kho-coctre-15.jpg",
+      "/images/products/warehouse/kho-coctre-18.jpg",
+      "/images/products/warehouse/kho-coctre-19.jpg",
+      "/images/products/warehouse/kho-coctre-01.jpg"
     ],
     featured: true,
     rating: 0,
@@ -283,9 +298,12 @@ Với xưởng chế biến và kho bãi trực tiếp tại 331 Phố Vác, Dâ
     ],
     packaging: "Đóng bó theo quy cách yêu cầu của khách hàng hoặc bốc trần lên xe tải.",
     images: [
-      "/images/products/coc-tre-theo-yeu-cau-1.webp",
-      "/images/products/coc-tre-theo-yeu-cau-2.webp",
-      "/images/products/coc-tre-theo-yeu-cau-3.webp"
+      "/images/products/warehouse/kho-coctre-01.jpg",
+      "/images/products/warehouse/kho-coctre-02.jpg",
+      "/images/products/warehouse/kho-coctre-05.jpg",
+      "/images/products/warehouse/kho-coctre-10.jpg",
+      "/images/products/warehouse/kho-coctre-14.jpg",
+      "/images/products/warehouse/kho-coctre-20.jpg"
     ],
     featured: true,
     rating: 0,

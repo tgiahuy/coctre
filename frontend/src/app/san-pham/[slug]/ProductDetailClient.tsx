@@ -15,6 +15,9 @@ import {
   Send,
   AlertCircle,
   Loader2,
+  ChevronLeft,
+  ChevronRight,
+  Camera,
 } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
@@ -43,6 +46,16 @@ export default function ProductDetailClient({
   const { openQuoteModal } = useQuoteModal();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<"desc" | "specs" | "apps" | "shipping" | "reviews">("desc");
+
+  const nextImage = () => {
+    if (!product?.images?.length) return;
+    setActiveImageIndex((prev) => (prev + 1) % product.images.length);
+  };
+
+  const prevImage = () => {
+    if (!product?.images?.length) return;
+    setActiveImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+  };
 
   // Reviews state
   const [submittedReviews, setSubmittedReviews] = useState<ProductReview[]>([]);
@@ -161,9 +174,9 @@ export default function ProductDetailClient({
         <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-200 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* LEFT: IMAGE GALLERY */}
           <div className="lg:col-span-6 space-y-4">
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-gray-100 bg-[#18231C]/5 shadow-inner">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-gray-100 bg-[#18231C]/5 shadow-inner group/preview">
               <Image
-                src={product.images?.[activeImageIndex] || product.images?.[0] || "/images/products/coc-tre-2m-1.webp"}
+                src={product.images?.[activeImageIndex] || product.images?.[0] || "/images/products/warehouse/kho-coctre-08.jpg"}
                 alt={product.name}
                 fill
                 className="object-cover transition-all duration-300"
@@ -175,24 +188,61 @@ export default function ProductDetailClient({
                 <CheckCircle2 className="w-4 h-4 text-[#CDAA63]" />
                 <span>{(product.stockStatus || "còn hàng").toUpperCase()}</span>
               </div>
+
+              {/* Image counter badge */}
+              {product.images && product.images.length > 1 && (
+                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+                  <Camera className="w-3.5 h-3.5 text-[#CDAA63]" />
+                  <span>Ảnh {activeImageIndex + 1} / {product.images.length}</span>
+                </div>
+              )}
+
+              {/* Next/Prev Navigation Buttons */}
+              {product.images && product.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      prevImage();
+                    }}
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all opacity-80 hover:opacity-100 cursor-pointer shadow-md"
+                    aria-label="Ảnh trước"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      nextImage();
+                    }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all opacity-80 hover:opacity-100 cursor-pointer shadow-md"
+                    aria-label="Ảnh tiếp theo"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Thumbnail Selectors */}
             {product.images && product.images.length > 1 && (
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-5 sm:grid-cols-6 gap-2">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
+                    type="button"
                     onClick={() => setActiveImageIndex(idx)}
                     className={`relative aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
                       activeImageIndex === idx
-                        ? "border-[#214E34] ring-2 ring-[#CDAA63]"
+                        ? "border-[#214E34] ring-2 ring-[#CDAA63] scale-105"
                         : "border-gray-200 opacity-70 hover:opacity-100"
                     }`}
                   >
                     <Image
                       src={img}
-                      alt={`${product.name} view ${idx + 1}`}
+                      alt={`${product.name} ảnh ${idx + 1}`}
                       fill
                       className="object-cover"
                     />
@@ -364,6 +414,48 @@ export default function ProductDetailClient({
                     </p>
                   </div>
                 </div>
+
+                {/* Real Warehouse Photos Gallery */}
+                {product.images && product.images.length > 1 && (
+                  <div className="pt-6 border-t border-gray-100">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-base font-bold text-[#18231C] flex items-center gap-2">
+                        <Camera className="w-4 h-4 text-[#214E34]" />
+                        <span>Hình ảnh thực tế tại kho cọc tre & xưởng chế biến 331 Phố Vác</span>
+                      </h4>
+                      <span className="text-xs text-[#214E34] font-semibold bg-[#EBF3EE] px-2.5 py-1 rounded-full">
+                        {product.images.length} ảnh thực tế
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {product.images.map((img, idx) => (
+                        <div
+                          key={idx}
+                          onClick={() => {
+                            setActiveImageIndex(idx);
+                            window.scrollTo({ top: 120, behavior: "smooth" });
+                          }}
+                          className="group relative aspect-[4/3] rounded-2xl overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition-all"
+                        >
+                          <Image
+                            src={img}
+                            alt={`${product.name} kho hàng ảnh ${idx + 1}`}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2.5">
+                            <span className="text-white text-xs font-semibold flex items-center gap-1">
+                              Xem ảnh {idx + 1}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-500 italic mt-3 text-center">
+                      * Hình ảnh thực tế được chụp trực tiếp tại tổng kho Cọc Tre Dương Huyền (331 Phố Vác, Dân Hòa, Hà Nội). Khách hàng có thể đến trực tiếp kiểm tra hàng trước khi bốc xe.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
