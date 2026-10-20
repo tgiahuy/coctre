@@ -112,7 +112,7 @@ export default function HighTrustCommitmentSection() {
               
               <div className="pt-2 space-y-2 text-xs sm:text-sm text-gray-200">
                 <p>📍 <strong>Kho bãi chính:</strong> {siteConfig.address}</p>
-                <p>📞 <strong>Hotline / Zalo:</strong> {siteConfig.hotlineFormatted} – {siteConfig.hotline2Formatted || "0369.928.040"}</p>
+                <p>📞 <strong>Hotline / Zalo:</strong> {siteConfig.hotlineFormatted} – {siteConfig.hotline2Formatted || "0912.468.203"}</p>
               </div>
 
               <div className="pt-3">

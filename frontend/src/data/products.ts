@@ -4,7 +4,7 @@ export interface Product {
   name: string;
   length: string; // e.g. "1.5m", "2m", "2.5m", "3m", "4m", "Theo yêu cầu"
   lengthMeters: number; // numeric length for filtering
-  diameter: string; // e.g. "Ø 60 - 80mm", "Ø 70 - 100mm"
+  diameter: string; // e.g. "60 - 80mm", "70 - 100mm"
   bambooType: string; // Tre đực già / Tre Luồng / Tre gai
   origin: string; // Hòa Bình / Thanh Hóa / Phú Thọ
   stockStatus: "Còn hàng" | "Sẵn hàng số lượng lớn" | "Đặt hàng 1-2 ngày";
@@ -28,10 +28,10 @@ export const products: Product[] = [
   {
     id: "coc-tre-15m",
     slug: "coc-tre-15m",
-    name: "Cọc Tre 1,5m (Ø 6 - 8cm)",
+    name: "Cọc Tre 1,5m (6 - 8cm)",
     length: "1,5m",
     lengthMeters: 1.5,
-    diameter: "Ø 60 – 80 mm",
+    diameter: "60 – 80 mm",
     bambooType: "Tre đực già, tre gai, tre luồng Hòa Bình",
     origin: "Vùng tre già Hòa Bình tuyển chọn",
     stockStatus: "Sẵn hàng số lượng lớn",
@@ -41,7 +41,7 @@ export const products: Product[] = [
 Đặc tính cọc tre khi ngập hoàn toàn trong môi trường nước ngầm hoặc bùn yếm khí sẽ tăng độ bền qua nhiều thập kỷ, không bị mối mọt xâm hại, đóng vai trò tạo mạng lưới liên kết đất bùn cát chặt chẽ.`,
     specs: [
       { label: "Chiều dài tiêu chuẩn", value: "1,45m – 1,55m (Đủ quy cách)" },
-      { label: "Đường kính gốc", value: "Ø 60mm – 80mm" },
+      { label: "Đường kính gốc", value: "60mm – 80mm" },
       { label: "Đường kính ngọn", value: "Tối thiểu ≥ 50mm" },
       { label: "Độ tuổi tre", value: "3 – 5 năm tuổi (Thịt tre già đanh, xanh sẫm)" },
       { label: "Gia công đầu cọc", value: "Đã vát nhọn 3 cạnh dài 15-20cm, cắt phẳng đầu" },
@@ -76,10 +76,10 @@ export const products: Product[] = [
   {
     id: "coc-tre-2m",
     slug: "coc-tre-2m",
-    name: "Cọc Tre 2m (Ø 6 - 9cm)",
+    name: "Cọc Tre 2m (6 - 9cm)",
     length: "2m",
     lengthMeters: 2.0,
-    diameter: "Ø 65 – 90 mm",
+    diameter: "65 – 90 mm",
     bambooType: "Tre luồng / Tre gai già đanh",
     origin: "Vùng nguyên liệu tre già chọn lọc miền Bắc",
     stockStatus: "Sẵn hàng số lượng lớn",
@@ -89,7 +89,7 @@ export const products: Product[] = [
 Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, không bị sâu mọt hoặc cụt ngọn non. Đầu cọc được tiện phẳng để chịu lực va đập khi máy ép thủy lực hoặc búa đóng hoạt động.`,
     specs: [
       { label: "Chiều dài tiêu chuẩn", value: "1,95m – 2,05m" },
-      { label: "Đường kính gốc", value: "Ø 65mm – 90mm" },
+      { label: "Đường kính gốc", value: "65mm – 90mm" },
       { label: "Đường kính ngọn", value: "Tối thiểu ≥ 55mm" },
       { label: "Độ tuổi tre", value: "Tre già 4 – 6 năm tuổi" },
       { label: "Xử lý bề mặt", value: "Tỉa sạch cành mắt, đầu vát nhọn 3 khía chống lệch hướng" },
@@ -124,10 +124,10 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
   {
     id: "coc-tre-25m",
     slug: "coc-tre-25m",
-    name: "Cọc Tre 2,5m (Ø 7 - 9.5cm)",
+    name: "Cọc Tre 2,5m (7 - 9.5cm)",
     length: "2,5m",
     lengthMeters: 2.5,
-    diameter: "Ø 70 – 95 mm",
+    diameter: "70 – 95 mm",
     bambooType: "Tre đực đặc ruột, tre luồng già tuyển chọn",
     origin: "Vùng nguyên liệu tre già chọn lọc",
     stockStatus: "Sẵn hàng số lượng lớn",
@@ -137,12 +137,12 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
 Được khai thác chính vụ vào mùa hanh khô nên tre đạt hàm lượng chất xơ cao nhất, dẻo dai và chống mục rỗng tối đa khi nằm trong lòng đất ngậm nước.`,
     specs: [
       { label: "Chiều dài tiêu chuẩn", value: "2,45m – 2,55m" },
-      { label: "Đường kính gốc", value: "Ø 70mm – 95mm" },
+      { label: "Đường kính gốc", value: "70mm – 95mm" },
       { label: "Đường kính ngọn", value: "Tối thiểu ≥ 60mm" },
       { label: "Độ tuổi tre", value: "Trên 4 năm tuổi (Vỏ bóng sẫm, thịt tre già cứng)" },
       { label: "Gia công", value: "Vát nhọn sắc bén, đầu trên cắt vuông góc 90 độ" },
       { label: "Độ thẳng thân", value: "Độ cong võng < 1.5% chiều dài cọc" },
-      { label: "Chứng nhận nguồn gốc", value: "Rừng trồng bền vững có hóa đơn xuất xứ lâm sản" }
+      { label: "Chứng nhận nguồn gốc", value: "Rừng trồng bền vững có hóa đơn xuất xứ hợp pháp" }
     ],
     applications: [
       "Công trình hạ tầng giao thông, nền đường đắp qua vùng trũng ngập úng.",
@@ -172,10 +172,10 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
   {
     id: "coc-tre-3m",
     slug: "coc-tre-3m",
-    name: "Cọc Tre 3m (Ø 7 - 10cm)",
+    name: "Cọc Tre 3m (7 - 10cm)",
     length: "3m",
     lengthMeters: 3.0,
-    diameter: "Ø 70 – 100 mm",
+    diameter: "70 – 100 mm",
     bambooType: "Tre luồng già tuyển chọn loại 1",
     origin: "Khai thác tuyển chọn từ vùng tre già đạt chuẩn",
     stockStatus: "Sẵn hàng số lượng lớn",
@@ -185,7 +185,7 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
 Sản phẩm thường được chỉ định trong các hồ sơ thiết kế kỹ thuật của Viện thiết kế giao thông, thủy lợi phục vụ gia cố chân taluy âm, chân khay kè đá và móng cống hộp qua vùng trũng thấp.`,
     specs: [
       { label: "Chiều dài tiêu chuẩn", value: "2,95m – 3,05m" },
-      { label: "Đường kính gốc", value: "Ø 70mm – 100mm (Đường kính to đều)" },
+      { label: "Đường kính gốc", value: "70mm – 100mm (Đường kính to đều)" },
       { label: "Đường kính ngọn", value: "Tối thiểu ≥ 65mm" },
       { label: "Độ tuổi tre", value: "5 – 7 năm tuổi (Tre già đanh, không mọt)" },
       { label: "Vát nhọn", value: "Vát 3 mặt sắc dài 25cm hỗ trợ máy đóng xuyên tầng đất cứng" },
@@ -219,10 +219,10 @@ Sản phẩm thường được chỉ định trong các hồ sơ thiết kế k
   {
     id: "coc-tre-4m",
     slug: "coc-tre-4m",
-    name: "Cọc Tre 4m (Ø 8 - 11cm)",
+    name: "Cọc Tre 4m (8 - 11cm)",
     length: "4m",
     lengthMeters: 4.0,
-    diameter: "Ø 80 – 110 mm",
+    diameter: "80 – 110 mm",
     bambooType: "Tre luồng đại thụ, tre gai già Hòa Bình",
     origin: "Vùng tre già Hòa Bình chọn lọc",
     stockStatus: "Sẵn hàng số lượng lớn",
@@ -232,7 +232,7 @@ Sản phẩm thường được chỉ định trong các hồ sơ thiết kế k
 Cọc có khả năng xuyên sâu qua nhiều lớp bùn lầy, giúp tạo liên kết chặt chẽ giữa tầng đất bùn và nền cát sỏi bên dưới, ngăn ngừa lún nghiêng móng vĩnh viễn.`,
     specs: [
       { label: "Chiều dài tiêu chuẩn", value: "3,95m – 4,05m" },
-      { label: "Đường kính gốc", value: "Ø 80mm – 110mm" },
+      { label: "Đường kính gốc", value: "80mm – 110mm" },
       { label: "Đường kính ngọn", value: "Tối thiểu ≥ 70mm" },
       { label: "Đặc tính", value: "Cắt sát gốc tre già, thân đanh cứng" },
       { label: "Gia công", value: "Vát nhọn chống va lệch móng, cắt phẳng mặt nhận lực ép" },
@@ -269,7 +269,7 @@ Cọc có khả năng xuyên sâu qua nhiều lớp bùn lầy, giúp tạo liê
     name: "Cọc Tre Theo Yêu Cầu (Đặt Cắt Quy Cách Riêng)",
     length: "Theo yêu cầu",
     lengthMeters: 0,
-    diameter: "Ø 50 – 120 mm tùy chọn",
+    diameter: "50 – 120 mm tùy chọn",
     bambooType: "Tre luồng, tre gai, tre đực Hòa Bình tuyển chọn",
     origin: "Vùng nguyên liệu tuyển chọn Hòa Bình",
     stockStatus: "Đặt hàng 1-2 ngày",
@@ -279,10 +279,10 @@ Cọc có khả năng xuyên sâu qua nhiều lớp bùn lầy, giúp tạo liê
 Với xưởng chế biến và kho bãi trực tiếp tại 331 Phố Vác, Dân Hòa, Hà Nội, chúng tôi có thể đáp ứng tiến độ gia công hàng vạn cọc chỉ trong 24 - 48 giờ.`,
     specs: [
       { label: "Chiều dài tùy biến", value: "Cắt chuẩn xác từ 1,0m đến 6,0m theo bản vẽ" },
-      { label: "Đường kính phân loại", value: "Tuyển chọn theo dải kích thước yêu cầu (Ví dụ: Ø80-100mm đồng đều)" },
+      { label: "Đường kính phân loại", value: "Tuyển chọn theo dải kích thước yêu cầu (Ví dụ: 80-100mm đồng đều)" },
       { label: "Yêu cầu vát cọc", value: "Vát nhọn 3 cạnh / 4 cạnh hoặc giữ nguyên đầu phẳng" },
       { label: "Thời gian đáp ứng", value: "1 – 2 ngày kể từ khi chốt số lượng đơn hàng" },
-      { label: "Chứng chỉ hồ sơ", value: "Cung cấp mẫu thí nghiệm nén uốn, hồ sơ xuất xứ lâm sản hợp pháp" }
+      { label: "Chứng chỉ hồ sơ", value: "Cung cấp mẫu thí nghiệm nén uốn, hồ sơ xuất xứ hợp pháp" }
     ],
     applications: [
       "Công trình có thiết kế địa chất chuyên biệt cần chiều dài cọc lẻ.",

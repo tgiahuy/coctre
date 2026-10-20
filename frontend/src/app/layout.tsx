@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -7,6 +8,13 @@ import QuoteModal from "@/components/common/QuoteModal";
 import DynamicFavicon from "@/components/common/DynamicFavicon";
 import { QuoteModalProvider } from "@/context/QuoteModalContext";
 import { siteConfig } from "@/data/config";
+
+const beVietnamPro = Be_Vietnam_Pro({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin", "vietnamese"],
+  display: "swap",
+  variable: "--font-be-vietnam-pro",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -110,7 +118,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="font-sans antialiased bg-[#F7F5EF] text-[#232323] min-h-screen flex flex-col selection:bg-[#CDAA63]/30 selection:text-[#214E34]" suppressHydrationWarning>
+      <body className={`${beVietnamPro.className} ${beVietnamPro.variable} font-sans antialiased bg-[#F7F5EF] text-[#232323] min-h-screen flex flex-col selection:bg-[#CDAA63]/30 selection:text-[#214E34]`} suppressHydrationWarning>
         <QuoteModalProvider>
           <DynamicFavicon />
           <Header />

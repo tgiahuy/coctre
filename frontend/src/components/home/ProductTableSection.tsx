@@ -16,7 +16,7 @@ export default function ProductTableSection() {
       badge: "Phổ biến nhất",
       badgeColor: "bg-emerald-600 text-white",
       length: "2.0 mét (Đủ chiều dài)",
-      diameter: "Ø 60mm – Ø 80mm",
+      diameter: "60mm – 80mm",
       usage: "Móng nhà phố 1-3 tầng, móng bè, nhà dân dụng",
       stock: "Có sẵn 20.000+ cây tại bãi",
     },
@@ -26,7 +26,7 @@ export default function ProductTableSection() {
       badge: "Công trình chọn nhiều",
       badgeColor: "bg-[#214E34] text-white",
       length: "2.5 mét (Đủ chiều dài)",
-      diameter: "Ø 70mm – Ø 90mm",
+      diameter: "70mm – 90mm",
       usage: "Nền đất yếu, móng nhà 3-4 tầng, cống hộp",
       stock: "Có sẵn 15.000+ cây tại bãi",
     },
@@ -36,7 +36,7 @@ export default function ProductTableSection() {
       badge: "Tre già đực tuyển",
       badgeColor: "bg-[#8C6219] text-white",
       length: "3.0 mét (Đủ chiều dài)",
-      diameter: "Ø 80mm – Ø 100mm",
+      diameter: "80mm – 100mm",
       usage: "Kè bờ kênh, bờ ao sông, móng sâu nền bùn",
       stock: "Có sẵn 15.000+ cây tại bãi",
     },
@@ -46,7 +46,7 @@ export default function ProductTableSection() {
       badge: "Tiết kiệm",
       badgeColor: "bg-gray-600 text-white",
       length: "1.5 mét (Đủ chiều dài)",
-      diameter: "Ø 50mm – Ø 70mm",
+      diameter: "50mm – 70mm",
       usage: "Gia cố rãnh mương, bờ bao ngắn, phụ trợ",
       stock: "Có sẵn 10.000+ cây tại bãi",
     },
@@ -56,7 +56,7 @@ export default function ProductTableSection() {
       badge: "Hàng đặt",
       badgeColor: "bg-[#E57C23] text-white",
       length: "4.0m – 5.0m hoặc cắt theo yêu cầu",
-      diameter: "Ø 80mm – Ø 110mm (Gốc to)",
+      diameter: "80mm – 110mm (Gốc to)",
       usage: "Dự án đê kè lớn, cầu đường, hạ tầng khu công nghiệp",
       stock: "Giao ngay 1-2 ngày",
     },
@@ -86,7 +86,7 @@ export default function ProductTableSection() {
           <div className="hidden lg:grid grid-cols-12 gap-4 bg-[#18261E] text-white p-4 font-black text-sm uppercase tracking-wider">
             <div className="col-span-3">Loại Cọc Tre</div>
             <div className="col-span-2">Kích Thước</div>
-            <div className="col-span-2">Đường Kính (Ø)</div>
+            <div className="col-span-2">Đường Kính</div>
             <div className="col-span-3">Mục Đích Sử Dụng</div>
             <div className="col-span-2 text-right">Liên Hệ Đặt Hàng</div>
           </div>

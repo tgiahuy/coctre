@@ -109,11 +109,6 @@ export default function DirectContactSection() {
                   <ShieldCheck className="w-4 h-4 text-[#CDAA63]" />
                   <span>TƯ VẤN & BÁO GIÁ TRỰC TIẾP 24/7</span>
                 </span>
-
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span>Kỹ sư trực máy • Phản hồi 5 phút</span>
-                </span>
               </div>
 
               <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-black text-white leading-tight">
@@ -124,38 +119,23 @@ export default function DirectContactSection() {
                 Tổng kho Cọc Tre Huyền Dương hỗ trợ báo giá trực tiếp tại bãi hoặc tận chân công trình. Gọi ngay để có giá tốt nhất và sắp xếp xe tải giao trong ngày.
               </p>
 
-              {/* 3 HIGH-CONTRAST ACTION BUTTONS */}
-              <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* 2 HIGH-CONTRAST ACTION BUTTONS */}
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 
-                {/* BUTTON 1: HOTLINE CHÍNH (CAM NỔI BẬT) */}
+                {/* BUTTON 1: HOTLINE CHÍNH 036 9928040 (CAM NỔI BẬT) */}
                 <a
-                  href={`tel:${siteConfig.hotline}`}
+                  href={`tel:${siteConfig.hotline || "0369928040"}`}
                   className="py-3.5 px-4 rounded-2xl bg-[#E57C23] hover:bg-[#D96B14] text-white font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-lg hover:shadow-xl transition-all active:scale-95 group text-center border border-amber-400/30"
-                  title="Bấm để gọi hotline chính"
+                  title="Bấm để gọi hotline"
                 >
                   <div className="flex items-center gap-1.5">
                     <Phone className="w-4 h-4 animate-bounce text-white shrink-0" />
-                    <span className="tracking-wide">GỌI: {siteConfig.hotlineFormatted}</span>
+                    <span className="tracking-wide">GỌI: {siteConfig.hotlineFormatted || "0369.928.040"}</span>
                   </div>
-                  <span className="text-[11px] font-medium text-amber-100/90">Hotline Bãi & Giao Xe</span>
+                  <span className="text-[11px] font-medium text-amber-100/90">Hotline Bãi & Tư Vấn Báo Giá</span>
                 </a>
 
-                {/* BUTTON 2: HOTLINE PHỤ (TRẮNG/VÀNG KIM - TƯƠNG PHẢN CAO, KHÔNG BỊ CHÌM) */}
-                {siteConfig.hotline2 ? (
-                  <a
-                    href={`tel:${siteConfig.hotline2}`}
-                    className="py-3.5 px-4 rounded-2xl bg-white hover:bg-amber-50 text-[#18231C] font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-lg hover:shadow-xl transition-all active:scale-95 group text-center border-2 border-[#CDAA63]"
-                    title="Bấm để gọi hotline kỹ thuật"
-                  >
-                    <div className="flex items-center gap-1.5 text-[#214E34]">
-                      <Headphones className="w-4 h-4 shrink-0 text-[#CDAA63]" />
-                      <span className="tracking-wide">GỌI: {siteConfig.hotline2Formatted}</span>
-                    </div>
-                    <span className="text-[11px] font-medium text-gray-600">Tư Vấn Kỹ Thuật</span>
-                  </a>
-                ) : null}
-
-                {/* BUTTON 3: ZALO BÁO GIÁ (XANH ZALO CHUẨN) */}
+                {/* BUTTON 2: ZALO BÁO GIÁ (XANH ZALO CHUẨN) */}
                 <a
                   href={siteConfig.zaloUrl}
                   target="_blank"
@@ -308,7 +288,7 @@ export default function DirectContactSection() {
                 <div>
                   <strong className="block text-white font-bold">Giờ Hoạt Động:</strong>
                   <span className="text-gray-300 text-[11px] leading-tight block mt-0.5">
-                    06:00 - 22:00 (Kỹ sư hỗ trợ khẩn cấp 24/7)
+                    8:00 - 22:00 (Thứ 2 - Chủ Nhật)
                   </span>
                 </div>
               </div>

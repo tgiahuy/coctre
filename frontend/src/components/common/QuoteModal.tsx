@@ -343,7 +343,7 @@ export default function QuoteModal() {
               <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 flex items-start gap-2">
                 <span className="font-bold text-[#E57C23]">✓</span>
                 <span>
-                  Báo giá trực tiếp từ kho cọc tre Huyền Dương, hỗ trợ hóa đơn VAT & chứng chỉ lâm sản hợp pháp cho nhà thầu.
+                  Báo giá trực tiếp từ kho cọc tre Huyền Dương, hỗ trợ hóa đơn VAT cho nhà thầu.
                 </span>
               </div>
 

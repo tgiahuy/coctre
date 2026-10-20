@@ -32,7 +32,7 @@ export default function SupplyCapacitySection() {
     },
     {
       title: "Hóa Đơn & Hồ Sơ Đầy Đủ",
-      desc: "Cung cấp hóa đơn GTGT (VAT), bảng kê lâm sản hợp pháp, phục vụ nghiệm thu quyết toán công trình.",
+      desc: "Cung cấp hóa đơn GTGT (VAT), đầy đủ hồ sơ chứng từ hợp pháp, phục vụ nghiệm thu quyết toán công trình.",
       icon: ReceiptText,
     },
   ];

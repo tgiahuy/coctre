@@ -35,7 +35,7 @@ export default function Footer() {
             <div>
               <h4 className="font-bold text-white text-base">Tre Già Tuyển Chọn 100%</h4>
               <p className="text-xs text-gray-400 mt-1">
-                Khai thác chính vụ, thân thẳng, thịt dày, vát nhọn 3 cạnh chuẩn TCVN 9361:2012.
+                Khai thác chính vụ, thân thẳng, thịt dày, quy cách chuẩn chất lượng.
               </p>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function Footer() {
 
             <div className="pt-2 text-xs text-gray-400 space-y-1 border-t border-[#24362A]">
               <p><strong className="text-gray-300">Năng lực cung ứng:</strong> {siteConfig.supplyCapacity}</p>
-              <p><strong className="text-gray-300">Hóa đơn chứng từ:</strong> Đầy đủ VAT & hồ sơ lâm sản</p>
+              <p><strong className="text-gray-300">Hóa đơn chứng từ:</strong> Đầy đủ VAT</p>
             </div>
           </div>
 
@@ -216,10 +216,6 @@ export default function Footer() {
         <div className="mt-14 pt-6 border-t border-[#24362A] flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400 gap-3">
           <p>© {currentYear} {siteConfig.companyName}. Bản quyền thuộc về {siteConfig.legalName}.</p>
           <div className="flex items-center gap-4">
-            <span>Tiêu chuẩn TCVN 9361:2012</span>
-            <span>•</span>
-            <span>Lâm sản hợp pháp</span>
-            <span>•</span>
             <Link
               href="/admin"
               className="text-gray-500 hover:text-[#CDAA63] transition-colors"

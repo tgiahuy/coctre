@@ -59,8 +59,8 @@ export default function TechnicalSpecsSection() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-black/30 border border-white/10 gap-1">
-                  <span className="text-gray-400 font-medium">Đường kính gốc (Ø):</span>
-                  <span className="font-extrabold text-[#CDAA63] text-sm sm:text-base">Ø 60mm đến Ø 110mm (Thân thẳng)</span>
+                  <span className="text-gray-400 font-medium">Đường kính gốc:</span>
+                  <span className="font-extrabold text-[#CDAA63] text-sm sm:text-base">60mm đến 110mm (Thân thẳng)</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-black/30 border border-white/10 gap-1">
@@ -120,7 +120,7 @@ export default function TechnicalSpecsSection() {
                 <h4 className="font-black text-base text-white">Đầy Đủ Hóa Đơn VAT & Chứng Từ</h4>
               </div>
               <p className="text-xs text-gray-300 leading-relaxed pl-12">
-                Cung cấp đầy đủ hợp đồng kinh tế, hóa đơn giá trị gia tăng (VAT), biên bản giao nhận và chứng nhận nguồn gốc xuất xứ lâm sản hợp pháp.
+                Cung cấp đầy đủ hợp đồng kinh tế, hóa đơn giá trị gia tăng (VAT), biên bản giao nhận và chứng nhận nguồn gốc xuất xứ hợp pháp.
               </p>
             </div>
 

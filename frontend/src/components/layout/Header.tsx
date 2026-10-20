@@ -83,7 +83,7 @@ export default function Header() {
             </span>
             <span className="hidden lg:flex items-center gap-1.5 text-gray-300">
               <Clock className="w-3.5 h-3.5 text-gray-400" />
-              6:00 - 22:00 (Thứ 2 - CN)
+              8:00 - 22:00 (Thứ 2 - CN)
             </span>
           </div>
 
@@ -126,11 +126,11 @@ export default function Header() {
             : "bg-white py-4 border-b border-gray-200"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center gap-2">
             {/* LOGO */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-11 h-11 sm:w-12 sm:h-12 shrink-0 rounded-full shadow-md group-hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#CDAA63]/30 bg-white p-0.5">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full shadow-md group-hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#CDAA63]/30 bg-white p-0.5">
                 <Image
                   src={siteConfig.logoUrl || "/images/logo.png"}
                   alt={siteConfig.companyName || "Logo Cọc Tre Huyền Dương"}
@@ -141,11 +141,11 @@ export default function Header() {
                   unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-[#214E34] leading-tight flex items-center gap-1">
+              <div className="flex flex-col min-w-0">
+                <span className="text-[15px] sm:text-xl lg:text-2xl font-black tracking-tight text-[#214E34] leading-tight whitespace-nowrap">
                   CỌC TRE <span className="text-[#CDAA63]">HUYỀN DƯƠNG</span>
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                <span className="text-[9px] sm:text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate">
                   Tổng Kho Cọc Tre Công Trình
                 </span>
               </div>
@@ -242,10 +242,10 @@ export default function Header() {
             </div>
 
             {/* MOBILE HAMBURGER BUTTON */}
-            <div className="flex lg:hidden items-center gap-2">
+            <div className="flex lg:hidden items-center gap-1.5 shrink-0">
               <button
                 onClick={() => openQuoteModal()}
-                className="bg-[#E57C23] text-white p-2 rounded-lg text-xs font-bold sm:hidden"
+                className="bg-[#E57C23] hover:bg-[#CC6914] text-white px-2.5 py-1.5 rounded-lg text-xs font-bold sm:hidden shadow-sm transition-colors"
                 aria-label="Nhận báo giá"
               >
                 BÁO GIÁ
@@ -253,13 +253,13 @@ export default function Header() {
 
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-gray-700 hover:text-[#214E34] hover:bg-gray-100 rounded-lg focus:outline-none"
+                className="p-1.5 text-gray-700 hover:text-[#214E34] hover:bg-gray-100 rounded-lg focus:outline-none"
                 aria-label="Mở menu"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-7 h-7" />
+                  <X className="w-6 h-6" />
                 ) : (
-                  <MenuIcon className="w-7 h-7" />
+                  <MenuIcon className="w-6 h-6" />
                 )}
               </button>
             </div>
@@ -283,14 +283,14 @@ export default function Header() {
                   <span className="text-[#CDAA63]">{siteConfig.hotlineFormatted}</span>
                 </a>
                 <a
-                  href={`tel:${siteConfig.hotline2 || "0369928040"}`}
+                  href={`tel:${siteConfig.hotline2 || "0912468203"}`}
                   className="flex items-center justify-between p-3 rounded-xl bg-[#1d3c2a] text-white font-bold shadow-sm border border-[#2B3E32]"
                 >
                   <div className="flex items-center gap-2">
                     <Phone className="w-4 h-4 text-[#CDAA63]" />
                     <span>Hotline 2</span>
                   </div>
-                  <span className="text-[#CDAA63]">{siteConfig.hotline2Formatted || "0369.928.040"}</span>
+                  <span className="text-[#CDAA63]">{siteConfig.hotline2Formatted || "0912.468.203"}</span>
                 </a>
               </div>
 

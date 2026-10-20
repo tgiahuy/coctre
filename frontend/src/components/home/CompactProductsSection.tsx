@@ -228,12 +228,6 @@ export default function CompactProductsSection() {
                       className="object-cover group-hover/card:scale-108 transition-transform duration-500"
                     />
 
-                    {/* Diameter Spec Badge */}
-                    <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur-sm text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1 shadow-sm">
-                      <Ruler className="w-3 h-3 text-[#CDAA63]" />
-                      <span>{item.diameter || "Tiêu chuẩn"}</span>
-                    </div>
-
                     {/* Length Tag */}
                     <div className="absolute top-2.5 right-2.5 bg-[#214E34]/90 backdrop-blur-sm text-[#EED59B] text-[10px] sm:text-xs font-extrabold px-2.5 py-1 rounded-md border border-[#CDAA63]/30 shadow-sm">
                       {item.length ? `Dài ${item.length}` : "Quy cách chuẩn"}
@@ -315,7 +309,7 @@ export default function CompactProductsSection() {
           <div className="flex items-center gap-2.5 text-center md:text-left">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
             <span>
-              Chúng tôi nhận chặt vát đầu cọc, cắt theo kích thước yêu cầu (1.5m - 5m) và giao tận chân công trình.
+              Chúng tôi nhận cắt theo kích thước yêu cầu (1.5m - 5m) và giao tận chân công trình.
             </span>
           </div>
 

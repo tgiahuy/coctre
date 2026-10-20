@@ -54,7 +54,7 @@ export default function HeroSection() {
             {/* Artistic Main Heading */}
             <div className="space-y-2">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] drop-shadow-md">
-                <span className="block font-serif italic text-[#CBEA7B] font-bold text-3xl sm:text-5xl mb-1">
+                <span className="block text-[#CBEA7B] font-black text-2xl sm:text-4xl lg:text-5xl mb-1.5 tracking-tight">
                   Cọc Tre Huyền Dương
                 </span>
                 <span className="text-white drop-shadow-sm">
@@ -120,11 +120,11 @@ export default function HeroSection() {
               </a>
               <span className="text-gray-400">•</span>
               <a
-                href={`tel:${siteConfig.hotline2 || "0369928040"}`}
+                href={`tel:${siteConfig.hotline2 || "0912468203"}`}
                 className="font-extrabold text-[#CDAA63] hover:text-white transition-colors flex items-center gap-1"
               >
                 <Phone className="w-3.5 h-3.5 text-[#E57C23]" />
-                {siteConfig.hotline2Formatted || "0369.928.040"}
+                {siteConfig.hotline2Formatted || "0912.468.203"}
               </a>
             </div>
           </div>
