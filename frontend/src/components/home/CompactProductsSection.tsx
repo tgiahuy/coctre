@@ -118,7 +118,7 @@ export default function CompactProductsSection() {
 
   return (
     <section
-      className="py-10 sm:py-16 bg-[#FAF9F5] border-t border-b border-gray-200 relative overflow-hidden"
+      className="py-8 sm:py-14 bg-[#FAF9F5] border-t border-b border-gray-200 relative overflow-hidden"
       id="san-pham-noi-bat"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -172,8 +172,71 @@ export default function CompactProductsSection() {
           </div>
         </div>
 
-        {/* SLIDER CAROUSEL TRACK WRAPPER */}
-        <div className="relative group/carousel">
+        {/* MOBILE: 2-COLUMN COMPACT GRID (Inspired by coctrehoabinh.com) */}
+        <div className="grid grid-cols-2 gap-2.5 min-[400px]:gap-3 sm:hidden mb-6">
+          {allProducts.map((item) => {
+            const imageSrc =
+              item.images && item.images.length > 0
+                ? item.images[0]
+                : "/images/products/coc-tre-3m-1.webp";
+
+            return (
+              <div
+                key={`mobile-${item.id || item.slug}`}
+                className="bg-white rounded-xl p-2.5 border border-gray-200/90 shadow-sm flex flex-col justify-between text-center group"
+              >
+                {/* Product Image */}
+                <Link
+                  href={`/san-pham/${item.slug}`}
+                  className="relative block aspect-square rounded-lg overflow-hidden bg-gray-100 mb-2 border border-gray-100"
+                >
+                  <Image
+                    src={imageSrc}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 640px) 45vw, 200px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {/* Length Badge */}
+                  <div className="absolute top-1.5 right-1.5 bg-[#214E34]/90 backdrop-blur-sm text-[#EED59B] text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-sm">
+                    {item.length ? `Dài ${item.length}` : "Chuẩn"}
+                  </div>
+                  {/* Diameter Badge */}
+                  <div className="absolute bottom-1.5 left-1.5 bg-black/60 backdrop-blur-sm text-white text-[8.5px] font-semibold px-1.5 py-0.5 rounded">
+                    {item.diameter}
+                  </div>
+                </Link>
+
+                {/* Title & Short spec */}
+                <div className="mb-2 text-left px-0.5">
+                  <Link
+                    href={`/san-pham/${item.slug}`}
+                    className="block group-hover:text-[#214E34]"
+                  >
+                    <h3 className="text-xs min-[380px]:text-[13px] font-black text-[#18231C] uppercase line-clamp-1 group-hover:text-[#214E34]">
+                      {item.name}
+                    </h3>
+                  </Link>
+                  <p className="text-[10px] text-gray-500 font-medium line-clamp-1 mt-0.5">
+                    {getProductHighlight(item)}
+                  </p>
+                </div>
+
+                {/* Quick Action Button */}
+                <button
+                  onClick={() => openQuoteModal(item.name)}
+                  className="w-full py-1.5 px-2 bg-[#214E34] hover:bg-[#183B27] text-white text-[11px] font-bold rounded-lg shadow-sm flex items-center justify-center gap-1 active:scale-95 transition-all mt-auto"
+                >
+                  <ShoppingCart className="w-3 h-3 text-[#CDAA63]" />
+                  <span>Báo giá</span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* DESKTOP & TABLET: SLIDER CAROUSEL TRACK WRAPPER */}
+        <div className="relative group/carousel hidden sm:block">
           
           {/* FLOATING LEFT ARROW BUTTON (Desktop & Tablet) */}
           <button
@@ -281,9 +344,9 @@ export default function CompactProductsSection() {
           </div>
         </div>
 
-        {/* DOTS / PROGRESS INDICATOR (Fixed, Responsive, Easy to click) */}
+        {/* DOTS / PROGRESS INDICATOR (Tablet & Desktop only) */}
         {pageCount > 1 && (
-          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-5 sm:mt-7">
+          <div className="hidden sm:flex items-center justify-center gap-1 sm:gap-2 mt-5 sm:mt-7">
             {Array.from({ length: pageCount }).map((_, idx) => (
               <button
                 key={idx}

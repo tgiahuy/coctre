@@ -26,12 +26,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       </Link>
 
       {/* PROJECT CONTENT */}
-      <div className="p-6 flex-1 flex flex-col justify-between">
+      <div className="p-3.5 sm:p-6 flex-1 flex flex-col justify-between">
         <div>
           {/* Location & Type */}
-          <div className="flex flex-wrap items-center gap-y-1 gap-x-3 text-xs text-gray-500 mb-2">
+          <div className="flex flex-wrap items-center gap-y-1 gap-x-2 text-[11px] sm:text-xs text-gray-500 mb-1.5 sm:mb-2">
             <span className="flex items-center gap-1 text-[#214E34] font-medium">
-              <MapPin className="w-3.5 h-3.5 text-[#CDAA63] shrink-0" />
+              <MapPin className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#CDAA63] shrink-0" />
               {project.location.split(',')[0]}
             </span>
             <span>•</span>
@@ -39,19 +39,19 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </div>
 
           <Link href={`/du-an/${project.slug}`} className="block">
-            <h3 className="text-base sm:text-lg font-bold text-[#18231C] leading-snug group-hover:text-[#214E34] transition-colors line-clamp-2">
+            <h3 className="text-sm sm:text-lg font-bold text-[#18231C] leading-snug group-hover:text-[#214E34] transition-colors line-clamp-2">
               {project.title}
             </h3>
           </Link>
 
-          <p className="mt-2.5 text-xs sm:text-sm text-[#686868] line-clamp-2 leading-relaxed">
+          <p className="mt-1.5 sm:mt-2.5 text-xs sm:text-sm text-[#686868] line-clamp-2 leading-relaxed">
             {project.shortDescription}
           </p>
         </div>
 
         {/* FOOTER LINK */}
-        <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-          <span className="text-xs text-gray-500 font-medium">
+        <div className="mt-3 sm:mt-5 pt-2.5 sm:pt-4 border-t border-gray-100 flex items-center justify-between">
+          <span className="text-[11px] sm:text-xs text-gray-500 font-medium">
             Cung cấp: <strong className="text-gray-800">{project.bambooSupplied.split('&')[0]}</strong>
           </span>
 
@@ -59,7 +59,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             href={`/du-an/${project.slug}`}
             className="inline-flex items-center gap-1 text-xs font-bold text-[#214E34] hover:text-[#183B27] group-hover:translate-x-0.5 transition-transform"
           >
-            <span>Xem dự án</span>
+            <span>Chi tiết</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#CDAA63]" />
           </Link>
         </div>
