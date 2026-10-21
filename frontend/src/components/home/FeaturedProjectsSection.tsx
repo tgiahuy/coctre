@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import Link from "next/link";
-import { ArrowRight, Building2, ChevronLeft, ChevronRight, Award } from "lucide-react";
+import { ChevronLeft, ChevronRight, Award } from "lucide-react";
 import ProjectCard from "@/components/common/ProjectCard";
 import { useProjects } from "@/lib/projectStore";
 
@@ -97,60 +96,59 @@ export default function FeaturedProjectsSection() {
   }
 
   return (
-    <section className="py-8 sm:py-16 lg:py-20 bg-[#F7F5EF] border-t border-gray-200 relative overflow-hidden" id="du-an-tieu-bieu">
+    <section className="py-16 sm:py-24 bg-[#F7F5EF] border-t border-gray-200 relative overflow-hidden" id="du-an-tieu-bieu">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* HEADER SECTION WITH TITLE & NAVIGATION BUTTONS */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-5 sm:mb-10 gap-3 sm:gap-6">
-          <div className="space-y-1.5 sm:space-y-3 max-w-3xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#214E34]/10 text-[#214E34] text-[11px] sm:text-xs font-black uppercase tracking-wider">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 gap-6">
+          <div className="space-y-3 max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#214E34]/10 text-[#214E34] text-xs font-black uppercase tracking-wider">
               <Award className="w-3.5 h-3.5 text-[#CDAA63]" />
               <span>CÔNG TRÌNH TIÊU BIỂU</span>
             </div>
 
-            <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-[#18231C] tracking-tight uppercase">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#18231C] tracking-tight uppercase">
               DỰ ÁN ĐÃ CUNG CẤP CỌC TRE
             </h2>
 
-            <p className="text-xs sm:text-base text-gray-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Những dự án giao thông, kè đê điều, cầu đường và công trình xây dựng trọng điểm tin tưởng lựa chọn cọc tre Huyền Dương.
             </p>
           </div>
 
           {/* Quick Header Arrows */}
-          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
+          <div className="flex items-center gap-2.5 shrink-0">
             <span className="text-xs text-gray-500 font-semibold hidden sm:inline-block mr-1">
               Khám phá dự án ({projects.length}):
             </span>
             <button
               onClick={() => handleScroll("left")}
               aria-label="Xem dự án trước"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
+              className="w-10 h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
               title="Xem dự án trước (Sang trái)"
             >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => handleScroll("right")}
               aria-label="Xem dự án kế tiếp"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
+              className="w-10 h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
               title="Xem dự án tiếp theo (Sang phải)"
             >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* SLIDER CAROUSEL TRACK WRAPPER */}
         <div className="relative group/projectSlider">
-          
+
           {/* FLOATING LEFT ARROW BUTTON */}
           <button
             onClick={() => handleScroll("left")}
             aria-label="Cuộn dự án sang trái"
-            className={`absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-sm border-2 border-[#214E34]/40 text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-90 hover:scale-110 hidden sm:flex ${
-              !canScrollLeft ? "opacity-75 hover:opacity-100" : "opacity-95"
-            }`}
+            className={`absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-sm border-2 border-[#214E34]/40 text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-90 hover:scale-110 hidden sm:flex ${!canScrollLeft ? "opacity-75 hover:opacity-100" : "opacity-95"
+              }`}
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
@@ -159,9 +157,8 @@ export default function FeaturedProjectsSection() {
           <button
             onClick={() => handleScroll("right")}
             aria-label="Cuộn dự án sang phải"
-            className={`absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-sm border-2 border-[#214E34]/40 text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-90 hover:scale-110 hidden sm:flex ${
-              !canScrollRight ? "opacity-75 hover:opacity-100" : "opacity-95"
-            }`}
+            className={`absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 backdrop-blur-sm border-2 border-[#214E34]/40 text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-90 hover:scale-110 hidden sm:flex ${!canScrollRight ? "opacity-75 hover:opacity-100" : "opacity-95"
+              }`}
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -170,13 +167,13 @@ export default function FeaturedProjectsSection() {
           <div
             ref={scrollRef}
             onScroll={updateScrollState}
-            className="flex items-stretch gap-3.5 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-2 sm:pb-4 pt-1 px-1 -mx-1"
+            className="flex items-stretch gap-5 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-4 pt-1 px-1 -mx-1"
             style={{ WebkitOverflowScrolling: "touch" }}
           >
             {projects.map((project) => (
               <div
                 key={project.id || project.slug}
-                className="project-card-item shrink-0 snap-start w-[76vw] min-[400px]:w-[280px] sm:w-[350px] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex flex-col"
+                className="project-card-item shrink-0 snap-start w-[85vw] sm:w-[350px] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex flex-col"
               >
                 <ProjectCard project={project} />
               </div>
@@ -186,38 +183,25 @@ export default function FeaturedProjectsSection() {
 
         {/* DOTS / PROGRESS INDICATOR */}
         {pageCount > 1 && (
-          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-4 sm:mt-8">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-8">
             {Array.from({ length: pageCount }).map((_, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => scrollToPage(idx)}
                 aria-label={`Chuyển đến trang dự án ${idx + 1}`}
-                className="p-1.5 sm:p-2 group cursor-pointer focus:outline-none"
+                className="p-2 group cursor-pointer focus:outline-none"
               >
                 <span
-                  className={`block h-2 sm:h-2.5 rounded-full transition-all duration-300 ${
-                    currentPage === idx
-                      ? "w-6 sm:w-8 bg-[#214E34] shadow-sm"
-                      : "w-2 sm:w-2.5 bg-gray-300 group-hover:bg-[#214E34]/50"
-                  }`}
+                  className={`block h-2.5 rounded-full transition-all duration-300 ${currentPage === idx
+                      ? "w-8 bg-[#214E34] shadow-sm"
+                      : "w-2.5 bg-gray-300 group-hover:bg-[#214E34]/50"
+                    }`}
                 />
               </button>
             ))}
           </div>
         )}
-
-        {/* ACTION BUTTON LINK */}
-        <div className="mt-6 sm:mt-10 text-center">
-          <Link
-            href="/du-an"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-[#214E34] hover:bg-[#183B27] text-white font-bold text-xs sm:text-base shadow-md hover:shadow-xl transition-all cursor-pointer group active:scale-95"
-          >
-            <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#CDAA63]" />
-            <span>XEM TẤT CẢ DỰ ÁN</span>
-            <ArrowRight className="w-4 h-4 text-[#CDAA63] group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
 
       </div>
     </section>
