@@ -23,16 +23,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-
-        {/* Volume badge */}
-        <div className="absolute top-3 right-3 bg-[#E57C23] text-white text-xs font-black px-3 py-1 rounded-lg shadow-md">
-          {project.totalQuantity}
-        </div>
-
-        {/* Year */}
-        <div className="absolute top-3 left-3 bg-[#18231C]/80 backdrop-blur-sm text-[#CDAA63] text-[11px] font-bold px-2.5 py-1 rounded-md border border-[#CDAA63]/30">
-          {project.completionYear}
-        </div>
       </Link>
 
       {/* PROJECT CONTENT */}

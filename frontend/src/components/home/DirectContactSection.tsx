@@ -47,7 +47,7 @@ export default function DirectContactSection() {
 
   // Smart Quick Callback form state
   const [phoneInput, setPhoneInput] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState("Cọc tre 2.0m (Phổ biến móng nhà)");
+  const [selectedProduct, setSelectedProduct] = useState("Cọc Tre 2m");
   const [locationInput, setLocationInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -208,12 +208,12 @@ export default function DirectContactSection() {
                           ))
                         ) : (
                           <>
-                            <option value="Cọc tre 2.0m (Phổ biến móng nhà)">Cọc tre 2.0m (Phổ biến móng nhà)</option>
-                            <option value="Cọc tre 2.5m (Kè sông, móng sâu)">Cọc tre 2.5m (Kè sông, móng sâu)</option>
-                            <option value="Cọc tre 3.0m (Công trình thủy lợi)">Cọc tre 3.0m (Công trình thủy lợi)</option>
-                            <option value="Cọc tre 1.5m (Móng hào, rãnh)">Cọc tre 1.5m (Móng hào, rãnh)</option>
-                            <option value="Cọc tre 4.0m (Công trình lớn)">Cọc tre 4.0m (Công trình lớn)</option>
-                            <option value="Cọc tre theo yêu cầu riêng">Cọc tre theo yêu cầu riêng</option>
+                            <option value="Cọc Tre 1,5m">Cọc Tre 1,5m</option>
+                            <option value="Cọc Tre 2m">Cọc Tre 2m</option>
+                            <option value="Cọc Tre 2,5m">Cọc Tre 2,5m</option>
+                            <option value="Cọc Tre 3m">Cọc Tre 3m</option>
+                            <option value="Cọc Tre 4m">Cọc Tre 4m</option>
+                            <option value="Cọc Tre Theo Yêu Cầu">Cọc Tre Theo Yêu Cầu</option>
                           </>
                         )}
                       </select>

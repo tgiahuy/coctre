@@ -297,7 +297,7 @@ export default function QuoteModal() {
                   >
                     {products.map((p) => (
                       <option key={p.id} value={p.slug}>
-                        {p.name} ({p.diameter})
+                        {p.name}
                       </option>
                     ))}
                   </select>

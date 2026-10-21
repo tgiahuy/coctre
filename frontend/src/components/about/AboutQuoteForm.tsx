@@ -11,12 +11,12 @@ export default function AboutQuoteForm() {
   const productOptions = products.length > 0
     ? products.map((p) => ({ value: p.slug, label: p.name }))
     : [
-        { value: "coc-tre-2m", label: "Cọc tre 2.0m (Phổ biến móng nhà)" },
-        { value: "coc-tre-25m", label: "Cọc tre 2.5m (Móng nhà 2 - 3 tầng)" },
-        { value: "coc-tre-3m", label: "Cọc tre 3.0m (Móng công trình lớn, kè sông hồ)" },
-        { value: "coc-tre-15m", label: "Cọc tre 1.5m (Kè mương rãnh, công trình nhỏ)" },
-        { value: "coc-tre-4m", label: "Cọc tre 4.0m (Thủy lợi, đê kè lớn)" },
-        { value: "coc-tre-theo-yeu-cau", label: "Cọc tre theo quy cách yêu cầu" }
+        { value: "coc-tre-15m", label: "Cọc Tre 1,5m" },
+        { value: "coc-tre-2m", label: "Cọc Tre 2m" },
+        { value: "coc-tre-25m", label: "Cọc Tre 2,5m" },
+        { value: "coc-tre-3m", label: "Cọc Tre 3m" },
+        { value: "coc-tre-4m", label: "Cọc Tre 4m" },
+        { value: "coc-tre-theo-yeu-cau", label: "Cọc Tre Theo Yêu Cầu" }
       ];
 
   const [formData, setFormData] = useState({

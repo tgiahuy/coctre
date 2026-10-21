@@ -77,14 +77,14 @@ export default function FloatingContact() {
       </div>
 
       {/* MOBILE STICKY BOTTOM BAR (Tối ưu riêng cho người lớn tuổi: Nút to, chữ rõ, 2 nút chính) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#121E16] border-t-2 border-[#CDAA63] px-3 py-2.5 flex items-center justify-between gap-3 shadow-[0_-6px_25px_rgba(0,0,0,0.5)]">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#121E16] border-t-2 border-[#CDAA63] px-2.5 py-2 sm:px-3 sm:py-2.5 flex items-center justify-between gap-2.5 shadow-[0_-6px_25px_rgba(0,0,0,0.5)]">
         {/* Call Button: Large & High Contrast */}
         <a
           href={`tel:${siteConfig.hotline}`}
-          className="flex-1 bg-[#E57C23] text-white py-3 px-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform"
+          className="flex-[1.15] bg-[#E57C23] text-white py-2.5 sm:py-3 px-2 sm:px-3 rounded-xl font-black text-xs min-[360px]:text-[13px] min-[390px]:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shadow-lg active:scale-95 transition-transform whitespace-nowrap min-w-0"
         >
-          <Phone className="w-5 h-5 text-white animate-pulse" />
-          <span>GỌI: {siteConfig.hotlineFormatted}</span>
+          <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse shrink-0" />
+          <span className="whitespace-nowrap tracking-tight">GỌI: {siteConfig.hotlineFormatted}</span>
         </a>
 
         {/* Zalo Button: Large */}
@@ -92,10 +92,10 @@ export default function FloatingContact() {
           href={siteConfig.zaloUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 bg-[#0068FF] text-white py-3 px-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform"
+          className="flex-1 bg-[#0068FF] text-white py-2.5 sm:py-3 px-2 sm:px-3 rounded-xl font-black text-xs min-[360px]:text-[13px] min-[390px]:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shadow-lg active:scale-95 transition-transform whitespace-nowrap min-w-0"
         >
-          <MessageCircle className="w-5 h-5" />
-          <span>NHẮN ZALO</span>
+          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+          <span className="whitespace-nowrap tracking-tight">NHẮN ZALO</span>
         </a>
       </div>
     </>

@@ -28,7 +28,7 @@ export const products: Product[] = [
   {
     id: "coc-tre-15m",
     slug: "coc-tre-15m",
-    name: "Cọc Tre 1,5m (6 - 8cm)",
+    name: "Cọc Tre 1,5m",
     length: "1,5m",
     lengthMeters: 1.5,
     diameter: "60 – 80 mm",
@@ -76,7 +76,7 @@ export const products: Product[] = [
   {
     id: "coc-tre-2m",
     slug: "coc-tre-2m",
-    name: "Cọc Tre 2m (6 - 9cm)",
+    name: "Cọc Tre 2m",
     length: "2m",
     lengthMeters: 2.0,
     diameter: "65 – 90 mm",
@@ -124,7 +124,7 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
   {
     id: "coc-tre-25m",
     slug: "coc-tre-25m",
-    name: "Cọc Tre 2,5m (7 - 9.5cm)",
+    name: "Cọc Tre 2,5m",
     length: "2,5m",
     lengthMeters: 2.5,
     diameter: "70 – 95 mm",
@@ -172,7 +172,7 @@ Sản phẩm được tuyển chọn kỹ: thân thẳng, mắt tre nhẵn, khô
   {
     id: "coc-tre-3m",
     slug: "coc-tre-3m",
-    name: "Cọc Tre 3m (7 - 10cm)",
+    name: "Cọc Tre 3m",
     length: "3m",
     lengthMeters: 3.0,
     diameter: "70 – 100 mm",
@@ -219,7 +219,7 @@ Sản phẩm thường được chỉ định trong các hồ sơ thiết kế k
   {
     id: "coc-tre-4m",
     slug: "coc-tre-4m",
-    name: "Cọc Tre 4m (8 - 11cm)",
+    name: "Cọc Tre 4m",
     length: "4m",
     lengthMeters: 4.0,
     diameter: "80 – 110 mm",
@@ -266,7 +266,7 @@ Cọc có khả năng xuyên sâu qua nhiều lớp bùn lầy, giúp tạo liê
   {
     id: "coc-tre-theo-yeu-cau",
     slug: "coc-tre-theo-yeu-cau",
-    name: "Cọc Tre Theo Yêu Cầu (Đặt Cắt Quy Cách Riêng)",
+    name: "Cọc Tre Theo Yêu Cầu",
     length: "Theo yêu cầu",
     lengthMeters: 0,
     diameter: "50 – 120 mm tùy chọn",
