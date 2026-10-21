@@ -88,51 +88,51 @@ export default function DirectContactSection() {
   };
 
   return (
-    <section className="py-8 sm:py-16 lg:py-20 bg-[#111F16] text-white relative overflow-hidden" id="lien-he-truc-tiep">
+    <section className="py-14 sm:py-20 bg-[#111F16] text-white relative overflow-hidden" id="lien-he-truc-tiep">
       {/* Decorative background glow */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[300px] bg-[#214E34]/30 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[300px] bg-[#CDAA63]/10 rounded-full blur-[130px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* 2-COLUMN GRID: KHUNG BÁO GIÁ THÔNG MINH (7 COLS) & GOOGLE MAPS (5 COLS) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-stretch">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-8 items-stretch">
+
           {/* CỘT 1: KHUNG TƯ VẤN & BÁO GIÁ THÔNG MINH (7 COLS) */}
-          <div className="lg:col-span-7 bg-[#182B1F] border-2 border-[#CDAA63]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-7 lg:p-9 shadow-2xl flex flex-col justify-between space-y-4 sm:space-y-6">
-            
+          <div className="lg:col-span-7 bg-[#182B1F] border-2 border-[#CDAA63]/40 rounded-3xl p-6 sm:p-9 shadow-2xl flex flex-col justify-between space-y-6">
+
             {/* Header section */}
-            <div className="space-y-2.5 sm:space-y-4 text-center lg:text-left">
-              
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CDAA63]/15 border border-[#CDAA63]/40 text-[#EED59B] text-[11px] sm:text-xs font-black uppercase tracking-wider">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#CDAA63]" />
+            <div className="space-y-4 text-center lg:text-left">
+
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#CDAA63]/15 border border-[#CDAA63]/40 text-[#EED59B] text-xs font-black uppercase tracking-wider">
+                  <ShieldCheck className="w-4 h-4 text-[#CDAA63]" />
                   <span>TƯ VẤN & BÁO GIÁ TRỰC TIẾP 24/7</span>
                 </span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl lg:text-[34px] font-black text-white leading-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-black text-white leading-tight">
                 Quý Khách Cần Báo Giá Cọc Tre Hoặc Tư Vấn Kỹ Thuật?
               </h2>
 
-              <p className="text-xs sm:text-base text-gray-300 leading-relaxed max-w-2xl">
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl">
                 Tổng kho Cọc Tre Huyền Dương hỗ trợ báo giá trực tiếp tại bãi hoặc tận chân công trình. Gọi ngay để có giá tốt nhất và sắp xếp xe tải giao trong ngày.
               </p>
 
-              {/* 2 HIGH-CONTRAST ACTION BUTTONS - COMPACT SIDE-BY-SIDE ON MOBILE */}
-              <div className="pt-1 sm:pt-2 grid grid-cols-2 gap-2 sm:gap-3">
-                
+              {/* 2 HIGH-CONTRAST ACTION BUTTONS */}
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+
                 {/* BUTTON 1: HOTLINE CHÍNH 036 9928040 (CAM NỔI BẬT) */}
                 <a
                   href={`tel:${siteConfig.hotline || "0369928040"}`}
-                  className="py-2.5 sm:py-3.5 px-2 sm:px-4 rounded-xl sm:rounded-2xl bg-[#E57C23] hover:bg-[#D96B14] text-white font-black text-[11px] sm:text-sm flex flex-col items-center justify-center gap-0.5 sm:gap-1 shadow-lg hover:shadow-xl transition-all active:scale-95 group text-center border border-amber-400/30"
+                  className="py-3.5 px-4 rounded-2xl bg-[#E57C23] hover:bg-[#D96B14] text-white font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-lg hover:shadow-xl transition-all active:scale-95 group text-center border border-amber-400/30"
                   title="Bấm để gọi hotline"
                 >
-                  <div className="flex items-center gap-1 sm:gap-1.5">
-                    <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-bounce text-white shrink-0" />
+                  <div className="flex items-center gap-1.5">
+                    <Phone className="w-4 h-4 animate-bounce text-white shrink-0" />
                     <span className="tracking-wide">GỌI: {siteConfig.hotlineFormatted || "0369.928.040"}</span>
                   </div>
-                  <span className="text-[9px] sm:text-[11px] font-medium text-amber-100/90 hidden min-[360px]:inline">Hotline Tư Vấn Báo Giá</span>
+                  <span className="text-[11px] font-medium text-amber-100/90">Hotline Bãi & Tư Vấn Báo Giá</span>
                 </a>
 
                 {/* BUTTON 2: ZALO BÁO GIÁ (XANH ZALO CHUẨN) */}
@@ -140,33 +140,33 @@ export default function DirectContactSection() {
                   href={siteConfig.zaloUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2.5 sm:py-3.5 px-2 sm:px-4 rounded-xl sm:rounded-2xl bg-[#0068FF] hover:bg-[#0055d4] text-white font-black text-[11px] sm:text-sm flex flex-col items-center justify-center gap-0.5 sm:gap-1 shadow-lg hover:shadow-xl transition-all active:scale-95 group text-center border border-blue-400/30"
+                  className="py-3.5 px-4 rounded-2xl bg-[#0068FF] hover:bg-[#0055d4] text-white font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-lg hover:shadow-xl transition-all active:scale-95 group text-center border border-blue-400/30"
                   title="Nhắn tin Zalo nhận báo giá kèm hình ảnh cọc"
                 >
-                  <div className="flex items-center gap-1 sm:gap-1.5">
-                    <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-white" />
+                  <div className="flex items-center gap-1.5">
+                    <MessageCircle className="w-4 h-4 shrink-0 text-white" />
                     <span>ZALO BÁO GIÁ</span>
                   </div>
-                  <span className="text-[9px] sm:text-[11px] font-medium text-blue-100 hidden min-[360px]:inline">Gửi ảnh cọc & báo giá</span>
+                  <span className="text-[11px] font-medium text-blue-100">Gửi ảnh cọc & nhận báo giá</span>
                 </a>
 
               </div>
             </div>
 
             {/* SMART QUICK CALLBACK BOX (FORM THÔNG MINH 1 CHẠM) */}
-            <div className="bg-[#122218]/90 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-[#CDAA63]/30 shadow-inner space-y-2.5 sm:space-y-3.5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 border-b border-white/10 pb-2 sm:pb-2.5">
-                <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-sm font-extrabold text-[#EED59B]">
-                  <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#CDAA63]" />
-                  <span>ĐỂ LẠI SỐ ĐIỆN THOẠI (BÁO GIÁ SAU 5 PHÚT)</span>
+            <div className="bg-[#122218]/90 rounded-2xl p-4 sm:p-5 border border-[#CDAA63]/30 shadow-inner space-y-3.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-extrabold text-[#EED59B]">
+                  <Sparkles className="w-4 h-4 text-[#CDAA63]" />
+                  <span>HOẶC ĐỂ LẠI SỐ ĐIỆN THOẠI (NHẬN BÁO GIÁ SAU 5 PHÚT)</span>
                 </div>
                 <button
                   type="button"
                   onClick={() => openQuoteModal()}
-                  className="text-[11px] sm:text-xs text-[#CDAA63] hover:text-white font-bold flex items-center gap-1 self-start sm:self-auto hover:underline cursor-pointer"
+                  className="text-xs text-[#CDAA63] hover:text-white font-bold flex items-center gap-1 self-start sm:self-auto hover:underline cursor-pointer"
                 >
-                  <FileText className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
-                  <span>Biểu mẫu chi tiết</span>
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Mở biểu mẫu chi tiết</span>
                 </button>
               </div>
 
@@ -190,15 +190,15 @@ export default function DirectContactSection() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleQuickSubmit} className="space-y-2.5 sm:space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-2.5">
-                    
+                <form onSubmit={handleQuickSubmit} className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+
                     {/* Chọn quy cách cọc */}
                     <div className="sm:col-span-5">
                       <select
                         value={selectedProduct}
                         onChange={(e) => setSelectedProduct(e.target.value)}
-                        className="w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#1C3325] border border-gray-600/80 text-white text-[11px] sm:text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#CDAA63]"
+                        className="w-full px-3 py-2.5 rounded-xl bg-[#1C3325] border border-gray-600/80 text-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#CDAA63]"
                       >
                         {products.length > 0 ? (
                           products.map((p) => (
@@ -226,7 +226,7 @@ export default function DirectContactSection() {
                         value={phoneInput}
                         onChange={(e) => setPhoneInput(e.target.value)}
                         placeholder="Nhập số điện thoại..."
-                        className="w-full px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#1C3325] border border-gray-600/80 text-white text-[11px] sm:text-xs placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#CDAA63]"
+                        className="w-full px-3 py-2.5 rounded-xl bg-[#1C3325] border border-gray-600/80 text-white text-xs placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#CDAA63]"
                       />
                     </div>
 
@@ -235,7 +235,7 @@ export default function DirectContactSection() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-2 sm:py-2.5 px-3 rounded-lg sm:rounded-xl bg-[#214E34] hover:bg-[#183B27] border border-[#CDAA63] text-white font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                        className="w-full py-2.5 px-3 rounded-xl bg-[#214E34] hover:bg-[#183B27] border border-[#CDAA63] text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer active:scale-95 disabled:opacity-50"
                       >
                         {isSubmitting ? (
                           <span>Đang gửi...</span>
@@ -260,34 +260,34 @@ export default function DirectContactSection() {
               )}
             </div>
 
-            {/* 3 CLEAN INFORMATION PILLS */}
-            <div className="pt-1.5 sm:pt-2 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs">
-              
-              <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-black/30 border border-white/10 flex items-start gap-2 sm:gap-2.5">
-                <MapPin className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-[#CDAA63] shrink-0 mt-0.5" />
+            {/* 3 CLEAN INFORMATION PILLS (REPLACED DEFECTIVE DARK BOXES) */}
+            <div className="pt-2 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+
+              <div className="p-3 rounded-xl bg-black/30 border border-white/10 flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-[#CDAA63] shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block text-white font-bold text-[11px] sm:text-xs">Xưởng & Tổng Kho:</strong>
-                  <span className="text-gray-300 text-[10px] sm:text-[11px] leading-tight block mt-0.5">
+                  <strong className="block text-white font-bold">Xưởng & Tổng Kho:</strong>
+                  <span className="text-gray-300 text-[11px] leading-tight block mt-0.5">
                     {siteConfig.address || "331 Phố Vác, Dân Hòa, Hà Nội"}
                   </span>
                 </div>
               </div>
 
-              <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-black/30 border border-white/10 flex items-start gap-2 sm:gap-2.5">
-                <Truck className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-xl bg-black/30 border border-white/10 flex items-start gap-2.5">
+                <Truck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block text-white font-bold text-[11px] sm:text-xs">Vận Chuyển:</strong>
-                  <span className="text-gray-300 text-[10px] sm:text-[11px] leading-tight block mt-0.5">
+                  <strong className="block text-white font-bold">Vận Chuyển:</strong>
+                  <span className="text-gray-300 text-[11px] leading-tight block mt-0.5">
                     Xe tải giao 24/7 tận công trình toàn miền Bắc
                   </span>
                 </div>
               </div>
 
-              <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-black/30 border border-white/10 flex items-start gap-2 sm:gap-2.5">
-                <Clock className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-amber-300 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-xl bg-black/30 border border-white/10 flex items-start gap-2.5">
+                <Clock className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block text-white font-bold text-[11px] sm:text-xs">Giờ Hoạt Động:</strong>
-                  <span className="text-gray-300 text-[10px] sm:text-[11px] leading-tight block mt-0.5">
+                  <strong className="block text-white font-bold">Giờ Hoạt Động:</strong>
+                  <span className="text-gray-300 text-[11px] leading-tight block mt-0.5">
                     8:00 - 22:00 (Thứ 2 - Chủ Nhật)
                   </span>
                 </div>
@@ -298,13 +298,13 @@ export default function DirectContactSection() {
           </div>
 
           {/* CỘT 2: ĐỊA CHỈ DOANH NGHIỆP TRÊN GOOGLE MAPS (5 COLS) */}
-          <div className="lg:col-span-5 bg-[#182B1F] border-2 border-[#CDAA63]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-7 shadow-2xl flex flex-col justify-between space-y-3 sm:space-y-4">
-            
+          <div className="lg:col-span-5 bg-[#182B1F] border-2 border-[#CDAA63]/40 rounded-3xl p-5 sm:p-7 shadow-2xl flex flex-col justify-between space-y-4">
+
             {/* Header info */}
-            <div className="space-y-1.5 sm:space-y-2.5">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between gap-2">
-                <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-[#CDAA63]/20 border border-[#CDAA63]/40 text-[#EED59B] text-[11px] sm:text-xs font-bold uppercase tracking-wider">
-                  <MapPin className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#CDAA63]" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CDAA63]/20 border border-[#CDAA63]/40 text-[#EED59B] text-xs font-bold uppercase tracking-wider">
+                  <MapPin className="w-3.5 h-3.5 text-[#CDAA63]" />
                   <span>VỊ TRÍ TRÊN BẢN ĐỒ</span>
                 </div>
 
@@ -312,29 +312,29 @@ export default function DirectContactSection() {
                   href={googleMapsDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] sm:text-xs text-[#CDAA63] hover:text-white font-bold flex items-center gap-1 hover:underline transition-colors bg-white/10 px-2.5 sm:px-3 py-1 rounded-lg border border-white/15"
+                  className="text-xs text-[#CDAA63] hover:text-white font-bold flex items-center gap-1 hover:underline transition-colors bg-white/10 px-3 py-1 rounded-lg border border-white/15"
                   title="Mở chỉ đường trên Google Maps"
                 >
-                  <Navigation className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                  <Navigation className="w-3.5 h-3.5" />
                   <span>Chỉ đường</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
 
               <div>
-                <h3 className="text-base sm:text-xl font-bold text-white flex items-center gap-2">
-                  <Building className="w-4 sm:w-5 h-4 sm:h-5 text-[#CDAA63] shrink-0" />
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                  <Building className="w-5 h-5 text-[#CDAA63] shrink-0" />
                   <span className="truncate">{siteConfig.companyName}</span>
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-300 mt-1 flex items-start gap-1.5">
-                  <MapPin className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-[#E57C23] shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-[#E57C23] shrink-0 mt-0.5" />
                   <span><strong>Trụ sở:</strong> {siteConfig.headquarters}</span>
                 </p>
               </div>
             </div>
 
             {/* INTERACTIVE GOOGLE MAPS IFRAME */}
-            <div className="relative flex-1 min-h-[220px] sm:min-h-[300px] w-full rounded-xl sm:rounded-2xl overflow-hidden border border-[#CDAA63]/40 shadow-inner bg-black/40">
+            <div className="relative flex-1 min-h-[260px] sm:min-h-[300px] w-full rounded-2xl overflow-hidden border border-[#CDAA63]/40 shadow-inner bg-black/40">
               <iframe
                 src={mapSrc}
                 width="100%"
@@ -344,7 +344,7 @@ export default function DirectContactSection() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title={`Bản đồ ${siteConfig.companyName}`}
-                className="w-full h-full min-h-[220px] sm:min-h-[300px] absolute inset-0"
+                className="w-full h-full min-h-[260px] sm:min-h-[300px] absolute inset-0"
               />
             </div>
 
@@ -352,9 +352,9 @@ export default function DirectContactSection() {
             <div className="pt-2 text-xs text-gray-300 flex items-center justify-between gap-2 border-t border-white/10">
               <div className="flex items-center gap-1.5 text-gray-300">
                 <Clock className="w-3.5 h-3.5 text-[#CDAA63] shrink-0" />
-                <span className="truncate font-medium text-[11px] sm:text-xs">{siteConfig.workHours}</span>
+                <span className="truncate font-medium">{siteConfig.workHours}</span>
               </div>
-              <span className="text-[10px] sm:text-[11px] font-bold text-emerald-300 bg-emerald-950/80 px-2 sm:px-2.5 py-0.5 rounded-full border border-emerald-500/40 shrink-0 flex items-center gap-1">
+              <span className="text-[11px] font-bold text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/40 shrink-0 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 <span>Đang mở cửa</span>
               </span>

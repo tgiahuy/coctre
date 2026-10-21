@@ -4,25 +4,25 @@ import { siteConfig } from "@/data/config";
 
 export default function AboutSection() {
   return (
-    <section className="py-8 sm:py-14 bg-white" id="gioi-thieu">
+    <section className="py-12 sm:py-16 bg-white" id="gioi-thieu">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* SECTION HEADER: VỀ CHÚNG TÔI with horizontal rule */}
-        <div className="border-b border-gray-300 pb-2 mb-5 sm:mb-8">
+        <div className="border-b border-gray-300 pb-2 mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl font-bold text-[#1F4E3D] uppercase tracking-wide">
             VỀ CHÚNG TÔI
           </h2>
         </div>
 
-        {/* 2-ROW ALTERNATING LAYOUT */}
-        <div className="space-y-6 sm:space-y-12">
-          
-          {/* ROW 1: TEXT ON LEFT | IMAGE ON RIGHT */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-12 items-start">
+        {/* 2-ROW ALTERNATING LAYOUT AS IN THE REFERENCE SCREENSHOT */}
+        <div className="space-y-10 sm:space-y-14">
+
+          {/* ROW 1: TEXT (GIỚI THIỆU & GIÁ TRỊ CỐT LÕI) ON LEFT | IMAGE ON RIGHT */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Content */}
-            <div className="space-y-4 sm:space-y-6 text-gray-700 leading-relaxed text-xs sm:text-[14.5px]">
+            <div className="space-y-6 text-gray-700 leading-relaxed text-sm sm:text-[14.5px]">
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-[#1F4E3D] uppercase mb-2">
+                <h3 className="text-base sm:text-lg font-bold text-[#1F4E3D] uppercase mb-2.5">
                   GIỚI THIỆU VỀ CÔNG TY
                 </h3>
                 <p className="text-gray-600 font-normal leading-relaxed text-justify">
@@ -31,10 +31,10 @@ export default function AboutSection() {
               </div>
 
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-[#1F4E3D] uppercase mb-2">
+                <h3 className="text-base sm:text-lg font-bold text-[#1F4E3D] uppercase mb-2.5">
                   GIÁ TRỊ CỐT LÕI
                 </h3>
-                <ul className="space-y-1.5 sm:space-y-2 list-disc pl-4 sm:pl-5 text-gray-600 text-justify marker:text-gray-500">
+                <ul className="space-y-2 list-disc pl-5 text-gray-600 text-justify marker:text-gray-500">
                   <li>
                     <strong className="text-gray-900">CHẤT LƯỢNG :</strong> Chỉ cung cấp tre già, tươi, thân thẳng, không mối mọt, cong vênh. Đảm bảo khả năng chịu lực vượt trội dưới lòng đất.
                   </li>
@@ -52,7 +52,7 @@ export default function AboutSection() {
             </div>
 
             {/* Right Image */}
-            <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-sm border border-gray-100 rounded-xl">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-sm border border-gray-100">
               <Image
                 src="/images/banner/bamboo-vertical.jpg"
                 alt="Rừng tre già nguyên liệu cọc tre Huyền Dương"
@@ -63,10 +63,10 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* ROW 2: IMAGE ON LEFT | TEXT ON RIGHT */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-12 items-start">
+          {/* ROW 2: IMAGE ON LEFT | TEXT (SỨ MỆNH) ON RIGHT */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Image (Desktop: Col 1, Mobile: order-2) */}
-            <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-sm border border-gray-100 order-2 lg:order-1 rounded-xl">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-sm border border-gray-100 order-2 lg:order-1">
               <Image
                 src="/images/banner/bamboo-sunlight.jpg"
                 alt="Tre tự nhiên thân thiện môi trường"
