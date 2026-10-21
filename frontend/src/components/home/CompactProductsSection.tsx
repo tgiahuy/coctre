@@ -119,8 +119,8 @@ export default function CompactProductsSection() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* GREEN RIBBON HEADER & NAVIGATION CONTROLS */}
-        <div className="relative flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 gap-4">
+        {/* GREEN RIBBON HEADER */}
+        <div className="relative flex items-center justify-center mb-8 sm:mb-10">
           
           {/* Background horizontal line */}
           <div
@@ -130,41 +130,12 @@ export default function CompactProductsSection() {
             <div className="w-full border-t-2 border-[#214E34]/25" />
           </div>
 
-          {/* Left spacer for balance on desktop */}
-          <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500 bg-[#FAF9F5] px-3 z-10 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            <span>Sẵn hàng tại bãi: <strong>500.000+ cọc</strong></span>
-          </div>
-
           {/* Center Hexagon/Ribbon Badge */}
           <div className="relative z-10">
             <div className="bg-[#214E34] text-white px-8 sm:px-12 py-2.5 sm:py-3 font-black text-sm sm:text-base tracking-wider uppercase shadow-lg flex items-center gap-2.5 clip-ribbon">
               <Sparkles className="w-4 h-4 text-[#CDAA63]" />
               <span>SẢN PHẨM NỔI BẬT</span>
             </div>
-          </div>
-
-          {/* Right Header Controls: Prev / Next Buttons */}
-          <div className="relative z-10 flex items-center gap-2 bg-[#FAF9F5] sm:pl-3">
-            <span className="text-xs text-gray-500 font-semibold hidden md:inline-block mr-1">
-              Xem thêm các quy cách:
-            </span>
-            <button
-              onClick={() => handleScroll("left")}
-              aria-label="Xem sản phẩm trước"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
-              title="Xem sản phẩm trước (Sang trái)"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => handleScroll("right")}
-              aria-label="Xem sản phẩm kế tiếp"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
-              title="Xem sản phẩm tiếp theo (Sang phải)"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
 

@@ -99,9 +99,9 @@ export default function FeaturedProjectsSection() {
     <section className="py-16 sm:py-24 bg-[#F7F5EF] border-t border-gray-200 relative overflow-hidden" id="du-an-tieu-bieu">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* HEADER SECTION WITH TITLE & NAVIGATION BUTTONS */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 gap-6">
-          <div className="space-y-3 max-w-3xl">
+        {/* HEADER SECTION WITH TITLE */}
+        <div className="mb-8 sm:mb-12 max-w-3xl">
+          <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#214E34]/10 text-[#214E34] text-xs font-black uppercase tracking-wider">
               <Award className="w-3.5 h-3.5 text-[#CDAA63]" />
               <span>CÔNG TRÌNH TIÊU BIỂU</span>
@@ -114,29 +114,6 @@ export default function FeaturedProjectsSection() {
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Những dự án giao thông, kè đê điều, cầu đường và công trình xây dựng trọng điểm tin tưởng lựa chọn cọc tre Huyền Dương.
             </p>
-          </div>
-
-          {/* Quick Header Arrows */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <span className="text-xs text-gray-500 font-semibold hidden sm:inline-block mr-1">
-              Khám phá dự án ({projects.length}):
-            </span>
-            <button
-              onClick={() => handleScroll("left")}
-              aria-label="Xem dự án trước"
-              className="w-10 h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
-              title="Xem dự án trước (Sang trái)"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => handleScroll("right")}
-              aria-label="Xem dự án kế tiếp"
-              className="w-10 h-10 rounded-full border border-[#214E34]/30 bg-white text-[#214E34] hover:bg-[#214E34] hover:text-white shadow-sm flex items-center justify-center transition-all cursor-pointer active:scale-95 hover:shadow-md"
-              title="Xem dự án tiếp theo (Sang phải)"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
