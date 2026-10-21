@@ -11,14 +11,14 @@ export default function HomePage() {
       {/* 1. HERO BANNER: Banner Xanh Tre Thiên Nhiên, Chữ To Rõ Ràng & Hotline 1 Chạm */}
       <HeroSection />
 
-      {/* 2. GIỚI THIỆU VỀ CÔNG TY & SỨ MỆNH: Bố Cục Zig-zag */}
-      <AboutSection />
-
-      {/* 3. SẢN PHẨM NỔI BẬT: 4 Ô Nhỏ Xếp Theo Chiều Ngang Tinh Gọn */}
+      {/* 2. SẢN PHẨM NỔI BẬT: 4 Ô Nhỏ Xếp Theo Chiều Ngang Tinh Gọn */}
       <CompactProductsSection />
 
-      {/* 4. DỰ ÁN TIÊU BIỂU: 3 Công Trình Lớn Chứng Minh Năng Lực Thực Tế */}
+      {/* 3. DỰ ÁN TIÊU BIỂU: Các Công Trình Đã Cung Cấp Cọc Tre */}
       <FeaturedProjectsSection />
+
+      {/* 4. GIỚI THIỆU VỀ CÔNG TY & SỨ MỆNH: Về Chúng Tôi */}
+      <AboutSection />
 
       {/* 5. LIÊN HỆ TRỰC TIẾP: Hộp Gọi Điện / Zalo 1 Chạm Nhanh Gọn */}
       <DirectContactSection />
