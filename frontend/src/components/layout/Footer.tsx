@@ -80,9 +80,10 @@ export default function Footer() {
                   unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
                 />
               </div>
-              <div>
-                <span className="text-xl font-extrabold text-white tracking-tight">
-                  CỌC TRE <span className="text-[#CDAA63]">HUYỀN DƯƠNG</span>
+              <div className="whitespace-nowrap">
+                <span className="text-xl font-extrabold text-white tracking-tight whitespace-nowrap">
+                  <span className="whitespace-nowrap">CỌC&nbsp;TRE</span>{" "}
+                  <span className="text-[#CDAA63] whitespace-nowrap">HUYỀN&nbsp;DƯƠNG</span>
                 </span>
               </div>
             </Link>

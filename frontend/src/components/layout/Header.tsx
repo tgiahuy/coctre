@@ -129,7 +129,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center gap-2">
             {/* LOGO */}
-            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full shadow-md group-hover:scale-105 transition-transform overflow-hidden ring-2 ring-[#CDAA63]/30 bg-white p-0.5">
                 <Image
                   src={siteConfig.logoUrl || "/images/logo.png"}
@@ -141,11 +141,12 @@ export default function Header() {
                   unoptimized={Boolean(siteConfig.logoUrl?.startsWith("data:"))}
                 />
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-[15px] sm:text-xl lg:text-2xl font-black tracking-tight text-[#214E34] leading-tight whitespace-nowrap">
-                  CỌC TRE <span className="text-[#CDAA63]">HUYỀN DƯƠNG</span>
+              <div className="flex flex-col justify-center">
+                <span className="text-[13.5px] min-[360px]:text-[15px] sm:text-xl lg:text-2xl font-black tracking-tight text-[#214E34] leading-tight whitespace-nowrap">
+                  <span className="whitespace-nowrap">CỌC&nbsp;TRE</span>{" "}
+                  <span className="text-[#CDAA63] whitespace-nowrap">HUYỀN&nbsp;DƯƠNG</span>
                 </span>
-                <span className="text-[9px] sm:text-[11px] font-semibold text-gray-500 uppercase tracking-wider truncate">
+                <span className="text-[8.5px] min-[360px]:text-[9.5px] sm:text-[11px] font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap leading-tight mt-0.5">
                   Tổng Kho Cọc Tre Công Trình
                 </span>
               </div>
