@@ -73,8 +73,8 @@ export default function HeroSection() {
               Công Ty TNHH Xây Dựng & TM Huyền Dương chuyên cung cấp cọc tre công trình từ 1.5m – 4m & theo yêu cầu. Sở hữu kho bãi quy mô lớn cùng hệ thống xe vận chuyển tận chân công trình trong ngày, giá tận xưởng, đủ quy cách.
             </p>
 
-            {/* 3 Value Highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            {/* DESKTOP ONLY: 3 Value Highlights */}
+            <div className="hidden lg:grid grid-cols-3 gap-3 pt-1">
               <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-gray-100 bg-white/10 px-3 py-2 rounded-xl backdrop-blur-sm border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-[#A3E635] shrink-0" />
                 <span>Giao hàng trong ngày</span>
@@ -89,8 +89,8 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* CTA BUTTONS */}
-            <div className="pt-3 flex flex-wrap items-center gap-3.5">
+            {/* DESKTOP ONLY: CTA BUTTONS */}
+            <div className="hidden lg:flex flex-wrap items-center gap-3.5 pt-3">
               <button
                 onClick={() => openQuoteModal()}
                 className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#E57C23] hover:bg-[#CC6914] text-white font-black text-sm sm:text-base rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
@@ -108,8 +108,8 @@ export default function HeroSection() {
               </Link>
             </div>
 
-            {/* Hotline Quick Callout */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 pt-1">
+            {/* DESKTOP ONLY: Hotline Quick Callout */}
+            <div className="hidden lg:flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-300 pt-1">
               <span>Hotline / Zalo tư vấn 24/7:</span>
               <a
                 href={`tel:${siteConfig.hotline}`}
@@ -127,10 +127,124 @@ export default function HeroSection() {
                 {siteConfig.hotline2Formatted || "0912.468.203"}
               </a>
             </div>
+
+            {/* MOBILE & TABLET: SIDE-BY-SIDE (HIGHLIGHTS + CTA BUTTONS & 2 BAMBOO IMAGES) */}
+            <div className="grid grid-cols-12 gap-2 sm:gap-4 items-stretch lg:hidden pt-2">
+              {/* Left Column: 3 Highlights + 2 Buttons + Hotline */}
+              <div className="col-span-7 flex flex-col justify-between space-y-2">
+                {/* 3 Value Highlights */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1 text-[10.5px] min-[380px]:text-xs font-semibold text-gray-100 bg-white/10 px-2 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#A3E635] shrink-0" />
+                    <span className="truncate">Giao hàng trong ngày</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[10.5px] min-[380px]:text-xs font-semibold text-gray-100 bg-white/10 px-2 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#A3E635] shrink-0" />
+                    <span className="truncate">Hỗ trợ bốc xếp tận nơi</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-[10.5px] min-[380px]:text-xs font-semibold text-gray-100 bg-white/10 px-2 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#A3E635] shrink-0" />
+                    <span className="truncate">Chiết khấu cao đơn lớn</span>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="space-y-1.5 pt-0.5">
+                  <button
+                    onClick={() => openQuoteModal()}
+                    className="w-full py-2.5 px-2 bg-[#E57C23] hover:bg-[#CC6914] text-white font-black text-xs min-[380px]:text-[12.5px] rounded-xl shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer leading-tight text-center"
+                  >
+                    <FileText className="w-3.5 h-3.5 shrink-0" />
+                    <span>NHẬN BÁO GIÁ TẬN XƯỞNG</span>
+                  </button>
+
+                  <Link
+                    href="/gioi-thieu"
+                    className="w-full py-2 px-2 bg-[#234E34]/80 hover:bg-[#183B27] text-white font-bold text-xs min-[380px]:text-[12px] rounded-xl border border-[#528C63] transition-all flex items-center justify-center gap-1.5 backdrop-blur-sm leading-tight text-center"
+                  >
+                    <span>VỀ CHÚNG TÔI</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#A3E635] shrink-0" />
+                  </Link>
+                </div>
+
+                {/* Hotline Quick Callout */}
+                <div className="pt-0.5 text-[10px] min-[380px]:text-[11px] text-gray-300 leading-tight">
+                  <span className="text-gray-400 block text-[9px]">Hotline / Zalo 24/7:</span>
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 pt-0.5">
+                    <a
+                      href={`tel:${siteConfig.hotline}`}
+                      className="font-extrabold text-[#CDAA63] hover:text-white transition-colors flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <Phone className="w-3 h-3 text-[#E57C23] shrink-0" />
+                      {siteConfig.hotlineFormatted}
+                    </a>
+                    <a
+                      href={`tel:${siteConfig.hotline2 || "0912468203"}`}
+                      className="font-extrabold text-[#CDAA63] hover:text-white transition-colors flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <Phone className="w-3 h-3 text-[#CDAA63] shrink-0" />
+                      {siteConfig.hotline2Formatted || "0912.468.203"}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: 2 Overlapping Bamboo Images & Badge */}
+              <div className="col-span-5 relative min-h-[250px] sm:min-h-[280px] flex items-center justify-end">
+                {/* First Diagonal Image Slice */}
+                <div 
+                  className="absolute right-9 min-[380px]:right-11 sm:right-16 top-0 bottom-6 w-[70px] min-[380px]:w-[82px] sm:w-[110px] rounded-xl overflow-hidden shadow-xl border-2 border-white/85 transform -skew-x-6 z-10"
+                >
+                  <Image
+                    src="/images/banner/bamboo-vertical.jpg"
+                    alt="Rừng tre cọc già tuyển chọn"
+                    fill
+                    sizes="(max-width: 640px) 100px, 150px"
+                    className="object-cover transform skew-x-6 scale-115"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-1.5 left-1 right-1 text-center text-[7px] min-[380px]:text-[8px] font-bold text-white bg-black/50 py-0.5 rounded backdrop-blur-sm truncate">
+                    Cọc Tuyển Chọn
+                  </div>
+                </div>
+
+                {/* Second Diagonal Image Slice */}
+                <div 
+                  className="absolute right-0 top-3 bottom-3 w-[76px] min-[380px]:w-[88px] sm:w-[120px] rounded-xl overflow-hidden shadow-2xl border-2 border-[#7BB661]/90 transform -skew-x-6 z-20"
+                >
+                  <Image
+                    src="/images/banner/bamboo-poles.jpg"
+                    alt="Bó cọc tre tại bãi tập kết"
+                    fill
+                    sizes="(max-width: 640px) 120px, 160px"
+                    className="object-cover transform skew-x-6 scale-115"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#13281C]/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-1.5 left-1 right-1 text-center text-[7px] min-[380px]:text-[8px] font-bold text-[#A3E635] bg-black/60 py-0.5 rounded backdrop-blur-sm truncate">
+                    Bãi 50.000+ Cọc
+                  </div>
+                </div>
+
+                {/* Quality Badge */}
+                <div className="absolute -bottom-1 left-0 right-0 z-30 bg-[#14261B]/95 border border-[#7BB661] p-1.5 rounded-xl shadow-xl backdrop-blur-md flex items-center gap-1">
+                  <div className="w-5 h-5 rounded-md bg-[#2D663B] text-[#A3E635] flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[7px] min-[380px]:text-[7.5px] uppercase tracking-wider text-[#A3E635] font-black block leading-none">
+                      Đảm bảo chất lượng
+                    </span>
+                    <span className="text-[8px] min-[380px]:text-[9px] font-bold text-white leading-tight block truncate">
+                      Tre Đực Đặc Ruột
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* RIGHT: DIAGONAL VISUAL SLICES (Matching Image 1 Aesthetic) */}
-          <div className="lg:col-span-5 relative">
+          {/* DESKTOP ONLY: RIGHT DIAGONAL VISUAL SLICES */}
+          <div className="hidden lg:block lg:col-span-5 relative">
             <div className="relative h-[340px] sm:h-[400px] w-full flex items-center justify-center">
               
               {/* First Diagonal Image Slice */}
