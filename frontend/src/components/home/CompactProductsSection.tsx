@@ -5,21 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ShoppingCart,
-  Phone,
   ArrowRight,
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  Layers,
   Ruler,
 } from "lucide-react";
-import { useSiteConfig } from "@/lib/configStore";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 import { useProducts } from "@/lib/productStore";
 import { Product } from "@/data/products";
 
 export default function CompactProductsSection() {
-  const siteConfig = useSiteConfig();
   const { openQuoteModal } = useQuoteModal();
   const allProducts = useProducts();
 
@@ -303,35 +299,6 @@ export default function CompactProductsSection() {
             ))}
           </div>
         )}
-
-        {/* BOTTOM HELPFUL INFO & CTA BAR */}
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-gray-600 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/90 shadow-sm">
-          <div className="flex items-center gap-2.5 text-center md:text-left">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-            <span>
-              Chúng tôi nhận cắt theo kích thước yêu cầu (1.5m - 5m) và giao tận chân công trình.
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 shrink-0">
-            <Link
-              href="/san-pham"
-              className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-[#214E34] hover:text-white text-gray-800 font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-sm"
-            >
-              <Layers className="w-4 h-4 text-[#CDAA63]" />
-              <span>Xem tất cả ({allProducts.length}) quy cách</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-
-            <a
-              href={`tel:${siteConfig.hotline}`}
-              className="px-4 py-2 rounded-xl bg-[#E57C23] hover:bg-[#CC6914] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-md active:scale-95"
-            >
-              <Phone className="w-4 h-4" />
-              <span>{siteConfig.hotlineFormatted}</span>
-            </a>
-          </div>
-        </div>
 
       </div>
     </section>
