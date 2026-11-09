@@ -45,12 +45,13 @@ export default function AboutPage() {
 
             {/* (Ảnh 1) */}
             <figure className="my-6 text-center space-y-2">
-              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
+              <div className="relative aspect-[3/4] max-w-xl mx-auto w-full rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm">
                 <Image
-                  src="/images/banner/bamboo-poles.jpg"
+                  src="/images/banner/gioi-thieu-kho-bai.jpg"
                   alt={`Kho bãi và xưởng chế biến cọc tre ${siteConfig.companyName} tại Dân Hòa, Hà Nội`}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  sizes="(max-width: 640px) 100vw, 576px"
+                  quality={100}
                   className="object-cover"
                   priority
                 />
@@ -172,17 +173,18 @@ export default function AboutPage() {
 
             {/* (Ảnh 2) */}
             <figure className="my-6 text-center space-y-2">
-              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
+              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm">
                 <Image
-                  src="/images/banner/bamboo-sunlight.jpg"
-                  alt={`Nguồn nguyên liệu tre già chọn lọc khắt khe và hệ thống vận chuyển Cọc Tre Huyền Dương`}
+                  src="/images/banner/tai-sao-chon-chung-toi.jpg"
+                  alt={`Nguồn nguyên liệu tre già chọn lọc khắt khe và bãi tập kết Cọc Tre Huyền Dương`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 1024px"
+                  quality={95}
                   className="object-cover"
                 />
               </div>
               <figcaption className="text-sm italic text-gray-500">
-                (Hình ảnh: Nguồn tre già đực chọn lọc khắt khe và phương tiện vận chuyển cọc tre Huyền Dương)
+                (Hình ảnh: Nguồn tre già được chọn lọc khắt khe và bãi tập kết cọc tre Huyền Dương)
               </figcaption>
             </figure>
 

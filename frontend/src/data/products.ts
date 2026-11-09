@@ -298,7 +298,7 @@ Với xưởng chế biến và kho bãi trực tiếp tại 331 Phố Vác, Dâ
     ],
     packaging: "Đóng bó theo quy cách yêu cầu của khách hàng hoặc bốc trần lên xe tải.",
     images: [
-      "/images/products/warehouse/kho-coctre-01.jpg",
+      "/images/products/warehouse/coc-tre-theo-yeu-cau.jpg",
       "/images/products/warehouse/kho-coctre-02.jpg",
       "/images/products/warehouse/kho-coctre-05.jpg",
       "/images/products/warehouse/kho-coctre-10.jpg",

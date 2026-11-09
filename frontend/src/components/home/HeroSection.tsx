@@ -6,10 +6,10 @@ import Image from "next/image";
 export default function HeroSection() {
   return (
     <section className="relative w-full overflow-hidden bg-[#183925]" id="banner-chinh">
-      <div className="w-full relative aspect-[1920/700] max-h-[700px] shadow-sm">
+      <div className="w-full relative aspect-[2/1] shadow-sm">
         <Image
-          src="/images/banner/banner-coctre-viet.webp"
-          alt="Cọc Tre Việt - Nền Móng Tương Lai - Giá Rẻ Cho Mọi Công Trình"
+          src="/images/banner/coc-tre-cong-trinh.png"
+          alt="Cọc Tre Việt - Vững Chắc Mọi Công Trình - Cung Cấp Số Lượng Lớn Giá Cạnh Tranh"
           fill
           priority
           sizes="100vw"

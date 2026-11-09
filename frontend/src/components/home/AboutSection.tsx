@@ -54,7 +54,7 @@ export default function AboutSection() {
             {/* Right Image */}
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-sm border border-gray-100">
               <Image
-                src="/images/banner/bamboo-vertical.jpg"
+                src="/images/banner/about-bamboo-1.jpg"
                 alt="Rừng tre già nguyên liệu cọc tre Huyền Dương"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -68,7 +68,7 @@ export default function AboutSection() {
             {/* Left Image (Desktop: Col 1, Mobile: order-2) */}
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100 shadow-sm border border-gray-100 order-2 lg:order-1">
               <Image
-                src="/images/banner/bamboo-sunlight.jpg"
+                src="/images/banner/about-bamboo-2.jpg"
                 alt="Tre tự nhiên thân thiện môi trường"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
