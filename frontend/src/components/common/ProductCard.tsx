@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle, ArrowRight, FileText, Ruler, CircleDot } from "lucide-react";
+import { ArrowRight, FileText, Ruler, CircleDot } from "lucide-react";
 import { Product } from "@/data/products";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
@@ -28,12 +28,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-
-        {/* Stock Badge */}
-        <div className="absolute top-3 left-3 bg-[#214E34]/90 backdrop-blur-sm text-[#EED59B] text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-[#CDAA63]/40 shadow-sm">
-          <CheckCircle className="w-3.5 h-3.5 text-[#CDAA63]" />
-          <span>{product.stockStatus}</span>
-        </div>
 
         {/* Length Pill */}
         <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-[#214E34] text-xs font-extrabold px-3 py-1 rounded-lg shadow-sm border border-gray-100">

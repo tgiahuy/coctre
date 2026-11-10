@@ -60,7 +60,8 @@ export default function Header() {
       hasDropdown: true,
     },
     { name: "DỰ ÁN", href: "/du-an" },
-    { name: "TIN TỨC", href: "/tin-tuc" },
+    // Tạm ẩn mục Tin tức:
+    // { name: "TIN TỨC", href: "/tin-tuc" },
     { name: "LIÊN HỆ", href: "/lien-he" },
   ];
 

@@ -110,7 +110,8 @@ export default function Footer() {
                 { name: "Giới thiệu doanh nghiệp", href: "/gioi-thieu" },
                 { name: "Danh mục sản phẩm cọc tre", href: "/san-pham" },
                 { name: "Dự án công trình tiêu biểu", href: "/du-an" },
-                { name: "Kiến thức & Kỹ thuật thi công", href: "/tin-tuc" },
+                // Tạm ẩn theo yêu cầu:
+                // { name: "Kiến thức & Kỹ thuật thi công", href: "/tin-tuc" },
                 { name: "Liên hệ & Hệ thống kho bãi", href: "/lien-he" },
               ].map((link) => (
                 <li key={link.name}>
