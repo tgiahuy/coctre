@@ -138,14 +138,11 @@ export default function Footer() {
                 <li key={p.id}>
                   <Link
                     href={`/san-pham/${p.slug}`}
-                    className="flex items-center justify-between text-gray-300 hover:text-[#CDAA63] hover:translate-x-1 transition-all group"
+                    className="flex items-center text-gray-300 hover:text-[#CDAA63] hover:translate-x-1 transition-all group"
                   >
                     <span className="flex items-center gap-1.5">
                       <ChevronRight className="w-3.5 h-3.5 text-[#CDAA63]" />
                       {p.name}
-                    </span>
-                    <span className="text-[11px] text-gray-500 group-hover:text-emerald-400">
-                      {p.diameter}
                     </span>
                   </Link>
                 </li>

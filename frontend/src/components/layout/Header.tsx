@@ -189,13 +189,8 @@ export default function Header() {
                             href={`/san-pham/${prod.slug}`}
                             className="flex items-center justify-between px-4 py-2.5 text-sm text-[#232323] hover:text-[#214E34] hover:bg-[#EBF3EE]/60 transition-colors group/item"
                           >
-                            <div>
-                              <div className="font-semibold text-gray-900 group-hover/item:text-[#214E34]">
-                                {prod.name}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                {prod.diameter}
-                              </div>
+                            <div className="font-semibold text-gray-900 group-hover/item:text-[#214E34]">
+                              {prod.name}
                             </div>
                             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
                               Sẵn kho
