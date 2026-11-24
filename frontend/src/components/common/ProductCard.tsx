@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, FileText, Ruler, CircleDot } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 import { Product } from "@/data/products";
 import { useQuoteModal } from "@/context/QuoteModalContext";
 
@@ -43,18 +43,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               {product.name}
             </h3>
           </Link>
-
-          {/* Key specs highlight */}
-          <div className="mt-3 grid grid-cols-2 gap-2 text-xs py-2.5 px-3 bg-[#F7F5EF] rounded-xl border border-[#E7E3D8]">
-            <div className="flex items-center gap-1.5 text-gray-700">
-              <Ruler className="w-3.5 h-3.5 text-[#214E34] shrink-0" />
-              <span>Đ.kính: <strong>{product.diameter}</strong></span>
-            </div>
-            <div className="flex items-center gap-1.5 text-gray-700">
-              <CircleDot className="w-3.5 h-3.5 text-[#CDAA63] shrink-0" />
-              <span className="truncate">Loại: <strong>{product.bambooType.split(',')[0]}</strong></span>
-            </div>
-          </div>
 
           <p className="mt-3 text-xs sm:text-sm text-[#686868] line-clamp-2 leading-relaxed">
             {product.shortDescription}
