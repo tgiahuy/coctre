@@ -131,7 +131,7 @@ public class DataSeeder implements CommandLineRunner {
                 .name("Cọc Tre 1,5m")
                 .length("1,5m")
                 .lengthMeters(1.5)
-                .diameter("60 – 80 mm")
+                .diameter("60 – 80")
                 .bambooType("Tre đực già, tre gai, tre luồng Hòa Bình")
                 .origin("Hòa Bình")
                 .stockStatus("Sẵn hàng số lượng lớn")
@@ -162,7 +162,7 @@ public class DataSeeder implements CommandLineRunner {
                 .name("Cọc Tre 2m")
                 .length("2m")
                 .lengthMeters(2.0)
-                .diameter("65 – 90 mm")
+                .diameter("65 – 90")
                 .bambooType("Tre luồng / Tre gai già đanh")
                 .origin("Hòa Bình – Thanh Hóa")
                 .stockStatus("Sẵn hàng số lượng lớn")
@@ -183,7 +183,7 @@ public class DataSeeder implements CommandLineRunner {
                 .name("Cọc Tre 2,5m")
                 .length("2.5m")
                 .lengthMeters(2.5)
-                .diameter("70 – 100 mm")
+                .diameter("70 – 100")
                 .bambooType("Tre đực già đặc ruột")
                 .origin("Hòa Bình")
                 .stockStatus("Sẵn hàng số lượng lớn")
@@ -204,7 +204,7 @@ public class DataSeeder implements CommandLineRunner {
                 .name("Cọc Tre 3m")
                 .length("3m")
                 .lengthMeters(3.0)
-                .diameter("80 – 100 mm")
+                .diameter("80 – 100")
                 .bambooType("Tre luồng già loại 1")
                 .origin("Hòa Bình – Thanh Hóa")
                 .stockStatus("Sẵn hàng số lượng lớn")
@@ -225,7 +225,7 @@ public class DataSeeder implements CommandLineRunner {
                 .name("Cọc Tre 4m")
                 .length("4m")
                 .lengthMeters(4.0)
-                .diameter("80 – 110 mm")
+                .diameter("80 – 110")
                 .bambooType("Tre luồng đại thụ, tre gai già Hòa Bình")
                 .origin("Hòa Bình")
                 .stockStatus("Sẵn hàng số lượng lớn")
@@ -239,7 +239,7 @@ public class DataSeeder implements CommandLineRunner {
                 ))
                 .advantages(Arrays.asList(
                     "Chiều dài 4m nguyên khối tạo diện tích ma sát tiếp xúc nền đất lớn nhất.",
-                    "Đường kính gốc to khủng 80-110mm, chịu lực va đập cơ giới cao không bị nứt vỡ.",
+                    "Đường kính gốc to khủng 80-110, chịu lực va đập cơ giới cao không bị nứt vỡ.",
                     "Vận chuyển tận chân công trình bằng xe tải dài và xe cẩu chuyên dụng.",
                     "Đầy đủ hóa đơn VAT và hồ sơ nguồn gốc xuất xứ hợp pháp."
                 ))
@@ -256,7 +256,7 @@ public class DataSeeder implements CommandLineRunner {
                 .name("Cọc Tre Theo Yêu Cầu")
                 .length("Theo yêu cầu")
                 .lengthMeters(0.0)
-                .diameter("50 – 120 mm tùy chọn")
+                .diameter("50 – 120 tùy chọn")
                 .bambooType("Tre luồng, tre gai, tre đực Hòa Bình tuyển chọn")
                 .origin("Hòa Bình")
                 .stockStatus("Đặt hàng 1-2 ngày")
