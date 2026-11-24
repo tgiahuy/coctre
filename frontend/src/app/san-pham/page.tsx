@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Filter, ShieldCheck, HelpCircle } from "lucide-react";
+import { Search, Filter, HelpCircle } from "lucide-react";
 import Breadcrumb from "@/components/common/Breadcrumb";
 import ProductCard from "@/components/common/ProductCard";
 import QuoteFormSection from "@/components/common/QuoteFormSection";
@@ -152,23 +152,6 @@ export default function ProductsPage() {
               </button>
             </div>
           )}
-        </div>
-
-        {/* TECHNICAL NOTE BOX */}
-        <div className="mt-16 bg-white p-6 sm:p-8 rounded-2xl border border-[#CDAA63]/40 shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#214E34] text-[#CDAA63] flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-7 h-7" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-[#18231C]">
-                Tiêu chuẩn kỹ thuật cọc tre công trình tại Cọc Tre Huyền Dương
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-600 mt-1.5 leading-relaxed">
-                Tất cả các loại cọc tre tại bãi chúng tôi đều được tuyển chọn từ tre đực già trên 3-5 năm tuổi, thân thẳng, thịt tre dày đặc ruột, không sâu mọt. Đầu cọc được máy vát nhọn 3 cạnh dài 15-25cm sắc bén, đầu trên cắt phẳng vuông góc đảm bảo không dập nát khi ép bằng máy cuốc hoặc búa đóng.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
 
