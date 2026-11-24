@@ -28,11 +28,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-
-        {/* Length Pill */}
-        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-[#214E34] text-xs font-extrabold px-3 py-1 rounded-lg shadow-sm border border-gray-100">
-          Dài {product.length}
-        </div>
       </Link>
 
       {/* CARD CONTENT */}

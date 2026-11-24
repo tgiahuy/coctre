@@ -195,11 +195,6 @@ export default function CompactProductsSection() {
                       className="object-cover group-hover/card:scale-108 transition-transform duration-500"
                     />
 
-                    {/* Length Tag */}
-                    <div className="absolute top-2.5 right-2.5 bg-[#214E34]/90 backdrop-blur-sm text-[#EED59B] text-[10px] sm:text-xs font-extrabold px-2.5 py-1 rounded-md border border-[#CDAA63]/30 shadow-sm">
-                      {item.length ? `Dài ${item.length}` : "Quy cách chuẩn"}
-                    </div>
-
                     {/* Stock Pill */}
                     <div className="absolute bottom-2 left-2.5 bg-emerald-600/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded">
                       ● Sẵn hàng bãi
