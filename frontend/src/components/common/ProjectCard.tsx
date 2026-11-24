@@ -50,11 +50,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
 
         {/* FOOTER LINK */}
-        <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-          <span className="text-xs text-gray-500 font-medium">
-            Cung cấp: <strong className="text-gray-800">{project.bambooSupplied.split('&')[0]}</strong>
-          </span>
-
+        <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-end">
           <Link
             href={`/du-an/${project.slug}`}
             className="inline-flex items-center gap-1 text-xs font-bold text-[#214E34] hover:text-[#183B27] group-hover:translate-x-0.5 transition-transform"
