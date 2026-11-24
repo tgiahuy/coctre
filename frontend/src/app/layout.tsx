@@ -53,10 +53,10 @@ export const metadata: Metadata = {
       "Giao hàng tận chân công trình trong ngày – Hỗ trợ bốc xếp – Chiết khấu cao cho đơn hàng lớn. Hơn 30 năm kinh nghiệm từ năm 1990.",
     images: [
       {
-        url: "/images/products/warehouse/kho-coctre-08.jpg",
-        width: 1050,
-        height: 1400,
-        alt: "Cọc tre công trình Huyền Dương",
+        url: "/images/og-logo.png?v=1",
+        width: 1200,
+        height: 630,
+        alt: "Logo Cọc Tre Huyền Dương",
       },
     ],
   },
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.companyName} - Cọc Tre Công Trình`,
     description: "Cung cấp cọc tre số lượng lớn giao tận chân công trình trong ngày.",
-    images: ["/images/products/warehouse/kho-coctre-08.jpg"],
+    images: ["/images/og-logo.png?v=1"],
   },
   icons: {
     icon: [
